@@ -1,0 +1,9 @@
+.signtextcolumn {
+  position: relative;
+  float:left;
+  padding:10px;
+  margin-bottom:15px;
+  border: 2px #cccccc solid;
+}
+
+

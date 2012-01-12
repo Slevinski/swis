@@ -1,0 +1,75 @@
+SWIS
+The SignWriting Image Server
+January 12th, 2012
+
+Stephen E Slevinski Jr
+http://www.signpuddle.net
+slevin@signpuddle.net
+
+NOTE: code does not include font
+grab online: http://signpuddle.net/iswa
+
+Version 2 series 
+----------------
+Current unstable development version
+
+Version 3 series
+---------------
+Future stable Semantically Versioned release
+
+Files
+-----
+bsw.php - symbol encoding functions for PHP
+	General BSW
+	ISWA 2010
+	Numbers
+	Unicode PUA Integration
+
+columns.css - div floating for columns
+
+columns.php - script for text display
+
+csw.php - Cartesian SignWriting processing for PHP
+
+fsw.js - Modern SignWriting library for JavaScript
+
+fsw.php - Formal and regular searching for PHP
+
+glyph.php - symbol image script
+
+glyphogram.php - cluster image script
+
+image.php - main manipulation functions
+
+spl.php - SignPuddle 1.6 legacy Conversion Library
+
+spml.php - SignPuddle Markup Language
+  read, pack, unpack
+	
+iswa - directory for fonts 
+
+fonts of the ISWA are available online:
+http://signpuddle.net/iswa/
+
+
+Flavors
+-------
+SWIS for Web Servers - Requires web server with PHP5 and GD graphics library.
+Install: unzip in public documents folder.
+
+SWIS for Windows - Includes preconfigured Uniform Server web server.
+Install: unzip anywhere (even on a USB drive)  and open the "Server_Start.bat" file.  In browser, open the location "http://localhost".
+
+SWIS for Mac - Includes preconfigured MAMP web server.
+Install: unzip to "MAMP" folder and place in the "Applications" folder.  Start the "MAMP.app" application in the "MAMP" folder.  In browser, open the location "http://localhost:8888".
+
+Version History
+2.2.0 - Jan 12th, 2012: alpha implementation of MSW v1 (incomplete, non-compliant)
+2.1.1 - May 3rd, 2011: Development release 
+2.1.0 - February 10th, 2011: Refactor for Formal SignWriting.
+2.0.0 - October 20th, 2010: Major refactor for BSW 3B and SVG.
+1.2.2 - July 26th, 2010: Fix for swclasses.php column centers.
+1.2.1 - July 6th, 2010: Fix for sym 01-06-017-01-03-10.
+1.2.0 - July 3rd, 2010: Punctuation fixes, format screen.
+1.1.0 - June 22nd, 2010: BSW revision 3 update.
+1.0.0 - May 11th, 2010: Initial release.
