@@ -2,9 +2,6 @@
 /**
  * SWIS Image
  * 
- * Copyright 2007-2010 Stephen E Slevinski Jr
- * Steve (Slevin@signpuddle.net)
- * 
  * This file is part of SWIS: the SignWriting Image Server.
  * 
  * SWIS is free software: you can redistribute it and/or modify
@@ -22,13 +19,13 @@
  * 
  * END Copyright
  *  
- * @copyright 2007-2010 Stephen E Slevinski Jr 
- * @author Steve (slevin@signpuddle.net)  
- * @license http://www.opensource.org/licenses/gpl-3.0.html GPL
- * @access public
- * @package SWIS
- * @version 2.0.0
- * @filesource
+ * @copyright 2007-2012 Stephen E Slevinski Jr 
+ * @author Steve Slevinski (slevin@signpuddle.net)  
+ * @version 3
+ * @section License 
+ *   GPL 3, http://www.opensource.org/licenses/gpl-3.0.html
+ * @brief base image function library
+ * @file
  *   
  */
 
@@ -194,7 +191,7 @@ function glyphogram_png($ksw, $ver,$size, $pad, $bound, $line, $fill, $back, $co
  * Step 1: process cluster string
  */
   $cluster = ksw2cluster($ksw);
-  $max = str2coord($cluster[0][1]);
+  $max = str2koord($cluster[0][1]);
   $xMax = $max[0];
   $yMax = $max[1];
   $mins = cluster2min($cluster);
@@ -282,7 +279,7 @@ function glyphogram_png($ksw, $ver,$size, $pad, $bound, $line, $fill, $back, $co
         $image="im$num";
         $W= ImageSX($$image);
         $H= ImageSY($$image);
-        $coord = str2coord($spatial[1]);
+        $coord = str2koord($spatial[1]);
         $X= $coord[0];
         $Y= $coord[1];
 
@@ -341,7 +338,7 @@ function glyphogram_svg($ksw, $ver, $size, $pad, $bound, $line, $fill, $back, $c
  * Step 1: process cluster string
  */
   $cluster = ksw2cluster($ksw);
-  $max = str2coord($cluster[0][1]);
+  $max = str2koord($cluster[0][1]);
   $xMax = $max[0];
   $yMax = $max[1];
   $mins = cluster2min($cluster);
@@ -421,7 +418,7 @@ EOT;
       $base = substr($spatial[0],1,3);
       $key = substr($spatial[0],1,5);
       $image="im$num";
-      $coord = str2coord($spatial[1]);
+      $coord = str2koord($spatial[1]);
       $X = $coord[0] - $xMin;
       $Y = $coord[1] - $yMin;
       $svg .= '<g transform="translate(' . $X . ',' . $Y . ')" >' . $$image . '</g>' . "\n";
@@ -442,7 +439,7 @@ function glyphogram_txt($ksw, $ver, $pad, $bound, $line, $fill, $back, $break) {
  * Step 1: process cluster string
  */
   $cluster = ksw2cluster($ksw);
-  $max = str2coord($cluster[0][1]);
+  $max = str2koord($cluster[0][1]);
   $xMax = $max[0];
   $yMax = $max[1];
   $mins = cluster2min($cluster);
@@ -503,7 +500,7 @@ function glyphogram_txt($ksw, $ver, $pad, $bound, $line, $fill, $back, $break) {
       $W = strpos($$image,"\n");
       $len = strlen($$image);
       $H = (($len+1)/($W+1));
-      $coord = str2coord($spatial[1]);
+      $coord = str2koord($spatial[1]);
       $X= $coord[0];
       $Y= $coord[1];
 

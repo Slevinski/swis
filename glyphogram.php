@@ -2,9 +2,6 @@
 /**
  * Glyphogram image
  * 
- * Copyright 2007-2010 Stephen E Slevinski Jr
- * Steve (Slevin@signpuddle.net)
- * 
  * This file is part of SWIS: the SignWriting Image Server.
  * 
  * SWIS is free software: you can redistribute it and/or modify
@@ -22,32 +19,30 @@
  * 
  * END Copyright
  *  
- * @copyright 2007-2010 Stephen E Slevinski Jr 
- * @author Steve (slevin@signpuddle.net)  
- * @license http://www.opensource.org/licenses/gpl-3.0.html GPL
- * @access public
- * @package SWIS
- * @version 1.2.0
- * @filesource
+ * @copyright 2007-2012 Stephen E Slevinski Jr 
+ * @author Steve Slevinski (slevin@signpuddle.net)  
+ * @version 3
+ * @section License 
+ *   GPL 3, http://www.opensource.org/licenses/gpl-3.0.html
+ * @brief Glyphogram image script
+ * @file
  *   
  */
 
 /**
  * include general libraries
  */
-include 'csw.php';
+include 'msw.php';
 include 'image.php';
 
 /**
  * attributes
  */ 
-$ksw = @$_REQUEST['ksw'];  //BSW 3 text, layout, or display
-$bsw = @$_REQUEST['bsw'];  //BSW 3 text, layout, or display
-$bsw2 = @$_REQUEST['bsw2'];  //BSW 2010
-$bsw3 = @$_REQUEST['bsw3'];  //BSW 3 legacy
+$ksw = @$_REQUEST['ksw'];  //BSW 3 text, layout, or panel
+$bsw = @$_REQUEST['bsw'];  //BSW 3 text, layout, or panel
 
 $text = @$_REQUEST['text'];
-$display = @$_REQUEST['display'];
+$panel = @$_REQUEST['panel'];
 $style = @$_REQUEST['style'];
 $size = @$_REQUEST['size'];
 $pad=@$_REQUEST['pad'];
@@ -60,26 +55,14 @@ $colorize = @$_REQUEST['colorize'];
 $name= @$_REQUEST['name'];
 if(!$name){$name='glyphogram';}
 
-if ($bsw2){
-  $bsw3 = bsw2bsw3($bsw2);
-}
-if ($bsw3) {
-  $bsw3c = new BSW_3C();
-  $bsw = $bsw3c->convert($bsw3);
-}
-
-if (cswLayout($text)) {
-  $ksw = csw2ksw($text);
-}
-
 if (kswLayout($text)) {
   $ksw = $text;
 }
-if (kswDisplay($display)) {
-  $cluster = display2cluster($display);
+if (kswPanel($panel)) {
+  $cluster = panel2cluster($panel);
   $ksw = cluster2ksw($cluster);
 }
-//display
+
 $fmt = substr($style,0,3);
 $ver = substr($style,3,1);
 switch ($fmt){

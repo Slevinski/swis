@@ -25,7 +25,6 @@
  * @author Steve (slevin@signpuddle.net)  
  * @license http://www.opensource.org/licenses/gpl-3.0.html GPL
  * @access public
- * @package SWIS 
  * @version 2.0
  * @filesource
  *   
@@ -172,7 +171,7 @@ isRot = function (char) {return inHexRange("392","3a1",char); }
 /**
  * Number section
  */
-function coord2str(x,y){
+function koord2str(x,y){
   str = '';
   if (x<0) str += 'n';
   str += Math.abs(x);
@@ -182,7 +181,7 @@ function coord2str(x,y){
   return str;
 }
 
-function str2coord(str) {
+function str2koord(str) {
   str = str.replace(/n/gi,'-');
   parts = str.split('x');
   x = parseInt(parts[0]);
@@ -236,7 +235,7 @@ function ksw2cluster(ksw){
   var max_match = ksw.match(/[LMR]n?[0-9]+xn?[0-9]+/i);
   var len = max_match[0].length;
   var strnum = max_match[0].slice(1,len);
-  coord = str2coord(strnum);
+  coord = str2koord(strnum);
   var cluster = new Array();
   cluster.push(coord);
 
@@ -258,7 +257,7 @@ function cluster2min(cluster){
   for(var i=1; i<cluster.length; i++){
     if (i==0) next;
     spatial = cluster[i];
-    coord = str2coord(spatial[1]);
+    coord = str2koord(spatial[1]);
     if (i==1){
       xMin = coord[0];
       yMin = coord[1];

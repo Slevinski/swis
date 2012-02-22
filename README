@@ -1,5 +1,6 @@
 SWIS
 The SignWriting Image Server
+Version 3 Series
 January 12th, 2012
 
 Stephen E Slevinski Jr
@@ -9,31 +10,17 @@ slevin@signpuddle.net
 NOTE: code does not include font
 grab online: http://signpuddle.net/iswa
 
-Version 2 series 
-----------------
-Current unstable development version
-
-Version 3 series
----------------
-Future stable Semantically Versioned release
-
 Files
 -----
-bsw.php - symbol encoding functions for PHP
-	General BSW
-	ISWA 2010
-	Numbers
-	Unicode PUA Integration
+bsw.php - Binary SignWriting for symbol encoding, structural markers, and number characters
 
 columns.css - div floating for columns
 
 columns.php - script for text display
 
-csw.php - Cartesian SignWriting processing for PHP
+csw.php - Character SignWriting for Unicode PUA
 
-fsw.js - Modern SignWriting library for JavaScript
-
-fsw.php - Formal and regular searching for PHP
+fsw.php - Formal SignWriting for regular searching
 
 glyph.php - symbol image script
 
@@ -41,11 +28,21 @@ glyphogram.php - cluster image script
 
 image.php - main manipulation functions
 
+ksw.php - Kartesian SignWriting for variant display forms
+
+msw.php - Modern SignWriting script encoding library
+
+size.php - Sizing library for symbols
+
 spl.php - SignPuddle 1.6 legacy Conversion Library
 
 spml.php - SignPuddle Markup Language
   read, pack, unpack
 	
+SWISTest.php - unit testing
+
+R2RTest.php - exhaustive testing for range2regex function
+
 iswa - directory for fonts 
 
 fonts of the ISWA are available online:
@@ -64,6 +61,7 @@ SWIS for Mac - Includes preconfigured MAMP web server.
 Install: unzip to "MAMP" folder and place in the "Applications" folder.  Start the "MAMP.app" application in the "MAMP" folder.  In browser, open the location "http://localhost:8888".
 
 Version History
+3.0.0-alpha.1 - Feb 22nd, 2012: implementation of MSW v1 with documentation and unit testing.
 2.2.0 - Jan 12th, 2012: alpha implementation of MSW v1 (incomplete, non-compliant)
 2.1.1 - May 3rd, 2011: Development release 
 2.1.0 - February 10th, 2011: Refactor for Formal SignWriting.

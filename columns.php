@@ -2,9 +2,6 @@
 /**
  * Column image for sign text
  * 
- * Copyright 2007-2011 Stephen E Slevinski Jr
- * Steve (Slevin@signpuddle.net)
- * 
  * This file is part of SWIS: the SignWriting Image Server.
  * 
  * SWIS is free software: you can redistribute it and/or modify
@@ -22,20 +19,20 @@
  * 
  * END Copyright
  *  
- * @copyright 2007-2011 Stephen E Slevinski Jr 
- * @author Steve (slevin@signpuddle.net)  
- * @license http://www.opensource.org/licenses/gpl-3.0.html GPL
- * @access public
- * @package SWIS
- * @version 2.0
- * @filesource
+ * @copyright 2007-2012 Stephen E Slevinski Jr 
+ * @author Steve Slevinski (slevin@signpuddle.net)  
+ * @version 3
+ * @section License 
+ *   GPL 3, http://www.opensource.org/licenses/gpl-3.0.html
+ * @brief column images for sign text example
+ * @file
  *   
  */
 
 /**
  * include, attributes, and header
  */ 
-include 'csw.php';
+include 'msw.php';
 
 $req = array('ksw','length','size','color','colorize','background','style');
 foreach ($req as $name){
@@ -61,8 +58,8 @@ echo '</head><body>';
 if ($length=='') $length=400;
 
 $ksw = trim($ksw);
-$display = ksw2display($ksw,intval($length/$size),$params);
-$cnt = count($display);
+$panel = ksw2panel($ksw,intval($length/$size),$params);
+$cnt = count($panel);
 $fmt = substr($style,0,3);
 switch ($fmt){
 case "png":
@@ -74,31 +71,31 @@ case "png":
     $pre .= '&fill=' . $background;
   }
   if ($color || $background) $style="png1";
-  forEach($display as $col){
+  forEach($panel as $col){
     if ($cnt==1){
-      $col = displayTrim($col);
+      $col = panelTrim($col);
       echo $pre . '&ksw=' . $col . '"></div>';
     } else {
-      echo $pre . '&display=' . $col . '"></div>';
+      echo $pre . '&panel=' . $col . '"></div>';
     }
   }
   break;
 case "txt":
   include 'image.php';
   $pre = '<div class="signtextcolumn"><tt>';
-  forEach($display as $col){
-    $cluster = display2cluster($col);
+  forEach($panel as $col){
+    $cluster = panel2cluster($col);
     $ksw = cluster2ksw($cluster);
     echo $pre . str_replace("\n","<br>",str_replace(' ','&nbsp;',glyphogram_txt($ksw)))  . '</tt></div>';
   }
   break;
 case "svg":
   $pre = '<div class="signtextcolumn">';
-  forEach($display as $col){
-    $cluster = display2cluster($col);
+  forEach($panel as $col){
+    $cluster = panel2cluster($col);
     $ksw = cluster2ksw($cluster);
     $max = $cluster[0][1];
-    $coord = str2coord($max);
+    $coord = str2koord($max);
     $wsvg = ceil($coord[0]*$size);
     $hsvg = ceil($coord[1]*$size);
     echo $pre . '<embed type="image/svg+xml" width="' . $wsvg . '" '; 

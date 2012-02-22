@@ -2,9 +2,6 @@
 /**
  * SignPuddle Legacy support
  * 
- * Copyright 2007-2010 Stephen E Slevinski Jr
- * Steve (Slevin@signpuddle.net)
- * 
  * This file is part of SWIS: the SignWriting Image Server.
  * 
  * SWIS is free software: you can redistribute it and/or modify
@@ -22,13 +19,13 @@
  * 
  * END Copyright
  *  
- * @copyright 2007-2010 Stephen E Slevinski Jr 
- * @author Steve (slevin@signpuddle.net)  
- * @license http://www.opensource.org/licenses/gpl-3.0.html GPL
- * @access public
- * @package SWIS
- * @version 1.2.0
- * @filesource
+ * @copyright 2007-2012 Stephen E Slevinski Jr 
+ * @author Steve Slevinski (slevin@signpuddle.net)  
+ * @version 3
+ * @section License 
+ *   GPL 3, http://www.opensource.org/licenses/gpl-3.0.html
+ * @brief legacy support for SignPuddle alternate encodings
+ * @file
  *   
  */
 
@@ -56,7 +53,7 @@ function swml2ksw($source){
     }
     foreach ($signData['SYMBOL'] as $symbols) {
       $key = id2key($symbols[VALUE],1);
-      $strnum = coord2str($symbols[ATTRIBUTES][X], $symbols[ATTRIBUTES][Y]);
+      $strnum = koord2str($symbols[ATTRIBUTES][X], $symbols[ATTRIBUTES][Y]);
       $ksw .= "S" . $key . $strnum;
     }
   }
@@ -122,7 +119,7 @@ function bld2ksw($bld){
     for ($i=0;$i<$cnt;$i++){
       if (!isPunc($keys[$i])){
         $data .= 'S' . $keys[$i];
-        $data .= coord2str($xs[$i],$ys[$i]);
+        $data .= koord2str($xs[$i],$ys[$i]);
       }
     }
   }
@@ -225,7 +222,7 @@ function ksw2bld($ksw,$force){
   if (!kswLayout($ksw) && !isPunc($ksw)) die("invalid word " . $ksw);
   $cluster=ksw2cluster($ksw);
   $lane = $cluster[0][0];
-  $max = str2coord($cluster[0][1]);
+  $max = str2koord($cluster[0][1]);
   $min = cluster2min($cluster);
 
   $adjX = intval((250 - ($max[0] - $min[0]))/2) - $min[0];
@@ -235,7 +232,7 @@ function ksw2bld($ksw,$force){
   $bld = array();
   for ($i=1;$i<count($cluster);$i++){
     $key = $cluster[$i][0];
-    $coord = str2coord($cluster[$i][1]);
+    $coord = str2koord($cluster[$i][1]);
     $bld[] = key2id($key,$force);
     $bld[] = $coord[0] + $adjX;
     $bld[] = $coord[1] + $adjY;

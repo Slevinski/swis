@@ -1,10 +1,7 @@
 <?php
 /**
- * BSW Library for PHP
+ * Binary SignWriting Library
  * 
- * Copyright 2007-2010 Stephen E Slevinski Jr
- * Steve (Slevin@signpuddle.net)
- *
  * This file is part of SWIS: the SignWriting Image Server.
  * 
  * SWIS is free software: you can redistribute it and/or modify
@@ -22,60 +19,46 @@
  * 
  * END Copyright
  *  
- * @copyright 2007-2010 Stephen E Slevinski Jr 
- * @author Steve (slevin@signpuddle.net)  
- * @license http://www.opensource.org/licenses/gpl-3.0.html GPL
- * @access public
- * @package SWIS 
- * @version 2.0
- * @filesource
+ * @copyright 2007-2012 Stephen E Slevinski Jr 
+ * @author Steve Slevinski (slevin@signpuddle.net)  
+ * @version 3
+ * @section License 
+ *   GPL 3, http://www.opensource.org/licenses/gpl-3.0.html
+ * @brief Binary SignWriting encoding for symbols, numbers, and markers
+ * @file
  *   
  */
-
-//base to directory
-if(1==0){
-  for ($i=0;$i<652;$i++){
-    $base = dechex($i+256);
-    $view = base2view($base);
-    $infile = 'iswa/svg1/' . $base . '/' . $view . '.svg';
-    $outfile = 'iswa/everson/base_' . str_pad(1+$i,3,'0',STR_PAD_LEFT) . '.svg';
-    copy ($infile,$outfile);
-  }
-}
-
-//set_time_limit(0);
-
-/**
- * Binary SignWriting for plain text symbol encoding
- *   bsw = 3 digit strings of 3
- *   key = 6 digit string starting with S, 5 without
- *   uni = Unicode string of 3 plane 1 characters
- * 
- */
  
-//test strings in ksw
-$sym_write = 'S10001';
-
-/**
- * Binary SignWriting for plain text symbol encoding
- *   bsw = 3 digit strings of 3
- *   key = 6 digit string starting with S, 5 without
- *   uni = Unicode string of 3 plane 1 characters
- * 
+/** @defgroup bsw Binary SignWriting
+ *  Encoding for symbols, numbers, and markers
  */
-//base section
-function bsw2base($bsw){
-  $bsw_base = '';
-  $chars = str_split($bsw,3);
-  sort($chars,SORT_STRING);
-  forEach($chars as $char){
-    if(isISWA($char)){
-      $bsw_base .= $char;
-    }
-  }
-  return $bsw_base;
-}
 
+/** @defgroup key Symbol Key
+ *  @ingroup bsw
+ *  Symbol key is a subsection of the ISWA
+ */
+
+/** @defgroup range Symbol Ranges
+ *  @ingroup bsw
+ *  Symbol Ranges is a subsection of the ISWA
+ */
+
+/** @defgroup str BSW Strings
+ *  @ingroup bsw
+ *  Binary SignWriting string functions
+ */
+
+/** @defgroup num Numbers
+ *  @ingroup bsw
+ *  Number functions
+ */
+
+/** 
+ * @brief symbol base to key for viewing
+ * @param $base symbol key prefix
+ * @return a symbol key for viewing
+ * @ingroup key
+ */
 function base2view($base){
   $view = $base . '00';
   if (isHand($base)){
@@ -86,8 +69,12 @@ function base2view($base){
   return $view;
 }
 
-//group section
-$sg_colorize = array('0000CC', '0000CC', '0000CC', '0000CC', '0000CC', '0000CC', '0000CC', '0000CC', '0000CC', '0000CC', 'CC0000', 'CC0000', 'CC0000', 'CC0000', 'CC0000', 'CC0000', 'CC0000', 'CC0000', 'CC0000', 'CC0000', 'FF0099', '006600', '006600', '006600', '006600', '006600', '000000', '000000', '884411', 'FF9900');
+/** 
+ * @brief returns the symbol group for a base or key
+ * @param $base symbol key prefix
+ * @return the key prefix for a group
+ * @ingroup key
+ */
 function base2group($base){
   $base = substr($base,0,3);
   $sg_list = array('100','10e','11e','144','14c','186','1a4','1ba','1cd','1f5', '205','216','22a','255','265','288','2a6','2b7','2d5','2e3', '2f7', '2ff','30a','32a','33b','359', '36d','376', '37f', '387');
@@ -99,15 +86,36 @@ function base2group($base){
   return $group;
 }
 
+/** 
+ *  List of key prefixes of the 30 groups
+ * @ingroup key
+ */
 $sg_list = array('100','10e','11e','144','14c','186','1a4','1ba','1cd','1f5', '205','216','22a','255','265','288','2a6','2b7','2d5','2e3', '2f7', '2ff','30a','32a','33b','359', '36d','376', '37f', '387');
+
+/** 
+ * @brief symbol base to key for viewing
+ * @param $base symbol key prefix
+ * @return boolean value if the key prefix is a group
+ * @ingroup key
+ */
 function isSymGrp($char){
   $sg_list = array('100','10e','11e','144','14c','186','1a4','1ba','1cd','1f5', '205','216','22a','255','265','288','2a6','2b7','2d5','2e3', '2f7', '2ff','30a','32a','33b','359', '36d','376', '37f', '387');
   return in_array($char,$sg_list);
 }
 
 
-//cat section
+/** 
+ *  List of key prefixes of the 7 categories
+ * @ingroup key
+ */
 $cat_list = array('100','205','2f7', '2ff','36d','37f','387');
+
+/** 
+ * @brief returns the symbol category for a base or key
+ * @param $base symbol key prefix
+ * @return the key prefix for a category
+ * @ingroup key
+ */
 function base2cat($base){
   $cat_list = array('100','205','2f7', '2ff','36d','37f','387');
   foreach ($cat_list as $cat){
@@ -118,19 +126,49 @@ function base2cat($base){
   return $cat;
 }
 
-//symbol section
-//symbol section
+/** 
+ *  Global variable that contains BaseSymbol information
+ * @ingroup key
+ */
 $BaseSymbols = array();
-function validkey($key){
+
+/** 
+ * @brief test if key is properly formatted
+ * @param $key symbol key
+ * @return boolean value if the key is properly formatted
+ * @ingroup key
+ */
+function isKey($key){
+  if ($key=='') return false;
+  $re_sym = '[123][a-f0-9]{2}[012345][a-f0-9]';
+  $re_pattern = '/^' . $re_sym . '$/i';
+
+  $result = preg_match($re_pattern,$key,$matches);
+  if ($result) {
+    if ($key == $matches[0]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/** 
+ * @brief test if key references a valid symbol
+ * @param $key symbol key
+ * @return boolean value if the key is a valid symbol
+ * @ingroup key
+ */
+function validKey($key){
+  if (!isKey($key)) return false;
   global $BaseSymbols;
   if (count($BaseSymbols)==0) $BaseSymbols = LoadBaseSymbols();
   $key = str_replace("S","",$key);
   $len = strlen($key);
-  if ($len<3){ return ;}//error
+  if ($len<3){ return false ;}//error
   $hcode = substr($key,0,3);
 
   $bs = $BaseSymbols[$hcode];
-  if (!$bs){return;}
+  if (!$bs){return false;}
 
   $df = 0;
   if ($len>3) $df = hexdec(substr($key,3,1));
@@ -144,122 +182,10 @@ function validkey($key){
   return $bFill and $bRot;
 }
 
-function key2bsw($key){
-  $key = str_replace('S','',$key);
-  $base = substr($key,0,3);
-  $fill = substr($key,3,1);
-  $rot = substr($key,4,1);
-  return $base . fill2char($fill) . rot2char($rot);
-}
-
-function bsw2key($bsw){
-  $bsw = str_replace(' ','',$bsw);
-  $bsw = str_replace('_','',$bsw);
-  $base = substr($bsw,0,3);
-  $fill = substr($bsw,3,3);
-  $rot = substr($bsw,6,3);
-  return $base . char2fill($fill) . char2rot($rot);
-}
-
-function key2code($key){
-  $key = str_replace('S','',$key);
-  return ((hexdec(substr($key,0,3)) - 256) * 96) + ((hexdec(substr($key,3,1)))*16) + hexdec(substr($key,4,1))+1;
-}
-
-function code2key($code){
-  $base = intval($code/96);
-  $code = $code - $base*96;
-  $fill = intval(($code-1)/16);
-  $rot = $code - ($fill*16);
-  if ($fill==0 && $rot==0) {
-    $base--;
-    $fill=5;
-    $rot=16;
-  }
-  return dechex($base+256) . dechex($fill) . dechex($rot-1);
-}
-
-function bsw2code($sym){
-  return ((hexdec(substr($sym,0,3)) - 256) * 96) + ((hexdec(substr($sym,3,3))-922)*16) + hexdec(substr($sym,6,3))-927;
-}
-
-function code2bsw($code){
-  $base = intval($code/96);
-  $code = $code - $base*96;
-  $fill = intval(($code-1)/16);
-  $rot = $code - ($fill*16);
-  return dechex($base+256) . dechex(($fill-1)+923) . dechex($rot+927);
-}
-
-
-function char2fill($char){
-  return dechex(hexdec($char)-922);
-}
-
-function fill2char($fill){
-  return dechex(hexdec($fill)+922);
-}
-
-function char2rot($char){
-  return dechex(hexdec($char)-928);
-}
-
-function rot2char($rot){
-  return dechex(hexdec($rot)+928);
-}
-
-//x-iswa-2010 section
-function inHexRange($start, $end, $char){
-  $char = substr(str_replace('S','',$char),0,3);
-  if (hexdec($char)>=hexdec($start) and hexdec($char)<=hexdec($end)){
-    return true;
-  } else {
-    return false;
-  }
-}
-
-/**
- * ISWA 2010 Section
- */
-function isISWA($char){
-  return inHexRange("100","38b",$char); 
-}
-function isWrit($char){
-  return inHexRange("100","37e",$char); 
-}
-function isHand($char){
-  return inHexRange("100","204",$char); 
-}
-function isMove($char){
-  return inHexRange("205","2f6",$char); 
-}
-function isDyn($char){
-  return inHexRange("2f7","2fe",$char); 
-}
-function isHead($char){
-  return inHexRange("2ff","36c",$char); 
-}
-function isTrunk($char){
-  return inHexRange("36d","375",$char); 
-}
-function isLimb($char){
-  return inHexRange("376","37e",$char); 
-}
-function isLoc($char){
-  return inHexRange("37f","386",$char); 
-}
-function isPunc($char){
-  return inHexRange("387","38b",$char); 
-} 
-function isFill($char){
-  return inHexRange("39a","39f",$char); 
-} 
-function isRot($char){
-  return inHexRange("3a0","3af",$char); 
-} 
-
-/**
- * ISWA 2010 SymbolGroup and BaseSymbol data
+/** 
+ * @brief returns array of symbol group information
+ * @return array of symbol group data
+ * @ingroup key
  */
 function loadSymbolGroups(){
   $filename = 'iswa/data/iswa.sgd';
@@ -282,6 +208,11 @@ function loadSymbolGroups(){
   return $SymbolGroups;
 }
 
+/** 
+ * @brief returns array of base symbol information
+ * @return array of base symbol data
+ * @ingroup key
+ */
 function loadBaseSymbols(){
   $filename = 'iswa/data/iswa.bsd';
   $data = file_get_contents($filename);
@@ -305,10 +236,243 @@ function loadBaseSymbols(){
   return $BaseSymbols;
 }
 
-/**
- * Number section
+/** 
+ * @brief returns the 16-bit symbol code of a key
+ * @param $key symbol key
+ * @return 16 bit symbol code
+ * @ingroup key
  */
-function coord2str($x,$y){
+function key2code($key){
+  $key = str_replace('S','',$key);
+  return ((hexdec(substr($key,0,3)) - 256) * 96) + ((hexdec(substr($key,3,1)))*16) + hexdec(substr($key,4,1))+1;
+}
+
+/** 
+ * @brief returns the symbol key of a 16-bit symbol code
+ * @param $code 16-bit symbol code
+ * @return symbol key
+ * @ingroup key
+ */
+function code2key($code){
+  $base = intval($code/96);
+  $code = $code - $base*96;
+  $fill = intval(($code-1)/16);
+  $rot = $code - ($fill*16);
+  if ($fill==0 && $rot==0) {
+    $base--;
+    $fill=5;
+    $rot=16;
+  }
+  return dechex($base+256) . dechex($fill) . dechex($rot-1);
+}
+
+/** 
+ * @brief test if symbol base is in range
+ * @param $start start of hex range
+ * @param $end end of hex range
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function inHexRange($start, $end, $char){
+  $char = substr(str_replace('S','',$char),0,3);
+  if (hexdec($char)>=hexdec($start) and hexdec($char)<=hexdec($end)){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/** 
+ * @brief test if symbol base is in the ISWA
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function isISWA($char){
+  return inHexRange("100","38b",$char); 
+}
+
+/** 
+ * @brief test if symbol base is a writing symbol
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function isWrit($char){
+  return inHexRange("100","37e",$char); 
+}
+
+/** 
+ * @brief test if symbol base is a hand symbol
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function isHand($char){
+  return inHexRange("100","204",$char); 
+}
+
+/** 
+ * @brief test if symbol base is a movement symbol
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function isMove($char){
+  return inHexRange("205","2f6",$char); 
+}
+
+/** 
+ * @brief test if symbol base is a dynamics symbol
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function isDyn($char){
+  return inHexRange("2f7","2fe",$char); 
+}
+
+/** 
+ * @brief test if symbol base is a head symbol
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function isHead($char){
+  return inHexRange("2ff","36c",$char); 
+}
+
+/** 
+ * @brief test if symbol base is a head symbol
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function hasHead($text){
+  $re_sym = 'S(2ff|3[0-5][0-9a-f]|36[0-9a-c])';
+  $re_pattern = '/' . $re_sym . '/i';
+  $result = preg_match_all($re_pattern,$text,$matches);
+  return count($matches[0])>0;
+}
+
+/** 
+ * @brief test if symbol base is a trunk symbol
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function isTrunk($char){
+  return inHexRange("36d","375",$char); 
+}
+
+/** 
+ * @brief test if symbol base is a limb symbol
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function isLimb($char){
+  return inHexRange("376","37e",$char); 
+}
+
+/** 
+ * @brief test if symbol base is a detailed location symbol
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function isLoc($char){
+  return inHexRange("37f","386",$char); 
+}
+
+/** 
+ * @brief test if symbol base is a punctuation symbol
+ * @param $char hex string to test in range
+ * @return boolean value
+ * @ingroup range
+ */
+function isPunc($char){
+  return inHexRange("387","38b",$char); 
+} 
+
+/** 
+ * @brief returns the fill value of a bsw fill char
+ * @param $char bsw string of a fill value
+ * @return fill value
+ * @ingroup str
+ */
+function char2fill($char){
+  return dechex(hexdec($char)-hexdec('110'));
+}
+
+/** 
+ * @brief returns the base fill char of a fill value
+ * @param $fill fill value
+ * @return bsw fill char
+ * @ingroup str
+ */
+function fill2char($fill){
+  return dechex(hexdec($fill)+hexdec('110'));
+}
+
+/** 
+ * @brief returns the rotation value of a bsw rotation char
+ * @param $char bsw string of a rotation value
+ * @return rotation value
+ * @ingroup str
+ */
+function char2rot($char){
+  return dechex(hexdec($char)-hexdec('120'));
+}
+
+/** 
+ * @brief returns the base rotation char of a rotation value
+ * @param $rotation rotation value
+ * @return bsw rotation char
+ * @ingroup str
+ */
+function rot2char($rot){
+  return dechex(hexdec($rot)+hexdec('120'));
+}
+
+/** 
+ * @brief returns the bsw string of a symbol key
+ * @param $key symbol key
+ * @return bsw string
+ * @ingroup str
+ */
+function key2bsw($key){
+  $key = str_replace('S','',$key);
+  $base = dechex(hexdec(substr($key,0,3)) + hexdec('30'));
+  $fill = substr($key,3,1);
+  $rot = substr($key,4,1);
+  return $base . fill2char($fill) . rot2char($rot);
+}
+
+/** 
+ * @brief returns the symbol key of a bsw string
+ * @param $bsw bsw string
+ * @return symbol key
+ * @ingroup str
+ */
+function bsw2key($bsw){
+  $bsw = str_replace(' ','',$bsw);
+  $bsw = str_replace('_','',$bsw);
+  $base = dechex(hexdec(substr($bsw,0,3)) - hexdec('30'));
+  $fill = substr($bsw,3,3);
+  $rot = substr($bsw,6,3);
+  return $base . char2fill($fill) . char2rot($rot);
+}
+
+/** 
+ * @brief x,y values to irregular coordinate string
+ * @param $x X value
+ * @param $y Y value
+ * @return a coordinate string centered on 0x0
+ * @ingroup num
+ */
+function koord2str($x,$y){
   $str = '';
   if ($x<0) $str .= 'n';
   $str .= abs($x);
@@ -318,7 +482,13 @@ function coord2str($x,$y){
   return $str;
 }
 
-function str2coord($str) {
+/** 
+ * @brief irregular coordinate string to array of x,y values
+ * @param $str  coordinate string centered on 0x0
+ * @return an array of x,y values 
+ * @ingroup num
+ */
+function str2koord($str) {
   if (!$str) return array(0,0);
   $str = str_replace('n','-',$str);
   $parts = explode('x',$str);
@@ -329,281 +499,75 @@ function str2coord($str) {
   return $coord;
 } 
 
-/**
- * Symbol size section
+/** 
+ * @brief x,y values to regular coordinate string
+ * @param $x X value
+ * @param $y Y value
+ * @return a coordinate string centered on 500x500
+ * @ingroup num
  */
-class SYM_SIZE {
-  private $db;
-  private $symload;
-  private $symsize;
-
-  public function __construct() {
-    $this->symload = array();
-    $this->symsize = array();
-    $this->db = sqlite_open('iswa/data/iswa.db2');
-  }
-
-  public function load($ksw){
-    
-if ($ksw=="")return;
-    $sym_pattern = '/S[123][a-f0-9]{2}[012345][a-f0-9]/i';
-    preg_match_all($sym_pattern,$ksw, $matches);
-    $syms = array();
-    foreach($matches[0] as $spatial){
-      $syms[] = substr($spatial,1,5);
-    }
-    $syms = array_unique($syms);
-    $syms = array_diff($syms,$this->symload);
-    $codes = array();
-    foreach ($syms as $key){
-      $this->symload[] = $key;
-      //determine code...
-      $codes[]=key2code($key);
-    }
-    $query = 'select sym_code, sym_w, sym_h from symbol where sym_code in (' . implode($codes,',') . ')';
-    $result = sqlite_array_query($this->db, $query);
-    foreach($result as $row){
-      $this->symsize[code2key($row['sym_code'])] = $row;
-    }
-  }
-  
-  public function size($key){
-    return $this->symsize[$key];
-  }
-  
-  public function expand($ksw){
-    foreach($this->symsize as $key=>$row){
-      $strnum = coord2str($row['sym_w'],$row['sym_h']);
-      $ksw = str_replace('S' . $key,'S' . $key . $strnum . 'x', $ksw);
-    }
-    return $ksw;
-  }
-  
-  public function other($ksw){
-    
-    $bsw3 = str_replace(' ' , '', $bsw3);
-    $bsw = ''; //BSW revision 3 draft C
-    $this->load($bsw3);
-    $chars = str_split($bsw3,3);
-    for ($i=0; $i<count($chars); $i++) {
-      $char = $chars[$i];
-      if (hexdec($char)>=hexdec("387") and hexdec($char)<=hexdec("38b")){//isPunc
-        //add punc and io
-        $iswa = $char;
-        $i++;
-        $iswa .= $chars[$i];
-        $i++;
-        $iswa .= $chars[$i];
-        $bsw .= $iswa;
-        //add min x,y
-        $size = $this->size($iswa);
-        $bsw .= num2hex(-intval($size['sym_w']/2));// adding x
-        $bsw .= num2hex(-intval($size['sym_h']/2));// adding y
-      } else {//a sign...
-        //still have $char...  now convert to new range for fa and fc
-        switch ($char){ //reorder sign boxes...
-          case "0fa":
-            $first_char = "0fb";
-            break;
-          case "0fb":
-            $first_char = "0fc";
-            break;
-          case "0fc":
-            $first_char = "0fd";
-            break;
-        }
-
-        //zero all and center (max & min)
-        
-        unset($min_X, $min_Y, $max_X, $max_Y);
-        unset($cmin_X, $cmin_Y, $cmax_X, $cmax_Y);
-
-        $char = $chars[++$i];//next char is non punc iswa, seq, or box
-        $syms = array();
-        //cycle through ISWA until Q or P or LBR
-        while(hexdec($char)>=hexdec("100") and hexdec($char)<=hexdec("37e")){//is non punc&seq ISWA
-          $iswa = $char;
-          $i++;
-          $iswa .= $chars[$i];
-          $i++;
-          $iswa .= $chars[$i];
-          $i++;
-//        echo $iswa . ' ';
-          $x = hex2num($chars[$i]);
-          $i++;
-          $y = hex2num($chars[$i]);
-          $size = $this->size($iswa);
-          $w = $size['sym_w'];
-          $h = $size['sym_h'];
-          if (isset($min_X)){
-            $min_X = min($min_X,$x);
-            $min_Y = min($min_Y,$y);
-            $max_X = max($max_X,$x+$w);
-            $max_Y = max($max_Y,$y+$h);
-          } else {
-            $min_X = $x;
-            $min_Y = $y;
-            $max_X = $x+$w;
-            $max_Y = $y+$h;
-          }
-
-          if(hexdec($char)>=hexdec("36d") and hexdec($char)<=hexdec("37e")){//is trunk or limb for centering
-            if (isset($cmin_X)){
-              $cmin_X = min($cmin_X,$x);
-              $cmin_Y = min($cmin_Y,$y);
-              $cmax_X = max($cmax_X,$x+$w);
-              $cmax_Y = max($cmax_Y,$y+$h);
-            } else {
-              $cmin_X = $x;
-              $cmin_Y = $y;
-              $cmax_X = $x+$w;
-              $cmax_Y = $y+$h;
-            }
-          }
-          $syms[] = $iswa;
-          $coords[] = array($x,$y);
-          
-          $char = @$chars[++$i];//next char is non punc iswa, seq, or box
-        }
-
-        //check the center...
-        if (isset($cmin_X)){
-          $c_X = intval(($cmin_X + $cmax_X)/2);
-          $c_Y = intval(($cmin_Y + $cmax_Y)/2);
-        } else { //all center
-          $c_X = intval(($min_X + $max_X)/2);
-          $c_Y = intval(($min_Y + $max_Y)/2);
-        }
-        //adjust max XY;
-        $max_X -= $c_X;
-        $max_Y -= $c_Y;
-
-        //now check for sequence first...
-        if ($char=="0fd"){
-          $bsw .="0fa";
-          $char = $chars[++$i];//next char is non punc iswa, seq, or box
-          while(hexdec($char)>=hexdec("100") and hexdec($char)<=hexdec("37e")){//is non punc&seq ISWA
-            $iswa = $char;
-            $i++;
-            $iswa .= $chars[$i];
-            $i++;
-            $iswa .= $chars[$i];
-            $i++;
-            $char = $chars[$i];//next char is non punc iswa, seq, or box
-            $bsw .= $iswa;
-          }
-        }
-        //add signbox
-        $bsw .= $first_char;
-        $bsw .= num2hex($max_X);
-        $bsw .= num2hex($max_Y);
-        foreach ($syms as $j => $iswa){
-          $coord = $coords[$j];
-          $bsw .= $iswa;
-          $bsw .= num2hex($coord[0] - $c_X);
-          $bsw .= num2hex($coord[1] - $c_Y);
-        }
-        
-        //check for sequence
-        
-        //cycle through 
-        $i--; //back up
-      }
-    }
-    return $bsw;
-  }
+function coord2str($x,$y){
+  $str = '';
+  $str .= $x + 500;
+  $str .= 'x';
+  $str .= $y + 500;
+  return $str;
 }
 
-
-/**
- * Unicode Proposed Integration
+/** 
+ * @brief regular coordinate string to array of x,y values
+ * @param $str  coordinate string centered on 500x500
+ * @return an array of x,y values 
+ * @ingroup num
  */
-function dec2utf($code,$plane=1){
-  $a = $code%64;
-  $b = floor($code/64);
-  $c = floor($b/64);
-  $b -= $c*64;
-  
-  switch($plane){
-  case 1:
-    $utf8 = "f0";
-    $utf8 .= dechex($c + 144);//90
-    $utf8 .= dechex($b + 128);//80
-    $utf8 .= dechex($a + 128);//80
-    break;
-  case 15:
-    $utf8 = "f3";
-    $utf8 .= dechex($c + 176);//B0
-    $utf8 .= dechex($b + 128);//80
-    $utf8 .= dechex($a + 128);//80
-    break;
-  case 16:
-    $utf8 = "f4";
-    $utf8 .= dechex($c + 128);//80
-    $utf8 .= dechex($b + 128);//80
-    $utf8 .= dechex($a + 128);//80
-    break;
+function str2coord($str) {
+  if (!$str) return array(0,0);
+  $parts = explode('x',$str);
+  $coord = array();
+  foreach ($parts as $part){
+    $coord[] = $part -500;
   }
-
-  return pack("N",hexdec($utf8));
+  return $coord;
 }
 
-function char2utf($char,$plane=1){
-  $code = hexdec($char)+55040;//primary shift
-  return dec2utf($code,$plane);
+/** 
+ * @brief number value to BSW character
+ * @param $num number from -250 to 249
+ * @return BSW character
+ * @ingroup num
+ */
+function num2bsw($num) {
+  return dechex($num + hexdec('800'));
 }
 
-function char2unicode($char,$plane=1){
-  $code = hexdec($char)+55040;//primary shift
-  return strtoupper(dechex($plane) . dechex($code));
+/** 
+ * @brief BSW character to number value
+ * @param $bsw BSW Number character
+ * @return number from -250 to 249
+ * @ingroup num
+ */
+function bsw2num($bsw) {
+  return hexdec($bsw) - hexdec('800');
 }
 
-function bsw2utf($bsw, $plane=1){
-  $bsw_utf = '';
-  $chars = str_split($bsw,3);
-  forEach($chars as $char){
-    $bsw_utf .= char2utf($char,$plane);
-  }
-  return $bsw_utf;
+/** 
+ * @brief coordinate array to BSW string
+ * @param $arr array of 0 based x,y values
+ * @return BSW String
+ * @ingroup num
+ */
+function coord2bsw($arr) {
+  return num2bsw($arr[0]) . num2bsw($arr[1]);
 }
 
-function utf2char($unichar){
-  $chars = str_split($unichar,2);
-  $plane = $chars[0];
-  switch($plane){
-    case "f0":
-      $a = hexdec($chars[1])-144;
-      $b = hexdec($chars[2])-128;
-      $c = hexdec($chars[3])-128;
-      break;
-    case "f3":
-      $a = hexdec($chars[1])-176;
-      $b = hexdec($chars[2])-128;
-      $c = hexdec($chars[3])-128;
-      break;
-    case "f4":
-      $a = hexdec($chars[1])-128;
-      $b = hexdec($chars[2])-128;
-      $c = hexdec($chars[3])-128;
-      break;
-  }
-
-  $code = $c + $b*64 + $a * 64 * 64 - 55040;
-  return dechex($code);
+/** 
+ * @brief BSW string to coordinate array
+ * @param $bsw string of 2 bsw numbers
+ * @return coordinate array
+ * @ingroup num
+ */
+function bsw2coord($bsw) {
+  return array(bsw2num(substr($bsw,0,3)),bsw2num(substr($bsw,3,3)));
 }
-
-function utf2bsw($bsw_utf){
-  $bsw = '';
-//  $pattern ='/[\x{1d800}-\x{1dcff}][\x{fd800}-\x{fdcff}][\x{10d800}-\x{10dcff}]/u';
-  $pattern ='/[\x{1D800}-\x{1DCFF}]/u';
-  preg_match_all($pattern, $bsw_utf,$matches);
-  forEach ($matches[0] as $uchar){
-    $val = unpack("N",$uchar);
-    $val = dechex($val[1]);
-    $bsw = $bsw . utf2char($val);
-  }
-  return $bsw;
-}
-
 
 ?>

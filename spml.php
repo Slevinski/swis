@@ -1,43 +1,6 @@
 <?php
 //for testing
-//include 'csw.php';
-
-/*
-$uicache = read_spml('ui',1);
-$result = $uicache->xpath('//entry[@id="' . $uid . '"]');
-$xml = $result[0];
-  $arr = $xml->attributes();
-  echo $arr["cdt"] . ',' . $arr["mdt"] . ',' . $arr['usr'];
-
-  //here entry should be item...
-  foreach($xml->children() as $entry) {
-    switch($entry->getName()){
-    case "term":
-      if (cswLayout($entry)){
-        echo '<p><img src="glyphogram.php?text=' . csw2ksw($entry) . '"/><br>';
-      }
-      break;
-    case "text":
-
-      if (cswLayout($entry)){
-        $sign['sgntxt']=''.$entry;
-      } else {
-        $sign['txt']=''.$entry;
-      }
-      break;
-    case "src":
-      $sign['src']=''.$entry;
-      break;
-    case "png":
-    case "svg":
-      break;
-    default :
-      echo "ack ... " . $entry->getName();
-      die();
-    }
-
-  }
-*/
+//include 'msw.php';
 
 function get_spml($type,$pid){
   global $data;

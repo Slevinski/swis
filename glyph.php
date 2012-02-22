@@ -2,9 +2,6 @@
 /**
  * Glyph image
  * 
- * Copyright 2007-2010 Stephen E Slevinski Jr
- * Steve (Slevin@signpuddle.net)
- * 
  * This file is part of SWIS: the SignWriting Image Server.
  * 
  * SWIS is free software: you can redistribute it and/or modify
@@ -22,13 +19,13 @@
  * 
  * END Copyright
  *  
- * @copyright 2007-2010 Stephen E Slevinski Jr 
- * @author Steve (slevin@signpuddle.net)  
- * @license http://www.opensource.org/licenses/gpl-3.0.html GPL
- * @access public
- * @package SWIS
- * @version 1.2.0
- * @filesource
+ * @copyright 2007-2012 Stephen E Slevinski Jr 
+ * @author Steve Slevinski (slevin@signpuddle.net)  
+ * @version 3
+ * @section License 
+ *   GPL 3, http://www.opensource.org/licenses/gpl-3.0.html
+ * @brief Glyph image script
+ * @file
  *   
  */
 
@@ -45,10 +42,9 @@ include 'image.php';
 $key = @$_REQUEST['key'];
 $code = @$_REQUEST['code'];
 $bsw = @$_REQUEST['bsw'];
-$bsw2 = @$_REQUEST['bsw2'];
 $sym = @$_REQUEST['sym'];
 if($sym){
-  $key = bsw2key(utf2bsw($sym));
+  $key = bsw2key(csw2bsw($sym));
 //  echo urlencode($sym) . ' and ' . $key;
 }
 $style = @$_REQUEST['style'];
@@ -83,20 +79,10 @@ if ($code){
   } else {
     $key = base2view($base);
   }
-} else if ($bsw2){
-  $bsw = bsw2bsw3($bsw2);
-  $base = substr($bsw,0,3);
-  if (strlen($bsw)>3){
-    $hfill = char2fill(substr($bsw,3,3));
-    $hrot = char2rot(substr($bsw,6,3));
-    $key = $base . $hfill . $hrot;
-  } else {
-    $key = base2view($base);
-  }
 } else {
   die();
 }
-//display
+
 $fmt = substr($style,0,3);
 $ver = substr($style,3,1);
 switch ($fmt){
