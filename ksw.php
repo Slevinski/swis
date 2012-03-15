@@ -167,6 +167,8 @@ function kswPanel($text){
     $cluster[0][1]="0x0";
     return $cluster;
   }
+  $seq = 'A' . ksw2seq($ksw);
+  $ksw = str_replace($seq,'',$ksw);
   if(isPunc($ksw)) {
     $ksw_pattern = '/S38[7-9ab][0-5][0-9a-f]n?[0-9]+xn?[0-9]+/i';
     preg_match($ksw_pattern,$ksw,$match);

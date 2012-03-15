@@ -103,23 +103,31 @@ function reorient ($text){
  */
 function ksw2fsw($ksw){
   //match all symbols...
-  $pattern = '/S[123][0-9a-f]{2}[0-5][0-9a-f]n?[0-9]+xn?[0-9]+/i';
-  preg_match_all($pattern,$ksw, $matches);
-  foreach($matches[0] as $spatial){
-    $len = strlen($spatial);
-    $str = substr($spatial,6,$len-7+1);
-    $coord = str2koord($str);
-    $ksw = str_replace($str,($coord[0]+500) . 'x' . ($coord[1]+500),$ksw);
+  $segments = explode(' ',$ksw);
+  $segsout = array();
+  foreach ($segments as $ksw){
+    $pattern = '/([BLMR]|S[123][0-9a-f]{2}[0-5][0-9a-f])n?[0-9]+xn?[0-9]+/i';
+    preg_match_all($pattern,$ksw, $matches);
+    $input = '';
+    $output = '';
+    foreach($matches[0] as $spatial){
+      $len = strlen($spatial);
+      $first = $spatial[0];
+      if (strpos("BLMR",$first)===false){
+        $key = substr($spatial,0,6);
+      } else {
+        $key = $first;
+      }
+      $klen = strlen($key);
+      $str = substr($spatial,$klen,$len-$klen);
+      $coord = str2koord($str);
+      $input .= $spatial;
+      $output .= $key . ($coord[0]+500) . 'x' . ($coord[1]+500);
+    }
+    $ksw = str_replace($input,$output,$ksw);
+    $segsout[] = $ksw;
   }
-  $pattern = '/[BLMR]n?[0-9]+xn?[0-9]+/i';
-  preg_match_all($pattern,$ksw, $matches);
-  foreach($matches[0] as $spatial){
-    $len = strlen($spatial);
-    $str = substr($spatial,1,$len-1);
-    $coord = str2koord($str);
-    $ksw = str_replace($str,($coord[0]+500) . 'x' . ($coord[1]+500),$ksw);
-  }
-  return $ksw;
+  return implode(' ',$segsout);
 }
 
 /** 
@@ -129,15 +137,26 @@ function ksw2fsw($ksw){
  * @ingroup conv
  */
 function fsw2ksw($fsw){
-  $pattern = '/[0-9]{3}x[0-9]{3}/i';
-  preg_match_all($pattern,$fsw, $matches);
-  foreach($matches[0] as $str){
-    $coord = str2koord($str);
-    $coord[0] -= 500;
-    $coord[1] -= 500;
-    $fsw = str_replace($str,koord2str($coord[0],$coord[1]) ,$fsw);
+  $segments = explode(' ',$fsw);
+  $segsout = array();
+  $pattern = '/([BLMR]|S[123][0-9a-f]{2}[0-5][0-9a-f])[0-9]{3}x[0-9]{3}/i';
+  foreach ($segments as $fsw){
+    $input = '';
+    $output = '';
+    preg_match_all($pattern,$fsw, $matches);
+    foreach($matches[0] as $str){
+      $len = strlen($str);
+      $pre = substr($str,0,$len-7);
+      $coord = str2koord(substr($str,$len-7,7));
+      $coord[0] -= 500;
+      $coord[1] -= 500;
+      $input .= $str;
+      $output .= $pre . koord2str($coord[0],$coord[1]);
+    }
+    $segsout[] = str_replace($input,$output,$fsw);
+
   }
-  return $fsw;
+  return implode(' ',$segsout);
 }
 
 /** 

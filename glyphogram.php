@@ -55,7 +55,9 @@ $colorize = @$_REQUEST['colorize'];
 $name= @$_REQUEST['name'];
 if(!$name){$name='glyphogram';}
 
-if (kswLayout($text)) {
+if (fswText($text)) {
+  $ksw = fsw2ksw($text);
+} else if (kswLayout($text)) {
   $ksw = $text;
 }
 if (kswPanel($panel)) {

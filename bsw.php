@@ -140,7 +140,7 @@ $BaseSymbols = array();
  */
 function isKey($key){
   if ($key=='') return false;
-  $re_sym = '[123][a-f0-9]{2}[012345][a-f0-9]';
+  $re_sym = 'S?[123][a-f0-9]{2}[012345][a-f0-9]';
   $re_pattern = '/^' . $re_sym . '$/i';
 
   $result = preg_match($re_pattern,$key,$matches);
@@ -161,7 +161,7 @@ function isKey($key){
 function validKey($key){
   if (!isKey($key)) return false;
   global $BaseSymbols;
-  if (count($BaseSymbols)==0) $BaseSymbols = LoadBaseSymbols();
+  if (count($BaseSymbols)==0) $BaseSymbols = loadBaseSymbols();
   $key = str_replace("S","",$key);
   $len = strlen($key);
   if ($len<3){ return false ;}//error

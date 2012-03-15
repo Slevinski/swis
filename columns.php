@@ -58,7 +58,7 @@ echo '</head><body>';
 if ($length=='') $length=400;
 
 $ksw = trim($ksw);
-$panel = ksw2panel($ksw,intval($length/$size),$params);
+$panel = explode(' ',ksw2panel($ksw,intval($length/$size),$params));
 $cnt = count($panel);
 $fmt = substr($style,0,3);
 switch ($fmt){
