@@ -117,12 +117,17 @@ function char2unicode($char,$plane=15){
  * @ingroup uni
  */
 function bsw2csw($bsw, $plane=15){
-  $bsw_utf = '';
-  $chars = str_split($bsw,3);
-  forEach($chars as $char){
-    $bsw_utf .= char2utf($char,$plane);
+  $parts = explode(' ',$bsw);
+  $out = array();
+  foreach ($parts as $part){
+    $csw = '';
+    $chars = str_split($part,3);
+    forEach($chars as $char){
+      $csw .= char2utf($char,$plane);
+    }
+    $out[] = $csw;
   }
-  return $bsw_utf;
+  return implode($out,' ');
 }
 
 /** 

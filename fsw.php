@@ -716,9 +716,7 @@ function query2displace($qsearch){
  * @ingroup fre
  */
 function query_results($qsearch,$input){
-  //return array[0] array of words
-  //return array[1] array of word counts
-  //return array[2] value of grand total
+  //return array of words
   
   $re = query2regex($qsearch);
   foreach ($re as $pattern){
