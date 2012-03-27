@@ -176,6 +176,7 @@ function bsw2fsw($bsw){
     //match each bsw char...
     $pattern = '/([1-8][0-9a-f]{2})/i';
     preg_match_all($pattern,$bword, $chars);
+    $coord = '';
     foreach($chars[0] as $char){
       if (inHexRange('100','104',$char)){
         switch($char){
@@ -202,19 +203,20 @@ function bsw2fsw($bsw){
       } else if (inHexRange('130','3bb',$char)){
         $fsw .= 'S' . dechex(hexdec($char) - hexdec('30'));
       } else if (inHexRange('706','8f9',$char)){
-        $fsw .= $char;//handle later...
+        if ($coord){
+          $coord .= $char;
+          $coord = bsw2coord($coord);
+          $fsw .= ($coord[0]+500) . 'x' . ($coord[1]+500);
+          $coord = '';
+        } else {
+          $coord = $char;
+        }
       }      
     }
     $words[] = $fsw;
   }
 
   $fsw = implode($words,' ');
-  $pattern = '/([78][0-9a-f]{2}){2}/i';
-  preg_match_all($pattern,$fsw, $matches);
-  foreach($matches[0] as $str){
-    $coord = bsw2coord($str);
-    $fsw = str_replace($str,($coord[0]+500) . 'x' . ($coord[1]+500),$fsw);
-  }
   return $fsw;
 }
 

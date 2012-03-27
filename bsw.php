@@ -465,6 +465,29 @@ function bsw2key($bsw){
   return $base . char2fill($fill) . char2rot($rot);
 }
 
+
+/** 
+ * @brief test if text is Binary SignWriting 
+ * @param $text character string
+ * @return boolean value if text is Binary SignWriting with number characters
+ * @ingroup str
+ */
+function bswText($text){
+  $bsw_sym = '[123][0-9a-f]{2}11[0-5]12[0-9a-f]';
+  $bsw_coord = '([78][0-9a-f]{2}){2}';
+  $bsw_word = '(100(' . $bsw_sym. ')+)?10[1-4](' . $bsw_coord . ')(' . $bsw_sym . $bsw_coord . ')*';
+  $bsw_punc = '3b[7-9ab]11[0-5]12[0-9a-f]' . $bsw_coord;
+  $bsw_pattern = '/^(' . $bsw_word . '|' . $bsw_punc . ')( ' . $bsw_word . '| ' . $bsw_punc .')*$/i';
+
+  $result = preg_match($bsw_pattern,$text,$matches);
+  if ($result) {
+    if ($text == $matches[0]) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /** 
  * @brief x,y values to irregular coordinate string
  * @param $x X value

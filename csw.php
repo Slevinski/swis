@@ -173,15 +173,19 @@ function utf2char($utf){
  * @ingroup uni
  * @see utf2char
  */
-function csw2bsw($bsw_utf){
-  $bsw = '';
-//  $pattern ='/[\x{1d800}-\x{1dcff}][\x{fd800}-\x{fdcff}][\x{10d800}-\x{10dcff}]/u';
-  $pattern ='/[\x{FD800}-\x{FDFF9}]/u';
-  preg_match_all($pattern, $bsw_utf,$matches);
-  forEach ($matches[0] as $uchar){
-    $bsw = $bsw . utf2char($uchar);
+function csw2bsw($csw){
+  $parts = explode(' ',$csw);
+  $out = array();
+  foreach ($parts as $csw){
+    $bsw = '';
+    $pattern ='/[\x{FD800}-\x{FDFF9}]/u';
+    preg_match_all($pattern, $csw,$matches);
+    forEach ($matches[0] as $uchar){
+      $bsw = $bsw . utf2char($uchar);
+    }
+    $out[] = $bsw;
   }
-  return $bsw;
+  return implode($out,' ');
 }
 
 /** 
