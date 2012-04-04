@@ -5,5 +5,13 @@
   margin-bottom:15px;
   border: 2px #cccccc solid;
 }
+.signtextrow {
+  position: relative;
+  float:left;
+  padding:10px;
+  display: inline-block;
+  border: 2px #cccccc solid;
+  clear:both;
+}
 
 

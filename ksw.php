@@ -335,7 +335,7 @@ function cluster2ksw($cluster){
  * @return array of x, y values
  * @ingroup kscrape
  */
-function cluster2min($cluster){
+function cluster2min($cluster,$override=true){
   foreach($cluster as $i=>$sym){
     if ($i==0) continue;
     $coord = str2koord($sym[1]);
@@ -347,7 +347,7 @@ function cluster2min($cluster){
       $yMin = min($yMin,$coord[1]);
     }
   }
-  if ($xMin > 0) {
+  if ($xMin > 0  && $override) {
     $xMin=0;
     $yMin=0;
   }
@@ -574,40 +574,48 @@ function crosshairs ($ksw,$out=15,$adj=''){
     $cluster = ksw2cluster($ksw);
     $min = cluster2min($cluster);
     $max = str2koord($cluster[0][1]);
-    $clusterW = $max[0]-$min[0];
-    $clusterH = $max[1]-$min[1];
-    $zeroX = max(-$min[0],$clusterW+$min[0]);
-    $zeroY = max(-$min[1],$clusterH+$min[1]);
-
     if (is_array($adj)){
-      $moveX = $min[0]-$adj[0];
-      $moveY = $min[1]-$adj[1];
+      $moveX = $adj[0] - $min[0];
+      $moveY = $adj[1] - $min[1];
+      $min[0] += $moveX;
+      $min[1] += $moveY;
+      $max[0] += $moveX;
+      $max[1] += $moveY;
+      //move each sym in cluster
+      foreach($cluster as $i=>$sym){
+        if ($i==0) continue;
+        $coord = str2koord($sym[1]);
+        $cluster[$i][1]=koord2str($coord[0] + $moveX, $coord[1] + $moveY);
+      }
     } else {
       $moveX = 0;//$min[0];
       $moveY = 0;//$min[1];
     }
-    $zeroX -= $moveX;
-    $zeroY -= $moveY;
-
+    $clusterW = $max[0]-$min[0];
+    $clusterH = $max[1]-$min[1];
+    $minX = min(0,$min[0]);
+    $maxX = max($max[0],0);
+    $minY = min(0,$min[1]);
+    $maxY = max($max[1],0);
     //add top mark
-    $x = $moveX-1;
-    $y = $moveY - $zeroY - 12 - $out;
+    $x = -1;
+    $y = -12 - $out + $minY;
     $spatial = array("S37c00",koord2str($x,$y));
     $cluster[]=$spatial;
     //add bottom mark
-    $x = $moveX-1;
-    $y = $moveY + $zeroY + $out ;
+    $x = -1;
+    $y = $out + $maxY;
     $spatial = array("S37c00",koord2str($x,$y));
     $cluster[]=$spatial;
 
     //add left mark
-    $x= $moveX - $zeroX - 12 - $out;
-    $y= $moveY-1;
+    $x= - 12 - $out + $minX;
+    $y= -1;
     $spatial = array("S37c06",koord2str($x,$y));
     $cluster[]=$spatial;
     //add right mark
-    $x = $moveX + $zeroX + $out;
-    $y = $moveY-1;
+    $x = $out + $maxX;
+    $y = -1;
     $spatial = array("S37c06",koord2str($x,$y));
     $cluster[]=$spatial;
 
