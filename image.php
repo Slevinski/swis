@@ -232,18 +232,18 @@ function glyphogram_png($ksw, $ver,$size, $pad, $bound, $line, $fill, $back, $co
  * Step 4: bound center, horizontal or vertical
  */
     if ($bound=="c" || $bound=="h"){
-      if (($cx-$xMin) > ($xMax-$cx)) {
-        $xMax = $cx + ($cx - $xMin);
+      if ((-$xMin) > ($xMax)) {
+        $xMax = - $xMin;
       } else {
-        $xMin = $cx - ($xMax - $cx);
+        $xMin = - $xMax;
       }
     }
 
     if ($bound=="c" || $bound=="v"){
-      if (($cy-$yMin) > ($yMax-$cy)) {
-        $yMax = $cy + ($cy - $yMin);
+      if ((-$yMin) > ($yMax)) {
+        $yMax = - $yMin;
       } else {
-        $yMin = $cy - ($yMax - $cy);
+        $yMin = - $yMax;
       }
     }
 
@@ -362,18 +362,18 @@ function glyphogram_svg($ksw, $ver, $size, $pad, $bound, $line, $fill, $back, $c
  * Step 4: bound center, horizontal or vertical
  */
     if ($bound=="c" || $bound=="h"){
-      if (($cx-$xMin) > ($xMax-$cx)) {
-        $xMax = $cx + ($cx - $xMin);
+      if ((-$xMin) > ($xMax)) {
+        $xMax = - $xMin;
       } else {
-        $xMin = $cx - ($xMax - $cx);
+        $xMin = - $xMax;
       }
     }
 
     if ($bound=="c" || $bound=="v"){
-      if (($cy-$yMin) > ($yMax-$cy)) {
-        $yMax = $cy + ($cy - $yMin);
+      if ((-$yMin) > ($yMax)) {
+        $yMax = - $yMin;
       } else {
-        $yMin = $cy - ($yMax - $cy);
+        $yMin = - $yMax;
       }
     }
 
@@ -463,18 +463,18 @@ function glyphogram_txt($ksw, $ver, $pad, $bound, $line, $fill, $back, $break) {
  * Step 4: bound center, horizontal or vertical
  */
     if ($bound=="c" || $bound=="h"){
-      if (($cx-$xMin) > ($xMax-$cx)) {
-        $xMax = $cx + ($cx - $xMin);
+      if ((-$xMin) > ($xMax)) {
+        $xMax = - $xMin;
       } else {
-        $xMin = $cx - ($xMax - $cx);
+        $xMin = - $xMax;
       }
     }
 
     if ($bound=="c" || $bound=="v"){
-      if (($cy-$yMin) > ($yMax-$cy)) {
-        $yMax = $cy + ($cy - $yMin);
+      if ((-$yMin) > ($yMax)) {
+        $yMax = - $yMin;
       } else {
-        $yMin = $cy - ($yMax - $cy);
+        $yMin = - $yMax;
       }
     }
 

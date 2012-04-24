@@ -268,7 +268,8 @@ function unpack_spml($type,$id){
         $outfile =  $data . '/' . $type . '/' . $id . '/' . $e_id . '.xml';
         $outxml = $entry->asXml();
         $outxml = str_replace("\n  \n","",$outxml);
-        file_put_contents($outfile,str_replace("\n\n","\n",$outxml)."\n");
+//        $outxml = str_replace("\n\n","",$outxml);
+        file_put_contents($outfile,$outxml."\n");
         break;
       case "png":
       case "svg":
@@ -278,9 +279,7 @@ function unpack_spml($type,$id){
       default:
         $spml .= '  ' . $itemXML . "\n";
     }
-//    if ($name == "entry") break;
   }
-
   $spml .= '</entry>' . "\n";
   $xmlfile = $data . '/' . $type . '/' . $id . '.xml';
   file_put_contents($xmlfile,$spml);
