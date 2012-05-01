@@ -45,7 +45,6 @@
 
 include('bsw.php');
 include('csw.php');
-include('size.php');
 include ('ksw.php');
 include ('fsw.php');
 

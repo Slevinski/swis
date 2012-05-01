@@ -31,9 +31,9 @@
 
 function glyph_png($key,$ver,$size,$line,$fill,$back, $colorize){
   if (!$ver) $ver=1;
-  $base = substr($key,0,3);
-  $file = 'iswa/png' . $ver . '/' . $base . '/' . $key . '.png';
-  $im_src = imagecreatefrompng($file);
+
+  $imgstr = image_png($key,$ver);
+  $im_src = imagecreatefromstring($imgstr); 
   if ($colorize) $line='';
 //   if (!$colorize and !$line){$line = "000000";}
   if ($line){
@@ -88,14 +88,12 @@ function glyph_svg($key,$ver,$size,$line,$fill,$back, $colorize){
   global $SymbolGroups;
   if ($colorize) {
     if (count($SymbolGroups==0)) $SymbolGroups = loadSymbolGroups();
-    $group = base2group($key);
+    $group = hexdec(base2group($key));
     $line = $SymbolGroups[$group]['color'];
   }
   if (!$fill && $back) $fill = $back;
   if (!$ver) $ver=1;
-  $base = substr($key,0,3);
-  $file = 'iswa/svg' . $ver . '/' . $base . '/' . $key . '.svg';
-  $im = file_get_contents($file);
+  $im = image_svg($key,$ver);
   if ($line) $im = str_replace("#000000","#LINE",$im);
   if ($fill) $im = str_replace("#ffffff","#FILL",$im);
   if ($line) $im = str_replace("#LINE","#".$line,$im);
@@ -114,8 +112,7 @@ function glyph_svg_trim($svg){
 function glyph_txt($key,$ver,$line,$fill,$back,$break){
   if (!$ver) $ver=1;
   $base = substr($key,0,3);
-  $file = 'iswa/txt' . $ver . '/' . $base . '/' . $key . '.txt';
-  $im = file_get_contents($file);
+  $im = image_txt($key,$ver);
   if ($back){
     $im = str_replace("-",$back,$im);
   } else {
@@ -206,8 +203,8 @@ function glyphogram_png($ksw, $ver,$size, $pad, $bound, $line, $fill, $back, $co
     $base = substr($spatial[0],1,3);
     $key = substr($spatial[0],1,5);
     $image="im$num";
-    $file = 'iswa/png' . $ver . '/' . $base . '/' . $key . '.png';
-    $$image= imagecreatefromstring(file_get_contents($file)); 
+    $imgstr = image_png($key,$ver);
+    $$image= imagecreatefromstring($imgstr); 
     if ($line){
       //for solid images
       if (imagecolorstotal( $$image)==1){

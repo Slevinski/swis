@@ -163,59 +163,6 @@ function iswa_08_10($iswa_08_id){
   return $iswa_08[$iswa_08_id];
 }
 
-/**
- * translation between ISWA 2010 symbol id and symbol key
- */
-$idkey = array();
-function load_iswa_id_key(){
-  global $idkey;
-  
-  $filename = 'iswa/data/iswa_sym_base.txt';
-  $contents = trim(file_get_contents($filename));
-  $rows = explode("\n",$contents);
-  foreach ($rows as $i => $row){
-    $parts = explode(',',$row);
-    $idkey[$parts[0]] = (string)$parts[1];
-  }
-}
-
-function id2key($sid){
-  global $idkey;
-  if (count($idkey)==0) load_iswa_id_key();
-  $sBase = substr($sid,0,12);
-  $base = $idkey[$sBase];
-  if (strlen($sid) == 18) {
-    $ifill = intval(substr($sid,13,2)) -1;
-    $hrot = dechex(intval(substr($sid,16,2) -1));
-    $key = $base . $ifill . $hrot;
-  } else {
-    $key = base2view($base);
-  }
-  return $key;
-}
-
-function key2id($key,$force){
-$key=str_replace('S','',$key);
-if (!$force) die('key2id');
-//return "01-01-001-01-01-01";
-  global $idkey;
-  if (count($idkey)==0) load_iswa_id_key();
-  $base = substr($key,0,3);
-  $sym = array_search($base,$idkey,true);
-  if (strlen($key)!=5){
-    $key = base2view($base);
-  }
-  $ifill = intval(substr($key,3,1)) + 1;
-  $irot = hexdec(strtoupper(substr($key,4,1))) + 1;
-  if ($irot>9) {
-    $srot = (string)$irot;
-  } else {
-    $srot = '0' . $irot;
-  }
-  return $sym . '-0' . $ifill . '-' . $srot;
-}
-
-
 function ksw2bld($ksw,$force){
   if(!$ksw) return;
   if (!$force) die("ksw2bld");

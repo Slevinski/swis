@@ -29,6 +29,9 @@
  *   
  */
  
+//include 'filesystem.php';
+include 'database.php';
+
 /** @defgroup bsw Binary SignWriting
  *  Encoding for symbols, numbers, and markers
  */
@@ -167,7 +170,7 @@ function validKey($key){
   if ($len<3){ return false ;}//error
   $hcode = substr($key,0,3);
 
-  $bs = $BaseSymbols[$hcode];
+  $bs = $BaseSymbols[hexdec($hcode)];
   if (!$bs){return false;}
 
   $df = 0;
@@ -180,60 +183,6 @@ function validKey($key){
   $rotbin = pow(2,$dr);
   $bRot = $rotbin & $bs['rots'];
   return $bFill and $bRot;
-}
-
-/** 
- * @brief returns array of symbol group information
- * @return array of symbol group data
- * @ingroup key
- */
-function loadSymbolGroups(){
-  $filename = 'iswa/data/iswa.sgd';
-  $data = file_get_contents($filename);
-  $rows = explode("\n",$data);
-  $SymbolGroups = array();
-  foreach ($rows as $i => $row){
-    $sg = array();
-    if ($i==0){
-      $keys = explode("\t",$rows[$i]);
-    } else {
-      $values = explode("\t",$rows[$i]);
-      foreach ($keys as $i => $key){
-        $sg[$key] = $values[$i];
-      }
-      $code = $sg['code'];
-      $SymbolGroups[$code] = $sg;
-    }
-  }
-  return $SymbolGroups;
-}
-
-/** 
- * @brief returns array of base symbol information
- * @return array of base symbol data
- * @ingroup key
- */
-function loadBaseSymbols(){
-  $filename = 'iswa/data/iswa.bsd';
-  $data = file_get_contents($filename);
-  $rows = explode("\n",$data);
-  $BaseSymbols = array();
-  foreach ($rows as $i => $row){
-    if ($row!=''){
-      $bs = array();
-      if ($i==0){
-        $keys = explode("\t",$rows[$i]);
-      } else {
-        $values = explode("\t",$rows[$i]);
-        foreach ($keys as $i => $key){
-          $bs[$key] = $values[$i];
-        }
-        $code = $bs['code'];
-        $BaseSymbols[$code] = $bs;
-      }
-    }
-  }
-  return $BaseSymbols;
 }
 
 /** 

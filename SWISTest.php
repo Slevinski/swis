@@ -56,6 +56,8 @@
 include 'msw.php';
 /** 
  * @brief Unit Testing class for bsw.php and csw.php
+ * @backupGlobals disabled
+ * @backupStaticAttributes disabled
  */
 class SWISTest extends PHPUnit_Framework_TestCase {
   //! @ingroup bswphp
@@ -128,14 +130,14 @@ class SWISTest extends PHPUnit_Framework_TestCase {
   public function test_loadSymbolGroups() {
     $sg = loadSymbolGroups();
     $this->assertEquals(30,count($sg));
-    $this->assertEquals('100',$sg['100']['code']);
+    $this->assertEquals(256,$sg[256]['code']);
   }
 
   //! @ingroup bswphp
   public function test_loadBaseSymbols() {
     $bs = loadBaseSymbols();
     $this->assertEquals(652,count($bs));
-    $this->assertEquals('100',$bs['100']['code']);
+    $this->assertEquals(256,$bs[256]['code']);
   }
 
   //! @ingroup bswphp
@@ -982,6 +984,15 @@ class SWISTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('QTS1005fS101uuS1025fV20',query2anywhere('QTS1005fS101uu500x500S1025fV20'));
     $this->assertEquals('QTR105t10fR205t210',query2anywhere('QTR105t10f500x500R205t210'));
   }
+ 
+  //! @ingroup spl
+  public function test_id2key(){
+    $this->assertEquals('10000',id2key('01-01-001-01-01-01'));
+  } 
   
+  //! @ingroup spl
+  public function test_key2id(){
+    $this->assertEquals('01-01-001-01-01-01',key2id('S10000',1));
+  } 
 }
 ?>
