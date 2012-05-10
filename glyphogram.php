@@ -59,6 +59,9 @@ if (fswText($text)) {
   $ksw = fsw2ksw($text);
 } else if (kswLayout($text)) {
   $ksw = $text;
+} else if (kswPanel($text)){
+  $cluster = panel2cluster($text);
+  $ksw = cluster2ksw($cluster);
 }
 if (kswPanel($panel)) {
   $cluster = panel2cluster($panel);
