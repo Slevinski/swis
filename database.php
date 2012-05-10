@@ -30,7 +30,7 @@
  */
 
 global $iswa_db;
-$iswa_db = new PDO('sqlite:iswa.sql3');
+$iswa_db = new PDO('sqlite:' . dirname(__FILE__) . '/iswa.sql3');
 
  /** 
  * @brief returns array of symbol group information
