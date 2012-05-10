@@ -47,8 +47,8 @@ if($sym){
   $key = bsw2key(csw2bsw($sym));
 //  echo urlencode($sym) . ' and ' . $key;
 }
-$style = @$_REQUEST['style'];
-if (!$style) $style='png1';
+$font= @$_REQUEST['font'];
+if (!$font) $font='png1';
 
 $size = @$_REQUEST['size'];
 $line = @$_REQUEST['line'];
@@ -83,8 +83,8 @@ if ($code){
   die();
 }
 
-$fmt = substr($style,0,3);
-$ver = substr($style,3,1);
+$fmt = substr($font,0,3);
+$ver = substr($font,3,1);
 switch ($fmt){
   case "txt":
     header("Content-type: text/plain");

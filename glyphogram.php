@@ -43,7 +43,7 @@ $bsw = @$_REQUEST['bsw'];  //BSW 3 text, layout, or panel
 
 $text = @$_REQUEST['text'];
 $panel = @$_REQUEST['panel'];
-$style = @$_REQUEST['style'];
+$font= @$_REQUEST['font'];
 $size = @$_REQUEST['size'];
 $pad=@$_REQUEST['pad'];
 $bound=@$_REQUEST['bound'];
@@ -65,8 +65,8 @@ if (kswPanel($panel)) {
   $ksw = cluster2ksw($cluster);
 }
 
-$fmt = substr($style,0,3);
-$ver = substr($style,3,1);
+$fmt = substr($font,0,3);
+$ver = substr($font,3,1);
 switch ($fmt){
   case "txt":
     header("Content-type: text/plain");

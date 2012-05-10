@@ -38,7 +38,7 @@ $req = array('ksw','length','size','color','colorize','background','style');
 foreach ($req as $name){
   $$name = @$_REQUEST[$name];
 }
-if (!$style) $style='png';
+if (!$font) $font='png';
 
 $lst = array('width','signTop','signBottom','padding','puncBottom','offset','justify');
 $params = array();
@@ -60,17 +60,17 @@ if ($length=='') $length=400;
 $ksw = trim($ksw);
 $panel = explode(' ',ksw2panel($ksw,intval($length/$size),$params));
 $cnt = count($panel);
-$fmt = substr($style,0,3);
+$fmt = substr($font,0,3);
 switch ($fmt){
 case "png":
-  $pre = '<div class="signtextcolumn"><img src="glyphogram.php?style=' . $style . '&size=' . $size;
+  $pre = '<div class="signtextcolumn"><img src="glyphogram.php?font=' . $font. '&size=' . $size;
   if ($color) $pre .= '&line=' . $color;
   if ($colorize) $pre .= '&colorize=1';
   if ($background) {
     $pre .= '&back=' . $background;
     $pre .= '&fill=' . $background;
   }
-  if ($color || $background) $style="png1";
+  if ($color || $background) $font="png1";
   forEach($panel as $col){
     if ($cnt==1){
       $col = panelTrim($col);
@@ -99,7 +99,7 @@ case "svg":
     $wsvg = ceil($coord[0]*$size);
     $hsvg = ceil($coord[1]*$size);
     echo $pre . '<embed type="image/svg+xml" width="' . $wsvg . '" '; 
-    echo 'height="' . $hsvg . '" src="' . $host . 'glyphogram.php?style=' . $style . '&';
+    echo 'height="' . $hsvg . '" src="' . $host . 'glyphogram.php?font=' . $font. '&';
     if ($size!=1) echo 'size=' . $size . '&';
     if ($color) echo 'line=' . $color . '&';
     if ($colorize) echo 'colorize=1&';

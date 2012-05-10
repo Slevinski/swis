@@ -664,7 +664,7 @@ function ksw2panel($ksw,$length,$params=array()){
     $form = 'row';
   }
   $style='flex';
-  $spacing=12;
+  //$spacing=12;
   $offset=50;
   $top=0;
   $justify=3; //0 does nothing, 1 pulls punc, 2 pushes signs, 3 does doth
