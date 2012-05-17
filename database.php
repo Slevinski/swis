@@ -112,6 +112,13 @@ function key2id($key,$force){
   return sprintf("%02d-%02d-%03d-%02d-%02d-%02d",$row[0],$row[1],$row[2],$row[3],$ifill, $irot);
 }
 
+function iswaName($id,$lang="en"){
+  global $iswa_db;
+  $query = 'select name from iswa_name where key = "' . $id . '" and lang = "' . $lang . '"';
+  $row = $iswa_db->query($query)->fetch();
+  return $row[0];
+}
+
 function image_png($key,$ver){
   global $iswa_db;
   $code = key2code($key);

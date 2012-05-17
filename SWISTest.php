@@ -995,5 +995,10 @@ class SWISTest extends PHPUnit_Framework_TestCase {
   public function test_key2id(){
     $this->assertEquals('01-01-001-01-01-01',key2id('S10000',1));
   } 
+
+  //! @ingroup spl
+  public function test_iswaName(){
+    $this->assertEquals('Hands',iswaName("01","en"));
+  }
 }
 ?>

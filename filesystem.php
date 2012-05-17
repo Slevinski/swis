@@ -136,6 +136,18 @@ if (!$force) die('key2id');
   return $sym . '-0' . $ifill . '-' . $srot;
 }
 
+$messages = array();
+function load_iswaNames(){
+  global $messages;
+  include('iswa/data/iswa.i18n.php');
+}
+
+function iswaName($id, $lang='en'){
+  global $messages;
+  if (count($messages)==0) load_iswaNames();
+  return $messages[$lang]['iswa_' . $id];
+}
+
 function image_png($key,$ver){
   $base = substr($key,0,3);
   $file = 'iswa/png' . $ver . '/' . $base . '/' . $key . '.png';
