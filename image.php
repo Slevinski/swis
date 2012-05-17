@@ -30,12 +30,16 @@
  */
 
 function glyph_png($key,$ver,$size,$line,$fill,$back, $colorize){
+  global $SymbolGroups;
+  if ($colorize) {
+    if (count($SymbolGroups==0)) $SymbolGroups = loadSymbolGroups();
+    $group = hexdec(base2group($key));
+    $line = $SymbolGroups[$group]['color'];
+  }
   if (!$ver) $ver=1;
 
   $imgstr = image_png($key,$ver);
   $im_src = imagecreatefromstring($imgstr); 
-  if ($colorize) $line='';
-//   if (!$colorize and !$line){$line = "000000";}
   if ($line){
     list($r,$g,$b) = array_values(str_split($line,2));
     $r=hexdec($r);
@@ -125,7 +129,10 @@ function glyph_txt($key,$ver,$line,$fill,$back,$break){
  }
 
 function glyphogram_png($ksw, $ver,$size, $pad, $bound, $line, $fill, $back, $colorize){
-  if ($colorize) $ver=4;
+  global $SymbolGroups;
+  if ($colorize) {
+    if (count($SymbolGroups==0)) $SymbolGroups = loadSymbolGroups();
+  }
   if (!$ver) $ver=1;
   if($back==-1){
     $back='';
@@ -139,9 +146,6 @@ function glyphogram_png($ksw, $ver,$size, $pad, $bound, $line, $fill, $back, $co
   }
   if (!kswLayout($ksw)) {
     $im = imagecreatetruecolor(2,2);
-  }
-  if ($colorize){
-    $line='';  //ignore line color
   }
   if (!$line){//default to black
     if ($ver==2){ 
@@ -205,6 +209,14 @@ function glyphogram_png($ksw, $ver,$size, $pad, $bound, $line, $fill, $back, $co
     $image="im$num";
     $imgstr = image_png($key,$ver);
     $$image= imagecreatefromstring($imgstr); 
+    if ($colorize) {
+      $group = hexdec(base2group($key));
+      $line = $SymbolGroups[$group]['color'];
+      list($r,$g,$b) = array_values(str_split($line,2));
+      $rl=hexdec($r);
+      $gl=hexdec($g);
+      $bl=hexdec($b);
+    }
     if ($line){
       //for solid images
       if (imagecolorstotal( $$image)==1){
