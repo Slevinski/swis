@@ -214,14 +214,15 @@ function puddle_spf(){
   if ($ui and $sgn){
     $type='sgn';
     $id = $sgn;
+  } else if ($sgn) {
+    $type='ui';
+    $id=$sgn;
+  } else if ($ui) {
+    $type='sgn';
+    $id='';
   } else {
     $type='ui';
-    if ($ui) {
-      $id=$ui;
-    } else if ($sgn) {
-      $type='ui';
-      $id=$sgn;
-    }
+    $id='';
   }
   return get_spml($type,$id);
 }
