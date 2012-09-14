@@ -203,6 +203,7 @@ function key2code($key){
  * @ingroup key
  */
 function code2key($code){
+$ode = $code;
   $base = intval($code/96);
   $code = $code - $base*96;
   $fill = intval(($code-1)/16);

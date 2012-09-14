@@ -155,6 +155,7 @@ class SWISTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('10001',code2key(2));
     $this->assertEquals('1000f',code2key(16));
     $this->assertEquals('10010',code2key(17));
+    $this->assertEquals('1005f',code2key(96));
     $this->assertEquals('10100',code2key(97));
   }
 
@@ -536,15 +537,10 @@ class SWISTest extends PHPUnit_Framework_TestCase {
   }
 
   //! @ingroup cswphp
-  public function test_uniord() {
-    $this->assertEquals('fd830',dechex(uniord(char2utf('130'))));
-  }
-
-  //! @ingroup cswphp
   public function test_num2utf() {
-    $this->assertEquals('fdf00', dechex(uniord(num2utf(0))));
-    $this->assertEquals('fde06', dechex(uniord(num2utf(-250))));
-    $this->assertEquals('fdff9', dechex(uniord(num2utf(249))));
+    $this->assertEquals('FDF00', char2unicode(utf2char(num2utf(0))));
+    $this->assertEquals('FDE06', char2unicode(utf2char(num2utf(-250))));
+    $this->assertEquals('FDFF9', char2unicode(utf2char(num2utf(249))));
   }
 
   //! @ingroup cswphp
@@ -646,6 +642,12 @@ class SWISTest extends PHPUnit_Framework_TestCase {
   }
 
   //! @ingroup kswphp
+  public function test_ksw2seq(){
+    $this->assertEquals('',ksw2seq('M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32'));
+    $this->assertEquals('S1870aS18701S2e734',ksw2seq('AS1870aS18701S2e734M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32'));
+  }
+
+  //! @ingroup kswphp
   public function test_ksw2cluster(){
     $syms = ksw2cluster('M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32');
     $this->assertEquals('18x33',$syms[0][1]);
@@ -668,6 +670,12 @@ class SWISTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('8xn4',$syms[3][1]);
     $this->assertEquals('S2e734',$syms[4][0]);
     $this->assertEquals('0xn32',$syms[4][1]);
+    
+    $syms = ksw2cluster('S38800n36xn4');
+    $this->assertEquals('36x4',$syms[0][1]);
+    $this->assertEquals('S38800',$syms[1][0]);
+    $this->assertEquals('n36xn4',$syms[1][1]);
+    
   }
   
   //! @ingroup kswphp
@@ -723,12 +731,6 @@ class SWISTest extends PHPUnit_Framework_TestCase {
   public function test_cluster2min(){
     $this->assertEquals(array(0,0),cluster2min(ksw2cluster('M230x300S14c2096x20S27106118x38S1870a104x165S1870197x140S20500123x146S2e734115x118S3880079x203')));
     $this->assertEquals(array(-19,-29),cluster2min(ksw2cluster('M115x49S14c20n19xn29S271063xn11')));
-  }
-
-  //! @ingroup kswphp
-  public function test_ksw2seq(){
-    $this->assertEquals('',ksw2seq('M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32'));
-    $this->assertEquals('S1870aS18701S2e734',ksw2seq('AS1870aS18701S2e734M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32'));
   }
 
   //! @ingroup kswphp

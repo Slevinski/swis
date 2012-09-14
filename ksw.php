@@ -57,7 +57,7 @@
  function kswRaw($text){
   $ksw_sym = 'S[123][0-9a-f]{2}[0-5][0-9a-f]';
   $ksw_coord = 'n?[0-9]+xn?[0-9]+';
-  $ksw_word = '(A(' . $ksw_sym. ')+)?[BLMR](' . $ksw_sym . $ksw_coord . ')*';
+  $ksw_word = '(A(' . $ksw_sym . ')+)?[BLMR](' . $ksw_sym . $ksw_coord . ')*';
   $ksw_punc = 'S38[7-9ab][0-5][0-9a-f]';
   $ksw_pattern = '/^(' . $ksw_word . '|' . $ksw_punc . ')( ' . $ksw_word . '| ' . $ksw_punc .')*$/i';
   $result = preg_match($ksw_pattern,$text,$matches);
@@ -152,6 +152,23 @@ function kswPanel($text){
     $keys .= substr($spatial,0,6);
   }
   return $keys;
+}
+
+/** 
+ * @brief scrape prefix of symbol keys
+ * @param $ksw ksw string
+ * @return string of symbol keys
+ * @ingroup kscrape
+ */
+ function ksw2seq($ksw){
+  $ksw_pattern = '/A(S[123][0-9a-f]{2}[0-5][0-9a-f])+/i';
+  preg_match($ksw_pattern,$ksw,$match);
+  if ($match){
+    $seq = $match[0];
+    $len = strlen($seq);
+    $seq = substr($seq,1,$len-1);
+    return $seq;
+  }
 }
 
 /** 
@@ -352,23 +369,6 @@ function cluster2min($cluster,$override=true){
     $yMin=0;
   }
   return array($xMin,$yMin);
-}
-
-/** 
- * @brief scrape prefix of symbol keys
- * @param $ksw ksw string
- * @return string of symbol keys
- * @ingroup kscrape
- */
- function ksw2seq($ksw){
-  $ksw_pattern = '/A(S[123][0-9a-f]{2}[0-5][0-9a-f])+/i';
-  preg_match($ksw_pattern,$ksw,$match);
-  if ($match){
-    $seq = $match[0];
-    $len = strlen($seq);
-    $seq = substr($seq,1,$len-1);
-    return $seq;
-  }
 }
 
 /**

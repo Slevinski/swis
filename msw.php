@@ -54,7 +54,7 @@ include ('fsw.php');
  * @return boolean value if text uses lanes
  * @ingroup gen
  */
- function isVert ($text){
+function isVert ($text){
   $lp = strpos($text, "L");
   $mp = strpos($text, "M");
   $rp = strpos($text, "R");

@@ -189,32 +189,6 @@ function csw2bsw($csw){
 }
 
 /** 
- * @brief returns decimal value for UTF-8 string
- * @param $utf UTF-8 char
- * @return decimal value of Unicode char
- * @ingroup uni
- */
-function uniord($utf) {
-    $h = ord($utf{0});
-    if ($h <= 0x7F) {
-        return $h;
-    } else if ($h < 0xC2) {
-        return false;
-    } else if ($h <= 0xDF) {
-        return ($h & 0x1F) << 6 | (ord($utf{1}) & 0x3F);
-    } else if ($h <= 0xEF) {
-        return ($h & 0x0F) << 12 | (ord($utf{1}) & 0x3F) << 6
-                                 | (ord($utf{2}) & 0x3F);
-    } else if ($h <= 0xF4) {
-        return ($h & 0x0F) << 18 | (ord($utf{1}) & 0x3F) << 12
-                                 | (ord($utf{2}) & 0x3F) << 6
-                                 | (ord($utf{3}) & 0x3F);
-    } else {
-        return false;
-    }
-}
- 
-/** 
  * @brief number value to UTF-8
  * @param $num number from -250 to 249
  * @return UTF-8 character
