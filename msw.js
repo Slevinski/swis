@@ -485,8 +485,7 @@ function ksw2cluster(ksw){
   var sym,coord,mcoord, matches, match, len, strnum;
   var cluster = new Array();
   if (!ksw) {
-    cluster[0][0]="M";
-    cluster[0][1]="0x0";
+    cluster= [["M","0x0"]];
     return cluster;
   }
   
@@ -530,7 +529,8 @@ function ksw2cluster(ksw){
 }
 
 function cluster2min(cluster){
-
+  var xMin = 0,
+    yMin = 0;
   for(var i=1; i<cluster.length; i++){
     if (i==0) next;
     spatial = cluster[i];

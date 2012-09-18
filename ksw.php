@@ -353,6 +353,8 @@ function cluster2ksw($cluster){
  * @ingroup kscrape
  */
 function cluster2min($cluster,$override=true){
+  $xMin=0;
+  $yMin=0;
   foreach($cluster as $i=>$sym){
     if ($i==0) continue;
     $coord = str2koord($sym[1]);
