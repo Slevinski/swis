@@ -545,6 +545,9 @@ function cluster2min(cluster){
   return new Array(xMin,yMin);
 }
 
+function cluster2max(cluster){
+  return str2koord(cluster[0][1]);
+}
 
 /**
  * Other functions...

@@ -734,6 +734,12 @@ class SWISTest extends PHPUnit_Framework_TestCase {
   }
 
   //! @ingroup kswphp
+  public function test_cluster2max(){
+    $this->assertEquals(array(230,300),cluster2max(ksw2cluster('M230x300S14c2096x20S27106118x38S1870a104x165S1870197x140S20500123x146S2e734115x118S3880079x203')));
+    $this->assertEquals(array(115,49),cluster2max(ksw2cluster('M115x49S14c20n19xn29S271063xn11')));
+  }
+
+  //! @ingroup kswphp
   public function test_ksw2raw(){
     $this->assertEquals('MS1870an11x15S18701n18xn10S205008xn4S2e7340xn32',ksw2raw('M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32'));
     $this->assertEquals('AS1870aS18701S2e734MS1870an11x15S18701n18xn10S205008xn4S2e7340xn32',ksw2raw('AS1870aS18701S2e734M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32'));

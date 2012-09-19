@@ -373,6 +373,16 @@ function cluster2min($cluster,$override=true){
   return array($xMin,$yMin);
 }
 
+/** 
+ * @brief find maximum coordinate of symbol cluster
+ * @param $cluster array of symbols with positioning
+ * @return array of x, y values
+ * @ingroup kscrape
+ */
+function cluster2max($cluster){
+  return str2koord($cluster[0][1]);
+}
+
 /**
  * @brief strip preprocessing information
  * @param $ksw ksw layout string
