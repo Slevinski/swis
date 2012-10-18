@@ -33,6 +33,7 @@
  * include general iswa library
  */
 include 'bsw.php';
+include 'csw.php';
 include 'spl.php';
 include 'image.php';
 
@@ -50,11 +51,11 @@ if($sym){
 $font= @$_REQUEST['font'];
 if (!$font) $font='png1';
 
-$size = @$_REQUEST['size'];
+$size = @$_REQUEST['size'];//doesn't work for SVG
 $line = @$_REQUEST['line'];
 $fill = @$_REQUEST['fill'];
-$back = @$_REQUEST['back'];
-$break = @$_REQUEST['break'];
+$back = @$_REQUEST['back'];//doesn't work
+$break = @$_REQUEST['break'];//specialty for txt font
 $colorize = @$_REQUEST['colorize'];
 $name= @$_REQUEST['name'];
 if(!$name){$name='glyph';}
@@ -73,9 +74,10 @@ if ($code){
 } else if ($bsw){
   $base = substr($bsw,0,3);
   if (strlen($bsw)>3){
-    $hfill = char2fill(substr($bsw,3,3));
-    $hrot = char2rot(substr($bsw,6,3));
-    $key = $base . $hfill . $hrot;
+    //$hfill = char2fill(substr($bsw,3,3));
+    //$hrot = char2rot(substr($bsw,6,3));
+    $key = bsw2key($bsw);
+    //$base . $hfill . $hrot;
   } else {
     $key = base2view($base);
   }

@@ -1,0 +1,106 @@
+.detail {
+  position: relative;
+  float:left;
+  width:85%;
+}
+
+#command {
+  position: relative;
+  float: left;
+  width:15%;
+  top:0;
+  text-align: center;
+}
+
+.cmd{
+  width:80px;
+  height:50px;
+  margin: 2px 2px 2px 2px;
+  border-top: 1px solid #cccccc;
+  border-bottom: 1px solid black;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid black;
+  background: #cccccc;
+  text-align: center;
+}
+
+.cmd:hover
+{
+  background: #eeeeee;
+}
+
+.cmd:active
+{
+  border-bottom: 1px solid #eeeeee;
+  border-top: 1px solid black;
+  border-right: 1px solid #eeeeee;
+  border-left: 1px solid black;
+}
+
+h1, h2, h3 {
+  display:inline;
+  text-align:left;
+  float:left;
+}
+
+.per {
+  padding: 10px;
+  text-shadow: 1px 1px 1px #ddd;
+  border: 1px solid #666;
+}
+
+.total {
+  text-align:left;
+  float:left;
+  font-size:200%;
+  padding:10px;
+  margin-left: 10px;
+}
+
+.summary {
+  text-align:right;
+  float:right;
+  font-size:150%;
+  padding:10px;
+  margin-top: 10px;
+}
+
+table { border: 3px double #ccc; padding: 0.5em; margin-bottom:30px; } 
+
+td { padding:3px;}
+
+.section {
+  margin-right: 20px;
+  padding:5px;
+  text-align:center;
+  width: 100px;
+}
+
+.idea {
+  background-color:crimson;
+}
+
+.proto {
+  background-color:orange;
+}
+
+.alpha {
+  background-color:yellow;
+}
+
+.beta {
+  background-color:lightblue;
+}
+
+.rc {
+  background-color:lightgreen;
+}
+
+.done {
+  background-color:green;
+}
+
+hr, br {
+  clear:both;
+} 
+

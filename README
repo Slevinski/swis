@@ -4,7 +4,6 @@ Version 3 Series
 January 12th, 2012
 
 Stephen E Slevinski Jr
-http://www.signpuddle.net
 slevin@signpuddle.net
 
 NOTE: SQLite 3 Database font with PNG1 and SVG1 included 
@@ -12,9 +11,8 @@ other fonts options online: http://signpuddle.net/iswa
 
 Files
 -----
+README - this file
 bsw.php - Binary SignWriting for symbol encoding, structural markers, and number characters
-columns.css - div floating for columns
-columns.php - script for text display
 csw.php - Character SignWriting for Unicode PUA
 database.php - ISWA database functions
 filesystem.php - ISWA filesystem functions
@@ -22,28 +20,26 @@ fsw.php - Formal SignWriting for regular searching
 glyph.php - symbol image script
 glyphogram.php - cluster image script
 image.php - main manipulation functions
+index.css - style sheet for index.php
+index.php - basic manual and demonstration.
 iswa.sql3 - SQLite 3 database with png1 and svg1 fonts
 ksw.php - Kartesian SignWriting for variant display forms
 msw.php - Modern SignWriting script encoding library
 spl.php - SignPuddle 1.6 legacy Conversion Library
 spml.php - SignPuddle Markup Language ( read, pack, unpack )
-sqlite.php - Filesystem to database conversion script
+spml2sql - alpha level spml to sqlite database script
+sqlite.php - Filesystem font to database font conversion script
 SWISTest.php - unit testing
 R2RTest.php - exhaustive testing for range2regex function
 
+Directories
+-----------
+media - images plus
 
-Flavors
--------
-SWIS for Web Servers - Requires web server with PHP5 and GD graphics library.
-Install: unzip in public documents folder.
 
-SWIS for Windows - Includes preconfigured Uniform Server web server.
-Install: unzip anywhere (even on a USB drive)  and open the "Server_Start.bat" file.  In browser, open the location "http://localhost".
-
-SWIS for Mac - Includes preconfigured MAMP web server.
-Install: unzip to "MAMP" folder and place in the "Applications" folder.  Start the "MAMP.app" application in the "MAMP" folder.  In browser, open the location "http://localhost:8888".
 
 Version History
+3.0.0-prerelease - Oct 18th, 2012: manual, complete functionality, unit testing
 3.0.0-alpha.1 - Feb 22nd, 2012: implementation of MSW v1 with documentation and unit testing.
 2.2.0 - Jan 12th, 2012: alpha implementation of MSW v1 (incomplete, non-compliant)
 2.1.1 - May 3rd, 2011: Development release 
