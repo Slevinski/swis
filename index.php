@@ -1,3 +1,53 @@
+<?php
+include 'msw.php';
+include 'spml.php';
+$fmt = @$_REQUEST['fmt'];
+$cmd = @$_REQUEST['cmd'];
+$ui = @$_REQUEST['ui'];
+$pdl = @$_REQUEST['pdl'];
+$font = @$_REQUEST['font'];
+Switch($fmt){
+case 'json':
+  break;
+case 'div':
+  break;
+default:
+  $fmt = 'html';
+}
+
+function req_attr ($set, $value){
+  $attr = array('fmt','cmd','ui','font','pdl');
+  foreach ($attr as $i=>$at){
+    if ($at != $set){
+      global $$at;
+    }
+  }
+  $$set = $value;
+  $return = '';
+  foreach ($attr as $i=>$at){
+    if ($$at) {
+      if ($return) {
+        $return .= '&';
+      } else {
+        $return .= '?';
+      }
+      $return .= $at . '=' . $$at;
+    }
+  }
+  return $return;
+}
+
+/****************************
+ * General format setups
+ */
+Switch($fmt){
+case 'json':
+  $jsar = array();
+  break;
+case 'div':
+  break;
+default:
+?>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -7,7 +57,7 @@
 <script type="text/javascript">
 </script>
 
-<title>SignWriting Image Server</title></head>
+<title>SignWriting Icon Server</title></head>
 <body><div id="command" class="command"><center><img src="media/logo.png" alt="Open SignPuddle logo" border=0><br><br>
 <form method="post" action="README"><button class="cmd" type="submit">README</button></form>
 <form method="post" action="http://www.signpuddle.net"><button class="cmd" type="submit">SignPuddle Report</button></form>
@@ -20,7 +70,7 @@
 <form method="" action="http://signbank.org/iswa"><button class="cmd" type="submit">ISWA Reference</button></form>
 <form method="" action="http://signpuddle.net/iswa"><button class="cmd" type="submit">ISWA Font</button></form>
 <form method="" action="http://www.movementwriting.org/symbolbank/index.html#ISWA2010"><button class="cmd" type="submit">ISWA SymbolBank</button></form>
-<form method="" action="http://github.com/Slevinski/swis"><button class="cmd" type="submit">SignWriting Image Server</button></form>
+<form method="" action="http://github.com/Slevinski/swis"><button class="cmd" type="submit">SignWriting Icon Server</button></form>
 <form method="" action="http://github.com/Slevinski/swic"><button class="cmd" type="submit">SignWriting Image Client</button></form>
 <form method="" action="http://signpuddle.net/wiki/index.php/MSW"><button class="cmd" type="submit">Modern SignWriting WIki</button></form>
 </center></div>
@@ -28,31 +78,47 @@
 <div class="detail">
   <div id="header" class="header">
   <table width="90%" border=0><tr><td align=left><font face="Arial, Helvetica, sans-serif"><a href="http://signpuddle.com">SignPuddle Standard</a></font></td><td rowspan=2 align=right><a href="http://www.gnu.org/copyleft/gpl.html"><img border=0 src="media/gplv3.png"></a></td></tr><tr><td align=middle valign=top>
-  <font color="#117700" size="6" face="Arial, Helvetica, sans-serif"><strong>SignWriting Image Server</strong></font></td></tr>
-<tr><td align=middle><font color="#117700" size="3" face="Arial, Helvetica, sans-serif"><strong>Github Edition</strong></font></td><td align=right><a href="http://semver.org"">semver</a> 3.0.0-prerelease</td></tr>
+  <font color="#117700" size="6" face="Arial, Helvetica, sans-serif"><strong>SignWriting Icon Server</strong></font></td></tr>
+<tr><td align=middle><font color="#117700" size="3" face="Arial, Helvetica, sans-serif"><strong><?php echo $edition;?></strong></font></td><td align=right><a href="http://semver.org"">semver</a> <?php echo $semver;?></td></tr>
 </table>
   <hr>
 </div>
 
-<h2><a href="http://signpuddle.net/wiki/index.php/SignWriting_Image_Server">SignWriting Image Server</a></h2>
-<b style="float:right">October 18th, 2012</b>
-<span class="per rc total">90%</span>
-<br>
+<?php
+}
+
+/****************************
+ * Config
+ * fonts and more
+ */
+
+  $fonts = loadFonts();
+  Switch($fmt){
+  case 'json':
+    $jsar['fonts'] = array();
+    break;
+  case 'div':
+  default:
+  //general page preamble
+?>
+<h2>SignWriting Icon Server</h2>
+<b style="float:right"><?php echo $ed_date;?></b>
+</br>
 <table>
   <tr>
-	<th class="per done section">PNG & SVG Support</th>
-	<td>use database or filesystem fonts</td>
+	<th class="per done section">Character Processing</th>
+	<td>BSW, CSW, FSW, KSW, and query. The characters of draft-slevinski-signwriting-text and their associated processes are fully implemented.</td>
   </tr><tr>
-	<th class="per done section">Symbol Images</th>
-	<td>access symbol images using id, key, and more</td>
+	<th class="per done section">Image Support</th>
+	<td>PNG and SVG images for symbols, signs, and text. Access the 16-bit symbol font using codes or names. Create logograms of sign images as a 2-dimensional arrangement of symbols. Combine and properly layout a sentence of logograms using multiple lanes.</td>
   </tr><tr>
-	<th class="per done section">Sign images</th>
-	<td>Create logograms of sign images as a 2-dimensional arrangement of symbols</td>
+	<th class="per beta section">Dictionaries / Documents</th>
+	<td>The dictionaries are available from SignPuddle Online for a multitude of languages. These dictionaries are an account of the community of users. Dictionaries are easy to download and install.</td>
   </tr><tr>
-	<th class="per done section">Column or Row Images</th>
-	<td>Combine and properly layout a sentence of logograms using multiple lanes</td>
+	<th class="per alpha section"><a href="api.php">Public API</a></th>
+	<td>Search the dictionaries and documents using the build in API. HTTP access is used for both the HTML pages and the JSON data.</td>
   </tr><tr>
-	<th class="per done section">Testing Suite</th>
+	<th class="per rc section">Testing Suite</th>
 	<td>PHPUnit testing suite with exhaustive range to regex testing</td>
   </tr><tr>
 	<th class="per beta section">MediaWiki Support</th>
@@ -62,20 +128,176 @@
 	<td>Additional handshapes and mouth movements to be determined</td>
   </tr>
 </table>
-
-<hr>
-<hr>
-<h2>What is the SignWriting Image Server?</h2><br>
-
-<p>The SignWriting Image Server create SVG and PNG images.  
-It is half of the client-server model of SignWriting Text.
+<p>The SignWriting Icon Server is half of the client-server model of SignWriting Text.
 Read about SignWriting Text in the Internet Draft published through
-the Internet Engineering Task Force.  I-D name of draft-slevinski-signwriting-text.
+the Internet Engineering Task Force.  I-D name of <a href="http://tools.ietf.org/html/draft-slevinski-signwriting-text">draft-slevinski-signwriting-text</a>.
 
-<h3>16-bit Symbol Font</h3><br>
-Available through the <b>glyph.php</b> script.
+<?php
+    echo '<h2>Fonts Available</h2>';
+    echo '<br>';
+    echo '<table>';
+  }
 
-<h4>Identity Attributes</h4>
+  foreach ($fonts as $item){
+    Switch($fmt){
+    case 'json':
+      $tfont = $item['font'];
+      $info = array();
+      $info['name'] = $item['name'];
+      $info['author'] = $item['author'];
+      $info['license'] = $item['license'];
+      $jsar['fonts'][$tfont] = $info;
+      break;
+    case 'div':
+    default:
+      echo '<tr>';
+      echo '<th class="per ';
+      if ($font == $item['font']) {
+        echo 'rc ';
+      }
+      echo 'section">';
+      echo '<a href="index.php' . req_attr('font',$item['font']) . '">' . $item['font'] . '</a>';
+      echo '</th>';
+      echo '<td>Reserved font name: ' .  $item['name'] . '<br>' . $item['author'] . '<br>' . $item['license'] . '</td>';
+      echo '</tr>';
+    }
+  }
+
+  Switch($fmt){
+  case 'json':
+    if ($font) $jsar['font'] = $font;
+    break;
+  case 'div':
+  default:
+    echo '</table>';
+  }
+
+
+/****************************
+ * Config
+ * signpuddle collections available
+ */
+
+  if ($pdl){
+    $tid = typeid($pdl);
+    $spml = get_spml($tid['type'],$tid['id']);
+
+    $pattern = '/\<entry/';
+    $cnt_e = preg_match_all($pattern, $spml, $matches);
+
+    $pattern = query2regex('Q');
+    $cnt_s = preg_match_all($pattern[0], $spml, $matches);
+
+    $pattern = query2regex('QT');
+    $cnt_t = preg_match_all($pattern[0], $spml, $matches);
+  }
+
+  $files = glob('data/spml/*.spml');
+  Switch($fmt){
+  case 'json':
+    $jsar['spml'] = array();
+    $jsar['other'] = array();
+    if ($pdl){
+      $info = array();
+      $info['str'] = $pdl;
+      $info['entries'] = $cnt_e;
+      $info['signs'] = $cnt_s;
+      $info['terms'] = $cnt_t;
+      $jsar['pdl'] = $info;
+    }
+    break;
+  case 'div':
+  default:
+    $all = '';
+    $other = '';
+  }
+
+  foreach ($files as $item){
+    $item = basename($item,'.spml');
+    $tid = typeid($item);
+        
+    Switch($fmt){
+    case 'json':
+      if ($tid['valid']){ 
+        $jsar['spml'][$tid['str']] = $tid;
+      } else {
+        $jsar['other'][$tid['str']] = $tid;
+      }
+      break;
+    case 'div':
+    default:
+      if ($tid['valid']){
+        $all .= '<tr>';
+        $all .= '<th class="per ';
+        if ($pdl == $tid['str']) {
+          $all .= 'rc ';
+        }
+        $all .= 'section">';
+        $all .= '<a href="index.php' . req_attr('pdl',$tid['str']) . '#spml">' . $tid['str'] . '</a>';
+        $all .= '</th>';
+        $all .= '<td>Type: ' .  $tid['type'] . '<br>ID: ' . $tid['id'] . '<br>';
+        $filename = $tid['str'] . '.spml';
+        $all .= 'Size: ' . humanfilesize('data/spml/' . $filename);
+        if ($pdl == $tid['str']) {
+          $all .= '<br>Entries: ' . number_format($cnt_e) . '<br>';
+          $all .= 'Sign count: ' . number_format($cnt_s) . '<br>';
+          $all .= 'Sign Terms: ' . number_format($cnt_t);
+        }
+
+        $all .= '</td></tr>';
+      } else {
+        $other .= '<tr>';
+        $other .= '<th class="per section">' . $tid['str'] . '</th>';
+        $filename = $tid['str'] . '.spml';
+        $other .= '<td>Name: ' .  $filename . '<br>';
+        $other .= 'Size: ' . humanfilesize('data/spml/' . $filename) . '</td>';
+        $other .= '</tr>';
+      }
+    }
+  }
+
+  Switch($fmt){
+  case 'json':
+    break;
+  case 'div':
+  default:
+    if ($all){
+      echo '<h2 id="spml">SPML Available</h2><br><table>';
+      echo $all;
+      echo '</table>';
+    }
+    if ($other){
+      echo '<h2>SPML Other</h2><br><table>';
+      echo $other;
+      echo '</table>';
+    }
+  }
+
+Switch($fmt){
+case 'json':
+  break;
+case 'div':
+default:
+  echo '<h2>Data Formats Available</h2>';
+  echo '<br>';
+  echo '<table>';
+  echo '<tr>';
+  echo '<th class="per section"><a href="index.php' . req_attr('fmt','json') . '">json</a></th>';
+  echo '<td>json output for use with JavaScript</td>';
+  echo '</tr>';
+  echo '<tr>';
+  echo '<th class="per section"><a href="index.php' . req_attr('fmt','div') . '">div</a></th>';
+  echo '<td>Inner html for use in a div</td>';
+  echo '</tr>';
+  echo '<tr>';
+  echo '<th class="per section"><a href="index.php?' . req_attr('fmt','html') . '">html</a></th>';
+  echo '<td>Default api format</td>';
+  echo '</tr>';
+  echo '</table>';
+?>
+<h2>16-bit Symbol Font</h2><br>
+<p>Available through the <b>glyph.php</b> script.
+<h3>Identity Attributes</h3><br>
 <table>
   <tr>
 	<th class="per section">key</th>
@@ -96,7 +318,7 @@ Available through the <b>glyph.php</b> script.
   </tr>
 </table>
 
-<h4>Style Attributes</h4>
+<h3>Style Attributes</h3><br>
 <table>
   <tr>
 	<th class="per section">font</th>
@@ -125,10 +347,10 @@ Available through the <b>glyph.php</b> script.
   </tr>
 </table>
 
-<h3>Logographic Sign Images</h3><br>
-Available through the <b>glyphogram.php</b> script.
+<h2>Logographic Sign Images</h2><br>
+<p>Available through the <b>glyphogram.php</b> script.
 
-<h4>Identity Attributes</h4>
+<h3>Identity Attributes</h3><br>
 <table>
   <tr>
 	<th class="per section">ksw</th>
@@ -149,7 +371,7 @@ Available through the <b>glyphogram.php</b> script.
   </tr>
 </table>
 
-<h4>Style Attributes</h4>
+<h3>Style Attributes</h3><br>
 <table>
   <tr>
 	<th class="per section">font</th>
@@ -209,12 +431,33 @@ Available through the <b>glyphogram.php</b> script.
 	<td><img src="glyphogram.php?ksw=M18x29S14c20n19xn29S271063xn11&font=png&name=hello"> or <img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=svg&name=world"></td>
   </tr>
 </table>
+<?php  
+}
+
+
+
+
+/****************************
+ * The end section and output
+ */
+ 
+Switch($fmt){
+case 'json':
+  echo json_encode($jsar);
+  break;
+case 'div':
+  break;
+default:
+?>
 
 </div>
 <br clear="all"><br>
 <hr>
 <div id="footer" class="footer"><table cellpadding="5" width="95%"><tr><td valign="top"><a href="http://scripts.sil.org/OFL"><img src="media/ofl.png"></a></td><td align=middle>
-<b>SignPuddle Standard: SignWriting Image Server</b><br><b>Copyright 2007-2012 Stephen E Slevinski Jr. Some Rights Reserved.</b><br>Except where otherwise noted, this work is licensed under<br><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution ShareAlike 3.0</td><td valign="top" align="right"><a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="media/by-sa.png"></a>
+<b>SignPuddle Standard: SignWriting Icon Server</b><br><b>Copyright 2007-2012 Stephen E Slevinski Jr. Some Rights Reserved.</b><br>Except where otherwise noted, this work is licensed under<br><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution ShareAlike 3.0</td><td valign="top" align="right"><a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="media/by-sa.png"></a>
 </td></tr></table></div><hr><br>
 </body>
 </html>﻿﻿﻿﻿﻿﻿
+<?php
+}
+?>

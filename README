@@ -1,13 +1,23 @@
 SWIS
-The SignWriting Image Server
-Version 3 Series
+The SignWriting Icon Server
+Version 1 Series
 January 12th, 2012
 
 Stephen E Slevinski Jr
 slevin@signpuddle.net
 
+Main Github Repository
+https://github.com/slevinski/swis
+
+Online for General Public Use
+http://signbank.org/swis
+
+Online for Wikimedia Labs projects
+http://swis.wmflabs.org
+
 NOTE: SQLite 3 Database font with PNG1 and SVG1 included 
 other fonts options online: http://signpuddle.net/iswa
+
 
 Files
 -----
@@ -36,8 +46,11 @@ Directories
 -----------
 media - images plus
 
+Version History
+1.0.0-prerelease - Nov 1st, 2012: project rename and configuration data 
 
-
+Previously known as
+SignWriting Image Server
 Version History
 3.0.0-prerelease - Oct 18th, 2012: manual, complete functionality, unit testing
 3.0.0-alpha.1 - Feb 22nd, 2012: implementation of MSW v1 with documentation and unit testing.

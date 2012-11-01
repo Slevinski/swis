@@ -1,8 +1,8 @@
 <?php
 /**
- * Modern SignWrting library
+ * Main SignWrting library
  * 
- * This file is part of SWIS: the SignWriting Image Server.
+ * This file is part of SWIS: the SignWriting Icon Server.
  * 
  * SWIS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,16 +21,35 @@
  *  
  * @copyright 2007-2012 Stephen E Slevinski Jr 
  * @author Steve Slevinski (slevin@signpuddle.net)  
- * @version 3
+ * @version 1
  * @section License 
  *   GPL 3, http://www.opensource.org/licenses/gpl-3.0.html
- * @brief Modern SignWriting script encoding library 
+ * @brief Main SignWriting script encoding library 
  * @file
  *   
  */
 
+/**
+ *
+ * Edition Section
+ *
+ */
+ $edition = "Github Edition";
+ $upperleft = "freedomdefined.png";
+ $semver = "1.0.0-prerelease";
+ $ed_date = "November 1st, 2012";
+/**
+ *
+ * This edition was prepared to further community implementations
+ * and ensure the freedom of the writer.
+ * 
+ * NOTE: consider financial support and read the wall
+ * http://signpuddle.net/wiki/index.php/The_Wall
+ *
+ */
+ 
 /** @defgroup msw MSW
- *  Modern SignWriting
+ *  Main SignWriting
  */
 
 /** @defgroup gen General

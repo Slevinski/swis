@@ -1,5 +1,5 @@
 <?php
-/*! \mainpage SignWriting Image Server manual
+/*! \mainpage SignWriting Icon Server manual
 
 
 

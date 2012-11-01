@@ -2,12 +2,40 @@
 //for testing
 //include 'msw.php';
 
+
+function typeid($str){
+//spml files are named with alpha chracters followed by digits, ex: ui1 sgn28, ...
+  preg_match('/(?P<type>\w+?)(?P<id>\d+)/', $str, $matches);
+  $type = @$matches['type'];
+  $id = @$matches['id'];
+  $typeid = array();
+  $typeid['str'] = $str;
+  $typeid['type'] = $type;
+  $typeid['id'] = $id;
+  $nstr = $type . $id;
+  $typeid['valid'] = ($str == $nstr);
+
+  return $typeid;
+}
+
+function humanfilesize($file) {
+  // Adapted from: http://www.php.net/manual/en/function.filesize.php
+  $size = filesize($file);
+  $mod = 1024;
+  $units = explode(' ','B KB MB GB TB PB');
+  for ($i = 0; $size > $mod; $i++) {
+    $size /= $mod;
+  }
+  return round($size, 2) . ' ' . $units[$i];
+}
+
 function get_spml($type,$pid){
   global $data;
   set_time_limit(0);
+  if ($type.$pid == '') return '';
   $filename = 'data/spml/' . $type . $pid . '.spml';
   if (!file_exists($filename)){
-    $spmlfile = pack_spml($type,$pid);
+    return '';
   }
   $handle = @fopen($filename, "r");
   $i =0;

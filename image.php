@@ -2,7 +2,7 @@
 /**
  * SWIS Image
  * 
- * This file is part of SWIS: the SignWriting Image Server.
+ * This file is part of SWIS: the SignWriting Icon Server.
  * 
  * SWIS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
  *  
  * @copyright 2007-2012 Stephen E Slevinski Jr 
  * @author Steve Slevinski (slevin@signpuddle.net)  
- * @version 3
+ * @version 1
  * @section License 
  *   GPL 3, http://www.opensource.org/licenses/gpl-3.0.html
  * @brief base image function library
@@ -416,7 +416,7 @@ EOT;
 <metadata>
 Valerie Sutton's ISWA 2010 symbols
 transformed by Stephen E Slevinski Jr
-combined using the SignWriting Image Server
+combined using the SignWriting Icon Server
 </metadata>
 EOT;
 */
