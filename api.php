@@ -156,8 +156,7 @@ if ($cmd=='config'){
   $fonts = loadFonts();
   Switch($fmt){
   case 'json':
-    $jsar['config'] = array();
-    $jsar['config']['fonts'] = array();
+    $jsar['fonts'] = array();
     break;
   case 'div':
   default:
@@ -174,7 +173,7 @@ if ($cmd=='config'){
       $info['name'] = $item['name'];
       $info['author'] = $item['author'];
       $info['license'] = $item['license'];
-      $jsar['config']['fonts'][$tfont] = $info;
+      $jsar['fonts'][$tfont] = $info;
       break;
     case 'div':
     default:
