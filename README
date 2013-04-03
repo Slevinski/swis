@@ -1,7 +1,8 @@
 SWIS
 The SignWriting Icon Server
-Version 1 Series
-January 12th, 2012
+SemVer: 1.0.0-prerelease.2
+
+Formal strings stable since January 12th, 2012
 
 Stephen E Slevinski Jr
 slevin@signpuddle.net
@@ -22,6 +23,7 @@ other fonts options online: http://signpuddle.net/iswa
 Files
 -----
 README - this file
+Boxfile - Pagodabox.com preconfiguration
 bsw.php - Binary SignWriting for symbol encoding, structural markers, and number characters
 csw.php - Character SignWriting for Unicode PUA
 database.php - ISWA database functions
@@ -47,6 +49,7 @@ Directories
 media - images plus
 
 Version History
+1.0.0-prerelease.2 - April 2nd, 2013: Pagodabox file 
 1.0.0-prerelease - Nov 1st, 2012: project rename and configuration data 
 
 Previously known as

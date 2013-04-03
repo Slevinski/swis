@@ -19,7 +19,7 @@
  * 
  * END Copyright
  *  
- * @copyright 2007-2012 Stephen E Slevinski Jr 
+ * @copyright 2007-2013 Stephen E Slevinski Jr 
  * @author Steve Slevinski (slevin@signpuddle.net)  
  * @version 1
  * @section License 
@@ -34,10 +34,25 @@
  * Edition Section
  *
  */
- $edition = "Github Edition";
- $upperleft = "freedomdefined.png";
- $semver = "1.0.0-prerelease";
- $ed_date = "November 1st, 2012";
+ $swis_edition = @$_ENV['swis_edition'];
+ if (!$swis_edition) $swis_edition = "Github Edition";
+ $semver = "1.0.0-prerelease.2";
+ $ed_date = "April 2nd, 2013";
+ $swis_url= @$_ENV['swis_url'];
+ if (!$swis_url){
+   $swis_url= curPage();
+ }
+function curPage() {
+ $pageURL = 'http';
+ if (@$_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+ $pageURL .= "://";
+ if ($_SERVER["SERVER_PORT"] != "80") {
+  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+ } else {
+  $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+ }
+ return str_replace ($_SERVER["PHP_SELF"],'/',$pageURL);
+}
 /**
  *
  * This edition was prepared to further community implementations

@@ -1,0 +1,12 @@
+global:
+  env:
+    - swis_edition: Pagodabox Free Edition 
+web1:
+  name: signwriting-icon-server 
+  document_root: /
+  php_version: 5.3.8
+  php_extensions:
+    - pdo_sqlite
+    - gd 
+    - eaccelerator
+

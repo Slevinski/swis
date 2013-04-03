@@ -79,7 +79,7 @@ default:
   <div id="header" class="header">
   <table width="90%" border=0><tr><td align=left><font face="Arial, Helvetica, sans-serif"><a href="http://signpuddle.com">SignPuddle Standard</a></font></td><td rowspan=2 align=right><a href="http://www.gnu.org/copyleft/gpl.html"><img border=0 src="media/gplv3.png"></a></td></tr><tr><td align=middle valign=top>
   <font color="#117700" size="6" face="Arial, Helvetica, sans-serif"><strong>SignWriting Icon Server</strong></font></td></tr>
-<tr><td align=middle><font color="#117700" size="3" face="Arial, Helvetica, sans-serif"><strong><?php echo $edition;?></strong></font></td><td align=right><a href="http://semver.org"">semver</a> <?php echo $semver;?></td></tr>
+<tr><td align=middle><font color="#117700" size="3" face="Arial, Helvetica, sans-serif"><strong><?php echo $swis_edition;?></strong></font></td><td align=right><a href="http://semver.org"">semver</a> <?php echo $semver;?></td></tr>
 </table>
   <hr>
 </div>
