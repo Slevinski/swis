@@ -28,40 +28,6 @@
  * @file
  *   
  */
-
-/**
- *
- * Edition Section
- *
- */
- $swis_edition = @$_ENV['swis_edition'];
- if (!$swis_edition) $swis_edition = "Github Edition";
- $semver = "1.0.0-prerelease.2";
- $ed_date = "April 2nd, 2013";
- $swis_url= @$_ENV['swis_url'];
- if (!$swis_url){
-   $swis_url= curPage();
- }
-function curPage() {
- $pageURL = 'http';
- if (@$_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
- $pageURL .= "://";
- if ($_SERVER["SERVER_PORT"] != "80") {
-  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
- } else {
-  $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
- }
- return str_replace ($_SERVER["PHP_SELF"],'/',$pageURL);
-}
-/**
- *
- * This edition was prepared to further community implementations
- * and ensure the freedom of the writer.
- * 
- * NOTE: consider financial support and read the wall
- * http://signpuddle.net/wiki/index.php/The_Wall
- *
- */
  
 /** @defgroup msw MSW
  *  Main SignWriting

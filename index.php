@@ -1,463 +1,269 @@
 <?php
-include 'msw.php';
-include 'spml.php';
-$fmt = @$_REQUEST['fmt'];
-$cmd = @$_REQUEST['cmd'];
-$ui = @$_REQUEST['ui'];
-$pdl = @$_REQUEST['pdl'];
-$font = @$_REQUEST['font'];
-Switch($fmt){
-case 'json':
-  break;
-case 'div':
-  break;
-default:
-  $fmt = 'html';
-}
-
-function req_attr ($set, $value){
-  $attr = array('fmt','cmd','ui','font','pdl');
-  foreach ($attr as $i=>$at){
-    if ($at != $set){
-      global $$at;
-    }
-  }
-  $$set = $value;
-  $return = '';
-  foreach ($attr as $i=>$at){
-    if ($$at) {
-      if ($return) {
-        $return .= '&';
-      } else {
-        $return .= '?';
-      }
-      $return .= $at . '=' . $$at;
-    }
-  }
-  return $return;
-}
-
-/****************************
- * General format setups
- */
-Switch($fmt){
-case 'json':
-  $jsar = array();
-  break;
-case 'div':
-  break;
-default:
+include 'edition.php';
 ?>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="index.css" rel="stylesheet" type="text/css" media="all">
-<script src="msw.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript">
-</script>
+<!DOCTYPE html>
+<html lang="ase">
+  <head>
+    <meta charset="utf-8">
+    <title>SignWriting Icon Server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Server side images and more for SignWriting">
+    <meta name="author" content="Stephen E Slevinski Jr">
 
-<title>SignWriting Icon Server</title></head>
-<body><div id="command" class="command"><center><img src="media/logo.png" alt="Open SignPuddle logo" border=0><br><br>
-<form method="post" action="README"><button class="cmd" type="submit">README</button></form>
-<form method="post" action="http://www.signpuddle.net"><button class="cmd" type="submit">SignPuddle Report</button></form>
-<form method="post" action="http://www.signpuddle.com"><button class="cmd" type="submit">SignPuddle Status</button></form>
-<form method="post" action="http://www.signwriting.org/lessons/"><button class="cmd" type="submit">SignWriting Lessons</button></form>
-<form method="post" action="http://www.signwriting.org/forums/swlist/"><button class="cmd" type="submit">SignWriting List</button></form>
-<form method="post" action="http://www.signpuddle.org"><button class="cmd" type="submit">SignPuddle Online</button></form>
-<form method="post" action="http://www.signbank.org/signpuddle/help"><button class="cmd" type="submit">SignPuddle Help</button></form>
-<form method="" action="http://www.signwriting.org/lessons/iswa/"><button class="cmd" type="submit">ISWA Lessons</button></form>
-<form method="" action="http://signbank.org/iswa"><button class="cmd" type="submit">ISWA Reference</button></form>
-<form method="" action="http://signpuddle.net/iswa"><button class="cmd" type="submit">ISWA Font</button></form>
-<form method="" action="http://www.movementwriting.org/symbolbank/index.html#ISWA2010"><button class="cmd" type="submit">ISWA SymbolBank</button></form>
-<form method="" action="http://github.com/Slevinski/swis"><button class="cmd" type="submit">SignWriting Icon Server</button></form>
-<form method="" action="http://github.com/Slevinski/swic"><button class="cmd" type="submit">SignWriting Image Client</button></form>
-<form method="" action="http://signpuddle.net/wiki/index.php/MSW"><button class="cmd" type="submit">Modern SignWriting WIki</button></form>
-</center></div>
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/prettify.css" rel="stylesheet">
 
-<div class="detail">
-  <div id="header" class="header">
-  <table width="90%" border=0><tr><td align=left><font face="Arial, Helvetica, sans-serif"><a href="http://signpuddle.com">SignPuddle Standard</a></font></td><td rowspan=2 align=right><a href="http://www.gnu.org/copyleft/gpl.html"><img border=0 src="media/gplv3.png"></a></td></tr><tr><td align=middle valign=top>
-  <font color="#117700" size="6" face="Arial, Helvetica, sans-serif"><strong>SignWriting Icon Server</strong></font></td></tr>
-<tr><td align=middle><font color="#117700" size="3" face="Arial, Helvetica, sans-serif"><strong><?php echo $swis_edition;?></strong></font></td><td align=right><a href="http://semver.org"">semver</a> <?php echo $semver;?></td></tr>
-</table>
-  <hr>
-</div>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
 
-<?php
-}
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="http://signpuddle.com/favicon.ico">
 
-/****************************
- * Config
- * fonts and more
- */
+    <!-- Universal SignWriting Pluging, Thin Viewer as 2 lines of Javascript, 3 KB -->
+    <script type="text/javascript">
+    <?php echo $script . "\n";?>
+    <?php echo $autostart . "\n";?>
+    </script>
 
-  $fonts = loadFonts();
-  Switch($fmt){
-  case 'json':
-    $jsar['fonts'] = array();
-    break;
-  case 'div':
-  default:
-  //general page preamble
-?>
-<h2>SignWriting Icon Server</h2>
-<b style="float:right"><?php echo $ed_date;?></b>
-</br>
-<table>
-  <tr>
-	<th class="per done section">Character Processing</th>
-	<td>BSW, CSW, FSW, KSW, and query. The characters of draft-slevinski-signwriting-text and their associated processes are fully implemented.</td>
-  </tr><tr>
-	<th class="per done section">Image Support</th>
-	<td>PNG and SVG images for symbols, signs, and text. Access the 16-bit symbol font using codes or names. Create logograms of sign images as a 2-dimensional arrangement of symbols. Combine and properly layout a sentence of logograms using multiple lanes.</td>
-  </tr><tr>
-	<th class="per beta section">Dictionaries / Documents</th>
-	<td>The dictionaries are available from SignPuddle Online for a multitude of languages. These dictionaries are an account of the community of users. Dictionaries are easy to download and install.</td>
-  </tr><tr>
-	<th class="per alpha section"><a href="api.php">Public API</a></th>
-	<td>Search the dictionaries and documents using the build in API. HTTP access is used for both the HTML pages and the JSON data.</td>
-  </tr><tr>
-	<th class="per rc section">Testing Suite</th>
-	<td>PHPUnit testing suite with exhaustive range to regex testing</td>
-  </tr><tr>
-	<th class="per beta section">MediaWiki Support</th>
-	<td>Plugin for MediaWiki to enable server for SignWriting images</td>
-  </tr><tr>
-	<th class="per section">Extended Fonts</th>
-	<td>Additional handshapes and mouth movements to be determined</td>
-  </tr>
-</table>
-<p>The SignWriting Icon Server is half of the client-server model of SignWriting Text.
-Read about SignWriting Text in the Internet Draft published through
-the Internet Engineering Task Force.  I-D name of <a href="http://tools.ietf.org/html/draft-slevinski-signwriting-text">draft-slevinski-signwriting-text</a>.
+  </head>
 
-<?php
-    echo '<h2>Fonts Available</h2>';
-    echo '<br>';
-    echo '<table>';
-  }
+  <body>
 
-  foreach ($fonts as $item){
-    Switch($fmt){
-    case 'json':
-      $tfont = $item['font'];
-      $info = array();
-      $info['name'] = $item['name'];
-      $info['author'] = $item['author'];
-      $info['license'] = $item['license'];
-      $jsar['fonts'][$tfont] = $info;
-      break;
-    case 'div':
-    default:
-      echo '<tr>';
-      echo '<th class="per ';
-      if ($font == $item['font']) {
-        echo 'rc ';
-      }
-      echo 'section">';
-      echo '<a href="index.php' . req_attr('font',$item['font']) . '">' . $item['font'] . '</a>';
-      echo '</th>';
-      echo '<td>Reserved font name: ' .  $item['name'] . '<br>' . $item['author'] . '<br>' . $item['license'] . '</td>';
-      echo '</tr>';
-    }
-  }
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="http://signpuddle.com"><img class="logo" src="img/logo.png" alt="Open SignPuddle logo" border="0"></a>
+          <a class="brand" href="#">SignWriting Icon Server<span><br><?php echo $swis_edition;?><br>Semver: <?php echo $semver;?></span>
+          </a>
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-right">
+              <li><a title="home" href="http://signpuddle.com">L531x546S30004482x482S20500521x495S18517500x519</a></li>
+              <li><a title="about" href="http://signpuddle.net">L527x523S18518474x508S10012497x501S2ef00503x477</a></li>
+              <li><a title="contact" href="http://www.linkedin.com/in/slevinski">L533x515S1c510503x486S1c518467x485S20600490x504</a></li>
+            </ul>
+            <ul class="nav">
+              <li><a href="https://github.com/Slevinski/swis/archive/master.zip">Download Source</a></li>
+              <li><a href="https://github.com/Slevinski/swis">GitHub Repository</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
 
-  Switch($fmt){
-  case 'json':
-    if ($font) $jsar['font'] = $font;
-    break;
-  case 'div':
-  default:
-    echo '</table>';
-  }
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">M548x530S15a37500x491S15a3f478x507S26c07521x474S26c11461x490S2fb00487x476S2f900537x470S2f900452x488</li>
+              <li><a href="#infrastructure">Infrastructure</a></li>
+              <li><a href="#labs">Wikimedia Labs</a></li>
+              <li class="nav-header">M526x526S18720475x475S23504478x508S26606496x501</li>
+              <li><a href="#thin">SignWriting Thin Viewer</a></li>
+              <li><a href="#mediawiki">SignWriting MediaWiki Plugin</a></li>
+              <li class="nav-header">M545x518S30007482x483S16d10516x472S20600523x496</li>
+              <li><a href="#portable">Portable Bookmark</a></li>
+              <li><a href="#pastable">Pastable Bookmark</a></li>
+              <li><a href="#local">Local HTML Documents</a></li>
+              <li><a href="#template">Templates</a></li>
+              <li class="nav-header">M536x529S19a20508x509S19a28463x509S2fb00491x471S2e742464x481S2e732508x480</li>
+              <li><a href="#draft">Internet Draft</a></li>
+              <li><a href="#theory">Theory and Example</a></li>
+              <li><a href="#websites">Websites and more</a></li>
+              <li class="nav-header" style="font-family:iswa;">M536x516S17719506x492S17719464x496S2d628469x487S2d628507x483 󽠃󽼒󽼝󽡼󽠒󽠠󽻭󽻣󽦡󽠐󽠦󽼃󽻵 󽠃󽼗󽼢󽨚󽠔󽠨󽻯󽼉󽠰󽠑󽠡󽼂󽻝󽨚󽠐󽠤󽼈󽻿󽠰󽠑󽠩󽻩󽻦</li>
+              <li><a href="#truetype">TrueType Font</a></li>
+              <li><a href="#graphite">Graphite</a></li>
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span9">
+          <div class="hero-unit">
+            <h1>SignWriting Icon Server</h1>
+            <h1>M523x535S10019478x475S10011502x466S2ea04507x502S2ea48485x510 M517x532S1eb20493x485S15a0a484x469S29b0b483x497 M526x536S19210504x465S19218475x465S2930c512x489S29314474x489S2fb04493x530 M548x530S15a37500x491S15a3f478x507S26c07521x474S26c11461x490S2fb00487x476S2f900537x470S2f900452x488</h1>
+          </div>
 
+          <!-- Servers
+          ================================================== -->
+          <section id="servers">
+            <div class="page-header">
+              <h1>Servers</h1>
+              <h2 lang="ase">M548x530S15a37500x491S15a3f478x507S26c07521x474S26c11461x490S2fb00487x476S2f900537x470S2f900452x488</h2>
+            </div>
 
-/****************************
- * Config
- * signpuddle collections available
- */
+            <h3 id="infrastructure">Infrastructure</h3>
+            <p>Until the TrueType Font is perfected, using the SignWriting script on computers requires a SignWriting Icon Server to generate the PNG and SVG images.</p>
+            <p>The SignWriting Icon Server is an open source project that is easy to install with very modest requirements of PHP, PDO SQLite, and the GD graphics library.</p>
+            <p>Each SignWriting Icon Server provides its own version of the SignWriting Thin Viewer as a site script or bookmark.</p>
 
-  if ($pdl){
-    $tid = typeid($pdl);
-    $spml = get_spml($tid['type'],$tid['id']);
+            <h3 id="labs">Wikimedia Labs</h3>
+            <p>The <a href="http://swis.wmflabs.org">main public SignWriting Icon Server</a> is available on <a href="https://wikitech.wikimedia.org">Wikimedia Labs</a>.</p>
+            <a href="http://swis.wmflabs.org"><h3 lang="ase">M549x543S18527530x497S1852f451x497S14c20509x457S14c28468x457S26610472x491S26600512x491S28c0e514x522S28c16458x522 M529x530S10030511x500S10038476x500S2a200506x471S2a218472x471 M532x525S10004512x475S22f04507x511S1000c474x475S22f14469x511</h3></a>
+          </section>
 
-    $pattern = '/\<entry/';
-    $cnt_e = preg_match_all($pattern, $spml, $matches);
+          <!-- For web sites
+          ================================================== -->
+          <section id="website">
+            <div class="page-header">
+              <h1>For Web Sites</h1>
+              <h2 lang="ase">M526x526S18720475x475S23504478x508S26606496x501</h2>
+            </div>
 
-    $pattern = query2regex('Q');
-    $cnt_s = preg_match_all($pattern[0], $spml, $matches);
+            <h3 id="thin">SignWriting Thin Viewer</h3>
+            <p>Grab a copy of the <a href="signwriting_thin.php">SignWriting Thin Viewer</a> and include the script on each page.</p>
+            <pre class=""><ol class="linenums">
+            <li class="L0"><span class="dec">&lt;!-- Universal SignWriting Plugin, Thin Viewer as 2 lines of Javascript, 3 KB --&gt;</span></li>
+            <li class="L1"><span class="dec">&lt;script type="text/javascript" src="signwriting_thin.js"&gt;</span></li>
+            </ol></pre>
+          
+            <h3 id="mediawiki">SignWriting MediaWiki Plugin</h3>
+            <p>A custom extension for MediaWiki software.  Utilizing the SignWriting Icon Server available on Wikimedia Labs, this extension adds a single client side script to the Resource Module before the page view.  Except to pass a 3 KB file to the client, the server running the MediaWiki software is not involved.</p>
+            <ul><li><a href="http://www.mediawiki.org/wiki/Extension:SignWriting_MediaWiki_Plugin">Extension page on MediaWiki.org</a></li>
+            <li><a href="https://gerrit.wikimedia.org/r/gitweb?p=mediawiki/extensions/SignWritingMediaWikiPlugin.git">Code base in Wikimedia's gerrit</a></li>
+            </ul>
 
-    $pattern = query2regex('QT');
-    $cnt_t = preg_match_all($pattern[0], $spml, $matches);
-  }
+            <h3>2 Lines of Javascript</h3>
+            <p>Ultimately, the SignWriting Thin Viewer utilizes 2 lines of code.</p>
+            <p>Line 1 defines a function for regular expression search and replace, then crawl the document object model for TEXT elements with matching strings and applies the function.</p>
+            <p>Line 2 calls the function when the DOM is loaded</p>
+            <pre class=""><ol class="linenums">
+            <li class="L0"><span class="dec"><?php echo htmlentities($script);?></span></li>
+            <li class="L1"><span class="dec"><?php echo $autostart;?></span></li>
+            </ol></pre>
 
-  $files = glob('data/spml/*.spml');
-  Switch($fmt){
-  case 'json':
-    $jsar['spml'] = array();
-    $jsar['other'] = array();
-    if ($pdl){
-      $info = array();
-      $info['str'] = $pdl;
-      $info['entries'] = $cnt_e;
-      $info['signs'] = $cnt_s;
-      $info['terms'] = $cnt_t;
-      $jsar['pdl'] = $info;
-    }
-    break;
-  case 'div':
-  default:
-    $all = '';
-    $other = '';
-  }
+          </section>
 
-  foreach ($files as $item){
-    $item = basename($item,'.spml');
-    $tid = typeid($item);
-        
-    Switch($fmt){
-    case 'json':
-      if ($tid['valid']){ 
-        $jsar['spml'][$tid['str']] = $tid;
-      } else {
-        $jsar['other'][$tid['str']] = $tid;
-      }
-      break;
-    case 'div':
-    default:
-      if ($tid['valid']){
-        $all .= '<tr>';
-        $all .= '<th class="per ';
-        if ($pdl == $tid['str']) {
-          $all .= 'rc ';
-        }
-        $all .= 'section">';
-        $all .= '<a href="index.php' . req_attr('pdl',$tid['str']) . '#spml">' . $tid['str'] . '</a>';
-        $all .= '</th>';
-        $all .= '<td>Type: ' .  $tid['type'] . '<br>ID: ' . $tid['id'] . '<br>';
-        $filename = $tid['str'] . '.spml';
-        $all .= 'Size: ' . humanfilesize('data/spml/' . $filename);
-        if ($pdl == $tid['str']) {
-          $all .= '<br>Entries: ' . number_format($cnt_e) . '<br>';
-          $all .= 'Sign count: ' . number_format($cnt_s) . '<br>';
-          $all .= 'Sign Terms: ' . number_format($cnt_t);
-        }
+          <!-- For End Users
+          ================================================== -->
+          <section id="end-users">
+            <div class="page-header">
+              <h1>For End Users</h1>
+              <h2 lang="ase">M545x518S30007482x483S16d10516x472S20600523x496</h2>
+            </div>
 
-        $all .= '</td></tr>';
-      } else {
-        $other .= '<tr>';
-        $other .= '<th class="per section">' . $tid['str'] . '</th>';
-        $filename = $tid['str'] . '.spml';
-        $other .= '<td>Name: ' .  $filename . '<br>';
-        $other .= 'Size: ' . humanfilesize('data/spml/' . $filename) . '</td>';
-        $other .= '</tr>';
-      }
-    }
-  }
+            <h3 id="portable">Portable Bookmark</h3>
+            <p>Bookmark this link to the <a href="<?php echo htmlentities($bookmark);?>">SignWriting Thin Viewer</a>.
+            For easier access, place this bookmark on the toolbar.  You may be able to drag the link onto the bookmark toolbar, if the toolbar is visible.</p>
+            <p>Use anywhere online where you find the ASCII code of Formal SignWriting.</p>
 
-  Switch($fmt){
-  case 'json':
-    break;
-  case 'div':
-  default:
-    if ($all){
-      echo '<h2 id="spml">SPML Available</h2><br><table>';
-      echo $all;
-      echo '</table>';
-    }
-    if ($other){
-      echo '<h2>SPML Other</h2><br><table>';
-      echo $other;
-      echo '</table>';
-    }
-  }
+            <h3 id="pastable">Pastable Bookmark</h3>
+            <p>Create or edit a bookmark with the following line of Javascript as the location or url of the bookmark.</p>
+            <pre class=""><ol class="linenums">
+            <li class="L0"><span class="dec"><?php echo htmlentities($bookmark);?></span></li>
+            </ol></pre>
 
-Switch($fmt){
-case 'json':
-  break;
-case 'div':
-default:
-  echo '<h2>Data Formats Available</h2>';
-  echo '<br>';
-  echo '<table>';
-  echo '<tr>';
-  echo '<th class="per section"><a href="index.php' . req_attr('fmt','json') . '">json</a></th>';
-  echo '<td>json output for use with JavaScript</td>';
-  echo '</tr>';
-  echo '<tr>';
-  echo '<th class="per section"><a href="index.php' . req_attr('fmt','div') . '">div</a></th>';
-  echo '<td>Inner html for use in a div</td>';
-  echo '</tr>';
-  echo '<tr>';
-  echo '<th class="per section"><a href="index.php?' . req_attr('fmt','html') . '">html</a></th>';
-  echo '<td>Default api format</td>';
-  echo '</tr>';
-  echo '</table>';
-?>
-<h2>16-bit Symbol Font</h2><br>
-<p>Available through the <b>glyph.php</b> script.
-<h3>Identity Attributes</h3><br>
-<table>
-  <tr>
-	<th class="per section">key</th>
-	<td>use symbol key, with or without <b>S</b> prefix</td>
-	<td><img src="glyph.php?key=10000"> or <img src="glyph.php?key=S10100"></td>
-  </tr><tr>
-	<th class="per section">code</th>
-	<td>use the symbol code as a 16-bit number</td>
-	<td><img src="glyph.php?code=1"> or <img src="glyph.php?code=97"></td>
-  </tr><tr>
-	<th class="per section">bsw</th>
-	<td>use the bsw string for symbols</td>
-	<td><img src="glyph.php?bsw=130110120"> or <img src="glyph.php?bsw=131110120"></td>
-  </tr><tr>
-	<th class="per section">sym</th>
-	<td>Use the Private Use Area Unicode characters</td>
-	<td><img src="glyph.php?sym=󽠰󽠐󽠠"> or <img src="glyph.php?sym=󽠱󽠐󽠠"></td>
-  </tr>
-</table>
+            <h3 id="local">Use in Local HTML Documents</h3>
+            <p>Grab a copy of the <a href="signwriting_thin.php">SignWriting Thin Viewer</a> and include the script in any HTML document.</p>
+            <pre class=""><ol class="linenums">
+            <li class="L0"><span class="dec">&lt;!-- Universal SignWriting Plugin, Thin Viewer as 2 lines of Javascript, 3 KB --&gt;</span></li>
+            <li class="L1"><span class="dec">&lt;script type="text/javascript" src="signwriting_thin.js"&gt;</span></li>
+            </ol></pre>
 
-<h3>Style Attributes</h3><br>
-<table>
-  <tr>
-	<th class="per section">font</th>
-	<td>Use <b>svg</b> or <b>png</b> values.  Add additional font numbers if available.</td>
-	<td><img src="glyph.php?key=10000&font=png"> or <img src="glyph.php?key=10100&font=svg"></td>
-  </tr><tr>
-	<th class="per section">size</th>
-	<td>1 is the standard size.  Use decimal value in a limited range, from .5 to 7 or more.</td>
-	<td><img src="glyph.php?key=10000&size=3"> or <img src="glyph.php?key=10000&size=.7"></td>
-  </tr><tr>
-	<th class="per section">line</th>
-	<td>specify the line color</td>
-	<td><img src="glyph.php?key=10000&line=00ff00"> or <img src="glyph.php?key=10100&line=ff00ff"></td>
-  </tr><tr>
-	<th class="per section">fill</th>
-	<td>specify the fill color of the palms and arrow heads</td>
-	<td><img src="glyph.php?key=10000&fill=00ff00"> or <img src="glyph.php?key=10100&fill=ff00ff"></td>
-  </tr><tr>
-	<th class="per section">colorize</th>
-	<td>colorize the line according to the standard colors.</td>
-	<td><img src="glyph.php?key=10000&colorize=1"> or <img src="glyph.php?key=20500&colorize=1"></td>
-  </tr><tr>
-	<th class="per section">name</th>
-	<td>give the image a file name.</td>
-	<td><img src="glyph.php?key=10000&name=symbol-name"> or <img src="glyph.php?key=10100&name=other_name"></td>
-  </tr>
-</table>
+            <h3 id="template">Download a SignWriting HTML Template</h3>
+            <p>The <a href="signwriting_template.zip">SignWriting HTML Template</a> includes two small files: a nearly blank HTML document and the SignWriting Thin Viewer.
+            <p>The <a href="signwriting_bootstrap.zip">SignWriting Bootstrap Template</a> includes HTML, CSS, and JavaScript files.  It is an adaptive template using SignWriting built on top of a Twitter Bootstrap example.</p>
+          </section>
 
-<h2>Logographic Sign Images</h2><br>
-<p>Available through the <b>glyphogram.php</b> script.
+          <!-- References 
+          ================================================== -->
+          <section id="references">
+            <div class="page-header">
+              <h1>References</h1>
+              <h2 lang="ase">M536x529S19a20508x509S19a28463x509S2fb00491x471S2e742464x481S2e732508x480</h2>
+            </div>
 
-<h3>Identity Attributes</h3><br>
-<table>
-  <tr>
-	<th class="per section">ksw</th>
-	<td>use the ksw string for the sign</td>
-	<td><img src="glyphogram.php?ksw=M18x29S14c20n19xn29S271063xn11"> or <img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32"></td>
-  </tr><tr>
-	<th class="per section">text</th>
-	<td>use the ksw or fsw sign strings</td>
-	<td><img src="glyphogram.php?text=M18x29S14c20n19xn29S271063xn11"> or <img src="glyphogram.php?text=M518x533S1870a489x515S18701482x490S20500508x496S2e734500x468"></td>
-  </tr><tr>
-	<th class="per section">horizontal panel</th>
-	<td>Use the variant display of <a href="http://signpuddle.net/wiki/index.php/MSW:Variant_Display_Form#10.D._Panel">KSW panel form</a> to properly layout an entire column or row.</td>
-	<td><img src="glyphogram.php?panel=D200x150_B39x75S14c20n19xn29S271063xn11_B115x75S1870an11x15S18701n18xn10S205008xn4S2e7340xn32_B157x75S38802n4xn36"></td>
-  </tr>
-	<th class="per section">vertical panel</th>
-	<td>Use the variant display of <a href="http://signpuddle.net/wiki/index.php/MSW:Variant_Display_Form#10.D._Panel">KSW panel form</a> to properly layout an entire column or row.</td>
-	<td><img src="glyphogram.php?panel=D230x250_M115x49S14c20n19xn29S271063xn11_M115x150S1870an11x15S18701n18xn10S205008xn4S2e7340xn32_B115x207S38800n36xn4"></td>
-  </tr>
-</table>
+            <h3 id="draft">Internet Draft to become RFC</h3>
+            <p>Submitted to the IETF, <a href="http://signpuddle.net/wiki/index.php/I-D_draft-slevinski-signwriting-text">draft-slevinski-signwriting-text</a> is available for review. </p>
 
-<h3>Style Attributes</h3><br>
-<table>
-  <tr>
-	<th class="per section">font</th>
-	<td>Use <b>svg</b> or <b>png</b> values.  Add additional font numbers if available.</td>
-	<td><img src="glyphogram.php?ksw=M18x29S14c20n19xn29S271063xn11&font=png"> or <img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=svg"></td>
-  </tr><tr>
-	<th class="per section">size</th>
-	<td>1 is the standard size.  Use decimal value in a limited range, from .5 to 7 or more.</td>
-	<td><img src="glyphogram.php?ksw=M18x29S14c20n19xn29S271063xn11&font=png&size=.7"> or <img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=svg&size=1.7"></td>
-  </tr><tr>
-	<th class="per section">line</th>
-	<td>specify the line color</td>
-	<td><img src="glyphogram.php?ksw=M18x29S14c20n19xn29S271063xn11&font=png&line=00ff00"> or <img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=svg&line=ff00ff"></td>
-  </tr><tr>
-	<th class="per section">fill</th>
-	<td>specify the fill color of the palms and arrow heads</td>
-	<td><img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=png&fill=00ff00"> or <img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=svg&fill=ff00ff"></td>
-  </tr><tr>
-	<th class="per section">back</th>
-	<td>specify the background color logogram</td>
-	<td><img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=png&back=00ff00"> or <img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=svg&back=ff00ff"></td>
-  </tr><tr>
-	<th class="per section">pad</th>
-	<td>specify the padding around the logogram</td>
-	<td><img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=png&back=00ff00&pad=10"> or <img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=svg&back=ff00ff&pad=10"></td>
-  </tr><tr>
-	<th class="per section">no bound</th>
-	<td>specify a tight bounding box around the logogram based</td>
-	<td>
-	<img src="glyphogram.php?ksw=M53x70S14c2016x12S2710638x30S2ff00n18xn17&font=png&back=00ff00&bound="> 
-	</td>
-  </tr><tr>
-	<th class="per section">bound=c</th>
-	<td>specify the bounding box around the logogram based on its center</td>
-	<td>
-	<img src="glyphogram.php?ksw=M53x70S14c2016x12S2710638x30S2ff00n18xn17&font=png&back=00ff00&bound=c">
-	</td>
-  </tr><tr>
-	<th class="per section">bound=v</th>
-	<td>specify the bounding box around the logogram based on its vertical center</td>
-	<td>
-	<img src="glyphogram.php?ksw=M53x70S14c2016x12S2710638x30S2ff00n18xn17&font=png&back=00ff00&bound=v">
-	</td>
-  </tr><tr>
-	<th class="per section">bound=h</th>
-	<td>specify the bounding box around the logogram based on its horizontal center</td>
-	<td>
-	<img src="glyphogram.php?ksw=M53x70S14c2016x12S2710638x30S2ff00n18xn17&font=png&back=00ff00&bound=h"> 
-	</td>
-  </tr><tr>
-	<th class="per section">colorize</th>
-	<td>colorize the line according to the standard colors.</td>
-	<td><img src="glyphogram.php?ksw=M18x29S14c20n19xn29S271063xn11&font=png&colorize=1"> or <img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=svg&colorize=1"></td>
-  </tr><tr>
-	<th class="per section">name</th>
-	<td>give the image a file name.</td>
-	<td><img src="glyphogram.php?ksw=M18x29S14c20n19xn29S271063xn11&font=png&name=hello"> or <img src="glyphogram.php?ksw=M18x33S1870an11x15S18701n18xn10S205008xn4S2e7340xn32&font=svg&name=world"></td>
-  </tr>
-</table>
-<?php  
-}
+            <h3 id="theory">Theory and Example</h3>
+            <p><a href="http://signpuddle.net/wiki/index.php/MSW">Modern SignWriting</a> explains the character encoding model of SignWriting Text, stable since January 12th, 2012.
+            </p>
+            <h3 id="websites">Websites and more</h3>
+            <ul>
+              <li class="">
+                <a href="http://www.signwriting.org/lessons/">SignWriting Lessons</a>
+              </li>
+              <li class="">
+                <a href="http://www.signwriting.org/forums/swlist/">Email List</a>
+              </li>
+              <li class="">
+                <a href="http://signpuddle.org">SignPuddle Online</a>
+              </li>
+            </ul>
+          </section>
 
+          <!-- local font 
+          ================================================== -->
+          <section id="font">
+            <div class="page-header">
+              <h1>Local Font</h1>
+              <p>The TrueType Font implementation is not production ready yet.  The proof of concept has several issues and is prone to crashing.  Development continues...</p>
+              <br>
+              <h2 lang="ase" style="font-family:iswa;">󽠃󽼒󽼝󽡼󽠒󽠠󽻭󽻣󽦡󽠐󽠦󽼃󽻵 󽠃󽼗󽼢󽨚󽠔󽠨󽻯󽼉󽠰󽠑󽠡󽼂󽻝󽨚󽠐󽠤󽼈󽻿󽠰󽠑󽠩󽻩󽻦</h2>
+              <p lang="ase" style="font-family:iswa;">󽠃󽼗󽼢󽨚󽠔󽠨󽻯󽼉󽠰󽠑󽠡󽼂󽻝󽨚󽠐󽠤󽼈󽻿󽠰󽠑󽠩󽻩󽻦</p>
+            </div>
 
+            <h3 id="truetype">TrueType Font</h3>
+            <p>Download and install the TrueType Font</p>
+            <p>Smart font development by Eduardo Trapani:  
+            <a href="http://signpuddle.net/iswa/iswa.ttf">iswa.ttf</a>, 6.1MB
+            <a href="https://github.com/bidaian/iswa_graphite">Github Source</a>
+            </p>
 
+            <h3 id="graphite">Graphite</h3>
+            <p>The TrueType Font works with <a href="http://scripts.sil.org/cms/scripts/page.php?site_id=projects&item_id=graphite_home">Graphite</a>
+            </p>
+          
+            <h3>Enable Graphite in FIrefox</h3>
+            <p>Enable Graphite in the Firefox Browser for testing and development: <a href="http://scripts.sil.org/cms/scripts/page.php?site_id=projects&item_id=graphite_firefox">instructions</a>
+            </p>
 
-/****************************
- * The end section and output
- */
- 
-Switch($fmt){
-case 'json':
-  echo json_encode($jsar);
-  break;
-case 'div':
-  break;
-default:
-?>
+          </section>
 
-</div>
-<br clear="all"><br>
-<hr>
-<div id="footer" class="footer"><table cellpadding="5" width="95%"><tr><td valign="top"><a href="http://scripts.sil.org/OFL"><img src="media/ofl.png"></a></td><td align=middle>
-<b>SignPuddle Standard: SignWriting Icon Server</b><br><b>Copyright 2007-2012 Stephen E Slevinski Jr. Some Rights Reserved.</b><br>Except where otherwise noted, this work is licensed under<br><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution ShareAlike 3.0</td><td valign="top" align="right"><a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="media/by-sa.png"></a>
-</td></tr></table></div><hr><br>
-</body>
-</html>﻿﻿﻿﻿﻿﻿
-<?php
-}
-?>
+        </div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>SignPuddle Standard: SignWriting Icon Server</p>
+        <p>Copyright 2007-2013 Stephen E Slevinski Jr. Some Rights Reserved.</p>
+        <p>Except where otherwise noted, this work is licensed under</p>
+        <p><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution ShareAlike 3.0</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+
+  
+
+</body></html>

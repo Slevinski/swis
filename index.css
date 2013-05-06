@@ -104,3 +104,7 @@ hr, br {
   clear:both;
 } 
 
+img {
+  float:left;
+  display:block;
+}
