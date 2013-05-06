@@ -11,7 +11,7 @@
  if (!$swis_url) $swis_url = curPage();
  
  $semver = "1.0.0-rc";
- $ed_date = "May 2nd, 2013";
+ $ed_date = "May 6th, 2013";
  
 function curPage() {
   $pageURL = 'http';
