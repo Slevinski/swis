@@ -420,7 +420,7 @@ combined using the SignWriting Icon Server
 </metadata>
 EOT;
 */
-  $svg .= "<metadata>" . $ksw . "</metadata>\n";
+  $svg .= "<metadata>" . ksw2fsw($ksw) . "</metadata>\n";
   if ($size!=1 && $size) $svg .= '<g transform="scale(' . $size . ')">';
   foreach($cluster as $num=>$spatial){
     if ($num==0) continue;
