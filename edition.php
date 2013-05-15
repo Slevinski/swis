@@ -13,16 +13,18 @@
  $semver = "1.0.0-rc.2";
  $ed_date = "May 15th, 2013";
  
+
+
 function curPage() {
   $pageURL = 'http';
   if (@$_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
   $pageURL .= "://";
   if ($_SERVER["SERVER_PORT"] != "80") {
-    $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].'/';
+    $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["SCRIPT_NAME"];
   } else {
-    $pageURL .= $_SERVER["SERVER_NAME"].'/';
+    $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["SCRIPT_NAME"];
   }
-  return str_replace ($_SERVER["PHP_SELF"],'/',$pageURL);
+  return str_replace (basename($_SERVER["PHP_SELF"]),'',$pageURL);
 }
 
 $thin_base = <<<EOT
