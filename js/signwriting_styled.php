@@ -1,10 +1,10 @@
 <?php
   header("Content-type: text/javascript");
   header('Content-Disposition: filename="signwriting_thin.js"');
-  include("edition.php");
+  include("../edition.php");
 ?>
 /**
- * Universal SignWriting Plugin, thin viewer
+ * SignWriting Styled Viewer
  *
  * Installation
  *   add this file to any web site or add these 2 lines to any web page
@@ -33,24 +33,24 @@
  * @author Steve (slevin@signpuddle.net)
  * @license http://www.opensource.org/licenses/gpl-3.0.html GPL
  * @access public
- * @version 1.0.0.rc
+ * @version 1.0.0.rc.2
  * @filesource
  *
  */
 
 /**
- * Line 1
- *   first, define a function for regular expression search and replace
- *   second, crawl the document object model for TEXT elements with matching strings and apply the function
+ * Section 1
+ *   define a function for regular expression search and replace
+ *   then, crawl the document object model for TEXT elements with matching strings and apply the function
  */
 <?php
-echo $script . "\n";
+echo $styled_script . "\n";
 ?>
 
 /**
- * Line 2
+ * Section 2
  *   execute function when DOM is loaded
  */
 <?php
-echo $autostart . "\n";
+echo $styled_start . "\n";
 ?>

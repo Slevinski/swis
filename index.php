@@ -28,11 +28,28 @@ include 'edition.php';
     <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="http://signpuddle.com/favicon.ico">
 
-    <!-- Universal SignWriting Pluging, Thin Viewer as 2 lines of Javascript, 3 KB -->
-    <script type="text/javascript">
-    <?php echo $script . "\n";?>
-    <?php echo $autostart . "\n";?>
-    </script>
+    <!-- Universal SignWriting Pluging, Viewer Script -->
+<?php 
+      $viewer = @$_REQUEST['viewer'];
+      if (!$viewer) $viewer = "styled";
+      switch ($viewer){
+        case "styled":
+          echo '    <script type="text/javascript">' . "\n";
+          echo $styled_script . "\n";
+          echo $styled_start . "\n";
+          echo '    </script>' . "\n";
+          break;
+        case "thin":
+          echo '    <script type="text/javascript">' . "\n";
+          echo $thin_script . "\n";
+          echo $thin_start . "\n";
+          echo '    </script>' . "\n";
+          break;
+        case "font":
+          echo '    <script type="text/javascript" src="js/signwriting_text.js"></script>' . "\n";
+          echo '    <script type="text/javascript" src="js/signwriting_font.js"></script>' . "\n";
+      }
+    ?>
 
   </head>
 
@@ -51,11 +68,11 @@ include 'edition.php';
           </a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
-              <li><a title="home" href="http://signpuddle.com">L531x546S30004482x482S20500521x495S18517500x519</a></li>
-              <li><a title="about" href="http://signpuddle.net">L527x523S18518474x508S10012497x501S2ef00503x477</a></li>
-              <li><a title="contact" href="http://www.linkedin.com/in/slevinski">L533x515S1c510503x486S1c518467x485S20600490x504</a></li>
+              <li <?php if ($viewer=="styled") echo 'class="active"';?> ><a href="?viewer=styled">Styled Viewer L533x532S1bd10505x502S1bd18479x502S28809513x473S28811467x472S22100502x495S22100488x495S20500496x483S2fb00494x469</a></li>
+              <li <?php if ($viewer=="thin") echo 'class="active"';?> ><a href="?viewer=thin">Thin Viewer L525x529S15a19496x506S1c513475x494S20e00499x484S26507512x471</a></li>
+              <li <?php if ($viewer=="font") echo 'class="active"';?>><a href="?viewer=font">Font Viewer L533x515S1c510503x486S1c518467x485S20600490x504</a></li>
             </ul>
-            <ul class="nav">
+            <ul class="nav nav-options">
               <li><a href="https://github.com/Slevinski/swis/archive/master.zip">Download Source</a></li>
               <li><a href="https://github.com/Slevinski/swis">GitHub Repository</a></li>
             </ul>
@@ -69,22 +86,26 @@ include 'edition.php';
         <div class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
-              <li class="nav-header">M548x530S15a37500x491S15a3f478x507S26c07521x474S26c11461x490S2fb00487x476S2f900537x470S2f900452x488</li>
+              <li class="nav-header">Text M538x517S19202505x483S1920a473x483S26606508x500S26612461x501S20500493x496</li>
+              <li><a href="#formal">Formal SignWriting</a></li>
+              <li class="nav-header">Servers M548x530S15a37500x491S15a3f478x507S26c07521x474S26c11461x490S2fb00487x476S2f900537x470S2f900452x488</li>
               <li><a href="#infrastructure">Infrastructure</a></li>
               <li><a href="#labs">Wikimedia Labs</a></li>
-              <li class="nav-header">M526x526S18720475x475S23504478x508S26606496x501</li>
+              <li><a href="#plugins">Plugins</a></li>
+              <li class="nav-header">Websites M526x526S18720475x475S23504478x508S26606496x501</li>
+              <li><a href="#styled">SignWriting Styled Viewer</a></li>
               <li><a href="#thin">SignWriting Thin Viewer</a></li>
+              <li><a href="#font">SignWriting Font Viewer</a></li>
               <li><a href="#mediawiki">SignWriting MediaWiki Plugin</a></li>
-              <li class="nav-header">M545x518S30007482x483S16d10516x472S20600523x496</li>
+              <li class="nav-header">End Users M545x518S30007482x483S16d10516x472S20600523x496</li>
               <li><a href="#portable">Portable Bookmark</a></li>
               <li><a href="#pastable">Pastable Bookmark</a></li>
-              <li><a href="#local">Local HTML Documents</a></li>
               <li><a href="#template">Templates</a></li>
-              <li class="nav-header">M536x529S19a20508x509S19a28463x509S2fb00491x471S2e742464x481S2e732508x480</li>
+              <li class="nav-header">References M536x529S19a20508x509S19a28463x509S2fb00491x471S2e742464x481S2e732508x480</li>
               <li><a href="#draft">Internet Draft</a></li>
               <li><a href="#theory">Theory and Example</a></li>
               <li><a href="#websites">Websites and more</a></li>
-              <li class="nav-header" style="font-family:iswa;">M536x516S17719506x492S17719464x496S2d628469x487S2d628507x483 󽠃󽼒󽼝󽡼󽠒󽠠󽻭󽻣󽦡󽠐󽠦󽼃󽻵 󽠃󽼗󽼢󽨚󽠔󽠨󽻯󽼉󽠰󽠑󽠡󽼂󽻝󽨚󽠐󽠤󽼈󽻿󽠰󽠑󽠩󽻩󽻦</li>
+              <li class="nav-header" style="font-family:iswa;"><br>Local Font M536x516S17719506x492S17719464x496S2d628469x487S2d628507x483 󽠃󽼒󽼝󽡼󽠒󽠠󽻭󽻣󽦡󽠐󽠦󽼃󽻵 󽠃󽼗󽼢󽨚󽠔󽠨󽻯󽼉󽠰󽠑󽠡󽼂󽻝󽨚󽠐󽠤󽼈󽻿󽠰󽠑󽠩󽻩󽻦</li>
               <li><a href="#truetype">TrueType Font</a></li>
               <li><a href="#graphite">Graphite</a></li>
             </ul>
@@ -93,11 +114,34 @@ include 'edition.php';
         <div class="span9">
           <div class="hero-unit">
             <h1>SignWriting Icon Server</h1>
-            <h1>M523x535S10019478x475S10011502x466S2ea04507x502S2ea48485x510 M517x532S1eb20493x485S15a0a484x469S29b0b483x497 M526x536S19210504x465S19218475x465S2930c512x489S29314474x489S2fb04493x530 M548x530S15a37500x491S15a3f478x507S26c07521x474S26c11461x490S2fb00487x476S2f900537x470S2f900452x488</h1>
+            <h1>L523x535S10019478x475S10011502x466S2ea04507x502S2ea48485x510 L517x532S1eb20493x485S15a0a484x469S29b0b483x497 L526x536S19210504x465S19218475x465S2930c512x489S29314474x489S2fb04493x530 L548x530S15a37500x491S15a3f478x507S26c07521x474S26c11461x490S2fb00487x476S2f900537x470S2f900452x488</h1>
           </div>
+
+          <!-- formal
+          ================================================== -->
+          <hr>
+          <section id="text">
+            <div class="page-header">
+              <h1>SignWriting Text</h1>
+              <h2 lang="ase">M538x517S19202505x483S1920a473x483S26606508x500S26612461x501S20500493x496</h2>
+              <p>SignWriting Text uses strings of characters to form words that represent signs.
+              </p> 
+            </div>
+
+            <h3 id="formal">Formal SignWriting</h3>
+            <p>Formal SignWriting uses ASCII strings to represent the logographic names of the signs. 
+            </p>
+            <textarea id="fsw_text">M518x529S14c20481x471S27106503x489 M518x533S1870a489x515S18701482x490S20500508x496S2e734500x468 S38800464x496</textarea>
+            <a id="process" class="btn btn-large btn-info">Process L532x538S18040501x523S18048467x511S2eb4c477x470S2eb08506x483S2fb00494x462</a>
+            <br><br>
+            <div id="output"></div>
+
+          </section>
+
 
           <!-- Servers
           ================================================== -->
+          <hr>
           <section id="servers">
             <div class="page-header">
               <h1>Servers</h1>
@@ -107,47 +151,78 @@ include 'edition.php';
             <h3 id="infrastructure">Infrastructure</h3>
             <p>Until the TrueType Font is perfected, using the SignWriting script on computers requires a SignWriting Icon Server to generate the PNG and SVG images.</p>
             <p>The SignWriting Icon Server is an open source project that is easy to install with very modest requirements of PHP, PDO SQLite, and the GD graphics library.</p>
-            <p>Each SignWriting Icon Server provides its own version of the SignWriting Thin Viewer as a site script or bookmark.</p>
+            <p>Each SignWriting Icon Server provides static or customized versions of the available <a href="#plugins">plugins</a>.</p>
 
             <h3 id="labs">Wikimedia Labs</h3>
             <p>The <a href="http://swis.wmflabs.org">main public SignWriting Icon Server</a> is available on <a href="https://wikitech.wikimedia.org">Wikimedia Labs</a>.</p>
             <a href="http://swis.wmflabs.org"><h3 lang="ase">M549x543S18527530x497S1852f451x497S14c20509x457S14c28468x457S26610472x491S26600512x491S28c0e514x522S28c16458x522 M529x530S10030511x500S10038476x500S2a200506x471S2a218472x471 M532x525S10004512x475S22f04507x511S1000c474x475S22f14469x511</h3></a>
+            </p>
+
+            <h3 id="plugins">Plugins</h3>
+            <p>The plugins automatically convert Formal SignWriting strings into grammatically correct SignWriting Text.
+            </p>
+            <p>Each SignWriting Icon Server provides several plugins to support SignWriting Text.
+            The customized plugins embed the server url in the code.
+            The static plugins use the experimental <a href="#truetype">TrueType Font</a> rather than the server side images.
+            </p>
+            <p>The <a href="#styled">SignWriting Styled Viewer</a> uses jQuery, HTML and CSS to create styled SignWriting Text.
+            </p>
+            <p>The <a href="#thin">SignWriting Thin Viewer</a> is a micro library written in 1.5K of stand alone JavaScript.
+            </p>
+            <p>The <a href="#font">SignWriting Font Viewer</a> is written in JavaScript and uses temporary Unicode characters on plane 15.
+            The font can be locally installed or streamed from a server.
+            </p> 
+            <p>The <a href="#mediawiki">SignWriting MediaWiki Plugin</a> is a custom extension for MediaWiki software.
+            </p> 
           </section>
+
 
           <!-- For web sites
           ================================================== -->
+          <hr>
           <section id="website">
             <div class="page-header">
               <h1>For Web Sites</h1>
               <h2 lang="ase">M526x526S18720475x475S23504478x508S26606496x501</h2>
+              <p>Each SignWriting Icon Server can support an arbitrary number of websites.  This server uses the following URL: <?php echo '<a href="' . $swis_url. '">' . $swis_url . '</a>';?>
             </div>
 
-            <h3 id="thin">SignWriting Thin Viewer</h3>
-            <p>Grab a copy of the <a href="signwriting_thin.php">SignWriting Thin Viewer</a> and include the script on each page.</p>
+            <h3 id="styled">SignWriting Styled Viewer</h3>
+            <p>The SignWriting Styled Viewer is written in JavaScript and requires the jQuery library for CSS integration.
             <pre class=""><ol class="linenums">
-            <li class="L0"><span class="dec">&lt;!-- Universal SignWriting Plugin, Thin Viewer as 2 lines of Javascript, 3 KB --&gt;</span></li>
-            <li class="L1"><span class="dec">&lt;script type="text/javascript" src="signwriting_thin.js"&gt;</span></li>
+            <li class="L1"><span class="dec">&lt;script type="text/javascript" src="<a href="js/jquery.js">js/jquery.js</a>"&gt;</span></li>
+            <li class="L1"><span class="dec">&lt;script type="text/javascript" src="<a href="js/signwriting_styled.php">js/signwriting_styled.js</a>"&gt;</span></li>
+            </ol></pre>
+
+            <h3 id="thin">SignWriting Thin Viewer</h3>
+            <p>The SignWriting Thin Viewer is a micro library written in 1.5K of stand alone JavaScript.
+            <pre class=""><ol class="linenums">
+            <li class="L1"><span class="dec">&lt;script type="text/javascript" src="<a href="js/signwriting_thin.php">js/signwriting_thin.js</a>"&gt;</span></li>
+            </ol></pre>
+            <h4 id="thin_template">HTML Template</h4>
+            <p>The <a href="signwriting_template.zip">SignWriting HTML Template</a> includes two small files: a nearly blank HTML document and the SignWriting Thin Viewer.
+            <p>The <a href="signwriting_bootstrap.zip">SignWriting Bootstrap Template</a> includes HTML, CSS, and JavaScript files.  It is an adaptive template using SignWriting built on top of a Twitter Bootstrap example.</p>
+
+            <h3 id="font">SignWriting Font Viewer</h3>
+            <p>The SignWriting Font Viewer is written in JavaScript and uses temporary Unicode characters on plane 15.
+             The font can be locally installed or streamed from a server.
+             </p>
+             <pre class=""><ol class="linenums">
+            <li class="L1"><span class="dec">&lt;script type="text/javascript" src="<a href="js/signwriting_text.js">js/signwriting_text.js</a>"&gt;</span></li>
+            <li class="L1"><span class="dec">&lt;script type="text/javascript" src="<a href="js/signwriting_font.js">js/signwriting_font.js</a>"&gt;</span></li>
             </ol></pre>
           
             <h3 id="mediawiki">SignWriting MediaWiki Plugin</h3>
-            <p>A custom extension for MediaWiki software.  Utilizing the SignWriting Icon Server available on Wikimedia Labs, this extension adds a single client side script to the Resource Module before the page view.  Except to pass a 3 KB file to the client, the server running the MediaWiki software is not involved.</p>
+            <p>The SignWriring MediaWiki Plugin is a custom extension for MediaWiki software.  Utilizing the SignWriting Icon Server available on Wikimedia Labs, this extension adds a single client side script to the Resource Module before the page view.  Except to pass a 3 KB file to the client, the server running the MediaWiki software is not involved.</p>
             <ul><li><a href="http://www.mediawiki.org/wiki/Extension:SignWriting_MediaWiki_Plugin">Extension page on MediaWiki.org</a></li>
             <li><a href="https://gerrit.wikimedia.org/r/gitweb?p=mediawiki/extensions/SignWritingMediaWikiPlugin.git">Code base in Wikimedia's gerrit</a></li>
             </ul>
-
-            <h3>2 Lines of Javascript</h3>
-            <p>Ultimately, the SignWriting Thin Viewer utilizes 2 lines of code.</p>
-            <p>Line 1 defines a function for regular expression search and replace, then crawl the document object model for TEXT elements with matching strings and applies the function.</p>
-            <p>Line 2 calls the function when the DOM is loaded</p>
-            <pre class=""><ol class="linenums">
-            <li class="L0"><span class="dec"><?php echo htmlentities($script);?></span></li>
-            <li class="L1"><span class="dec"><?php echo $autostart;?></span></li>
-            </ol></pre>
-
           </section>
+
 
           <!-- For End Users
           ================================================== -->
+          <hr>
           <section id="end-users">
             <div class="page-header">
               <h1>For End Users</h1>
@@ -155,30 +230,24 @@ include 'edition.php';
             </div>
 
             <h3 id="portable">Portable Bookmark</h3>
-            <p>Bookmark this link to the <a href="<?php echo htmlentities($bookmark);?>">SignWriting Thin Viewer</a>.
+            <p>Bookmark this link to the <a href="<?php echo htmlentities($thin_bookmark);?>">SignWriting Thin Viewer</a>.
             For easier access, place this bookmark on the toolbar.  You may be able to drag the link onto the bookmark toolbar, if the toolbar is visible.</p>
             <p>Use anywhere online where you find the ASCII code of Formal SignWriting.</p>
 
             <h3 id="pastable">Pastable Bookmark</h3>
             <p>Create or edit a bookmark with the following line of Javascript as the location or url of the bookmark.</p>
             <pre class=""><ol class="linenums">
-            <li class="L0"><span class="dec"><?php echo htmlentities($bookmark);?></span></li>
+            <li class="L0"><span class="dec"><?php echo htmlentities($thin_bookmark);?></span></li>
             </ol></pre>
 
-            <h3 id="local">Use in Local HTML Documents</h3>
-            <p>Grab a copy of the <a href="signwriting_thin.php">SignWriting Thin Viewer</a> and include the script in any HTML document.</p>
-            <pre class=""><ol class="linenums">
-            <li class="L0"><span class="dec">&lt;!-- Universal SignWriting Plugin, Thin Viewer as 2 lines of Javascript, 3 KB --&gt;</span></li>
-            <li class="L1"><span class="dec">&lt;script type="text/javascript" src="signwriting_thin.js"&gt;</span></li>
-            </ol></pre>
-
-            <h3 id="template">Download a SignWriting HTML Template</h3>
+            <h3 id="template">Templates</h3>
             <p>The <a href="signwriting_template.zip">SignWriting HTML Template</a> includes two small files: a nearly blank HTML document and the SignWriting Thin Viewer.
             <p>The <a href="signwriting_bootstrap.zip">SignWriting Bootstrap Template</a> includes HTML, CSS, and JavaScript files.  It is an adaptive template using SignWriting built on top of a Twitter Bootstrap example.</p>
           </section>
 
           <!-- References 
           ================================================== -->
+          <hr>
           <section id="references">
             <div class="page-header">
               <h1>References</h1>
@@ -207,6 +276,7 @@ include 'edition.php';
 
           <!-- local font 
           ================================================== -->
+          <hr>
           <section id="font">
             <div class="page-header">
               <h1>Local Font</h1>
@@ -263,6 +333,12 @@ include 'edition.php';
     <script src="js/bootstrap-collapse.js"></script>
     <script src="js/bootstrap-carousel.js"></script>
     <script src="js/bootstrap-typeahead.js"></script>
+    <script type="text/javascript">
+      jQuery('a#process').click(function(){
+        jQuery('div#output').html('<h3>Processed Output</h3>' + jQuery('textarea#fsw_text').val());
+        signwriting_<?php echo $viewer;?>(document.getElementById("output"));
+      });
+    </script>
 
   
 

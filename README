@@ -1,6 +1,6 @@
 SWIS
 The SignWriting Icon Server
-SemVer: 1.0.0-rc
+SemVer: 1.0.0-rc.2
 
 Formal strings stable since January 12th, 2012
 
@@ -40,7 +40,6 @@ ksw.php - Kartesian SignWriting for variant display forms
 msw.php - Modern SignWriting script encoding library
 signwriting_bootstrap.zip - bootstrap style template
 signwriting_template.zip - nearly blank template
-signwriting_thin.php - dynamically create version of signwriting_thin.js
 spl.php - SignPuddle 1.6 legacy Conversion Library
 spml.php - SignPuddle Markup Language ( read, pack, unpack )
 spml2sql - alpha level spml to sqlite database script
@@ -55,6 +54,7 @@ img - images
 js - javascript files
 
 Version History
+1.0.0-rc.2 - May 15th, 2013: added Styled Viewer and Font Viewer plugins
 1.0.0-rc - May 6th, 2013: custom signwriting_thin.js for each SWIS  
 1.0.0-prerelease.2 - April 2nd, 2013: Pagodabox file 
 1.0.0-prerelease - Nov 1st, 2012: project rename and configuration data 

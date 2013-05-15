@@ -1,5 +1,5 @@
 body {
-  padding-top: 110px;
+  padding-top: 130px;
   padding-bottom: 40px;
 }
 .sidebar-nav {
@@ -71,7 +71,7 @@ img.logo:hover {
   -webkit-transform:scale(1.2); /* Safari and Chrome */
 }
 
-ul.pull-right li{
+ul.nav-options li{
   -webkit-transition: background 0.5s ease-in-out;
   -moz-transition: background 0.5s ease-in-out;
   -ms-transition: background 0.5s ease-in-out;
@@ -79,7 +79,7 @@ ul.pull-right li{
   transition: background 0.5s ease-in-out;
 }
 
-ul.pull-right li:hover {
+ul.nav-options li:hover {
   background: #2A9E13;
 }
 a span {
@@ -97,6 +97,20 @@ a.brand {
 }
 a.brand:hover {
   color: #2A9E13;
+}
+
+li.nav-header {
+  background: #2A9E13;
+  color: white;
+  text-align: center;
+  font-size: 120%;
+  -moz-border-radius: 4em 4em 0em 0em;
+  border-radius: 4em 4em 0em 0em;
+}
+
+textarea {
+  width: 90%;
+  height: 130px;
 }
 
 footer {
@@ -120,8 +134,8 @@ pre {
   h3:before { 
     display: block; 
     content: " "; 
-    margin-top: -105px; 
-    height: 105px; 
+    margin-top: -130px; 
+    height: 130px; 
     visibility: hidden; 
   }
 }
