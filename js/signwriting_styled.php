@@ -1,6 +1,6 @@
 <?php
   header("Content-type: text/javascript");
-  header('Content-Disposition: filename="signwriting_thin.js"');
+  header('Content-Disposition: filename="signwriting_styled.js"');
   include("../edition.php");
 ?>
 /**
