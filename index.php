@@ -15,6 +15,7 @@ include 'edition.php';
     <link href="css/index.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
     <link href="css/prettify.css" rel="stylesheet">
+    <link href="css/palette.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -54,8 +55,8 @@ include 'edition.php';
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
+  
+    <div class="navbar">
       <div class="navbar-inner">
         <div class="container-fluid">
           <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -64,7 +65,7 @@ include 'edition.php';
             <span class="icon-bar"></span>
           </button>
           <a href="http://signpuddle.com"><img class="logo" src="img/logo.png" alt="Open SignPuddle logo" border="0"></a>
-          <a class="brand" href="#">SignWriting Icon Server<span><br><?php echo $swis_edition;?><br>Semver: <?php echo $semver;?></span>
+          <a class="brand" href="<?php echo $swis_url;?>">SignWriting Icon Server<span><br><?php echo $swis_edition;?><br>Semver: <?php echo $semver;?></span>
           </a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
@@ -82,12 +83,17 @@ include 'edition.php';
     </div>
 
     <div class="container-fluid">
+
       <div class="row-fluid">
+
         <div class="span3">
           <div class="well sidebar-nav">
+
             <ul class="nav nav-list">
-              <li class="nav-header">Text M538x517S19202505x483S1920a473x483S26606508x500S26612461x501S20500493x496</li>
-              <li><a href="#formal">Formal SignWriting</a></li>
+              <li class="nav-header">API M580x513S14c02549x487S14c0a421x489S26502531x491S26516455x493S14c02498x487S14c0a474x490</li>
+              <li><a href="#front">Spoken Language</a></li>
+              <li><a href="#back">Sign Language</a></li>
+              <li><a href="#components">Components</a></li>
               <li class="nav-header">Servers M548x530S15a37500x491S15a3f478x507S26c07521x474S26c11461x490S2fb00487x476S2f900537x470S2f900452x488</li>
               <li><a href="#infrastructure">Infrastructure</a></li>
               <li><a href="#labs">Wikimedia Labs</a></li>
@@ -111,33 +117,128 @@ include 'edition.php';
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
-        <div class="span9">
-          <div class="hero-unit">
-            <h1>SignWriting Icon Server</h1>
-            <h1>L523x535S10019478x475S10011502x466S2ea04507x502S2ea48485x510 L517x532S1eb20493x485S15a0a484x469S29b0b483x497 L526x536S19210504x465S19218475x465S2930c512x489S29314474x489S2fb04493x530 L548x530S15a37500x491S15a3f478x507S26c07521x474S26c11461x490S2fb00487x476S2f900537x470S2f900452x488</h1>
-          </div>
 
-          <!-- formal
-          ================================================== -->
-          <hr>
-          <section id="text">
-            <div class="page-header">
-              <h1>SignWriting Text</h1>
-              <h2 lang="ase">M538x517S19202505x483S1920a473x483S26606508x500S26612461x501S20500493x496</h2>
-              <p>SignWriting Text uses strings of characters to form words that represent signs.
-              </p> 
+        <div class="span9">
+          <div id="formal" class="">
+            <div class="input-append">
+              <input type="search" class="span7" placeholder="spoken language" id="spoken"/>
+              <button type="button" id="search" class="btn">Search</button>
+            </div>
+            <div class="input-append">
+              <input type="search" class="span6" placeholder="sign language" id="signed"/>
+              <button id="visualize" class="btn">Visualize</button>
+              <button id="query" class="btn">Query</button>
+              <button id="reverse" class="btn">Reverse</button>
             </div>
 
-            <h3 id="formal">Formal SignWriting</h3>
-            <p>Formal SignWriting uses ASCII strings to represent the logographic names of the signs. 
-            </p>
-            <textarea id="fsw_text">M518x529S14c20481x471S27106503x489 M518x533S1870a489x515S18701482x490S20500508x496S2e734500x468 S38800464x496</textarea>
-            <a id="process" class="btn btn-large btn-info">Process L532x538S18040501x523S18048467x511S2eb4c477x470S2eb08506x483S2fb00494x462</a>
-            <br><br>
             <div id="output"></div>
+          </div>
 
+          <!-- API
+          ================================================== -->
+          <hr>
+          <section id="api">
+            <div class="page-header">
+              <h1>API</h1>
+              <h2 lang="ase">M580x513S14c02549x487S14c0a421x489S26502531x491S26516455x493S14c02498x487S14c0a474x490</h2>
+            </div>
+
+            <h3 id="front">Spoken Language</h3>
+            <p>Search spoken language to find related signs. To find an exact term, enter the term and press search.  
+            Use the wildcard "%" to match any number of unknown characters.  For example, "hear%" will find "heart beat", "hearing" and more.  
+            Use the wildcard "_" to match any single unknown character.  For example, "h_m" will find "hum" and"ham".
+            </p>
+
+            <h3 id="back">Sign Language</h3>
+            <p>Process sign language using Formal SignWriting and query strings.
+            </p>
+            <p>To visualize a Formal SignWriting string, enter an ASCII string such as 
+            M<noscript></noscript>518x529S14c20481x471S27106503x489 M<noscript></noscript>518x533S1870a489x515S18701482x490S20500508x496S2e734500x468 S<noscript></noscript>38800464x496 and press Visualize.
+            </p>
+            <p>A query will find approximate matches based on Formal SignWriting or query strings.  For example, the query string QS10000 will find all signs that use the symbol with key S10000, 
+            where as QS10000S21600 will find all signs that use both symbols S10000 and S21600.
+            </p>
+            <p>A reverse lookup will find related spoken words based on Formal SignWriting or query strings.  
+            For example, the reverse lookup for M<noscript></noscript>518x533S1870a489x515S18701482x490S20500508x496S2e734500x468 will return "globe" and "world".
+            </p>
+            <h3 id="components">Components</h3>
+            <h4>Request Message</h4>
+            <p>The API for this SignWriting Icon Server can be accessed using the following URL: <?php echo '<a href="' . $swis_url. 'v1/">' . $swis_url . 'v1/</a>';?>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Definition</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>query</td>
+                  <td>Query sign language with Formal SignWriting or or query string.
+                  </td>
+                </tr>
+                <tr>
+                  <td>lang</td>
+                  <td>Language code for sign language, such as "ase" for American Sign Language.
+                  </td>
+                </tr>
+                <tr>
+                  <td>search</td>
+                  <td>Seach spoken language with wildcards "_" and "%".
+                    <ul>
+                      <li>"_" to match any single character</li>
+                      <li>"%" to match any string of characters</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>slang</td>
+                  <td>Seach language code for spoken language, such as "en" for English.
+                  </td>
+                </tr>
+                <tr>
+                  <td>reverse</td>
+                  <td>Reverse lookup sign language with Formal SignWriting or or query string to find related spoken language.
+                  </td>
+                </tr>
+                <tr>
+                  <td>offset</td>
+                  <td>Each request returns 10 results.  Additional results can be accessed with the offset, such as an offset of 10 would start with the 11th result.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <h5>Example Requests</h5>
+            <?php
+              $root = $swis_url . 'v1/?';
+              $examples = array();
+              $examples[] = $root .'query=QS10013';
+              $examples[] = $root .'query=QS10013&lang=ase';
+              $examples[] = $root .'search=globe';
+              $examples[] = $root .'search=globe&slang=en';
+              $examples[] = $root .'reverse=QS1870a489x515S18701482x490S20500508x496S2e734500x468';
+              $examples[] = $root .'';
+              $examples[] = $root .'offset=10';
+              $examples[] = $root .'offset=20';
+              foreach ($examples as $ex){
+                echo '<p><a href="' . $ex . '">' . $ex . '</a></p>';
+              }
+              
+            ?>
+            <h4>Response Message</h4>
+            <p>The response message is JSON.
+            </p>
+            <form id="resp_form" class="form-inline" action="<?php echo $root;?>">
+              <input type="text" class="input-small" name="query" placeholder="query">
+              <input type="text" class="input-small" name="lang" placeholder="lang">
+              <input type="text" class="input-small" name="search" placeholder="search">
+              <input type="text" class="input-small" name="slang" placeholder="slang">
+              <input type="text" class="input-small" name="reverse" placeholder="reverse">
+              <input type="text" class="input-small" name="offset" placeholder="offset">
+              <button type="submit" class="btn">Submit</button>
+            </form>
+            <div id="response"></div>
           </section>
-
 
           <!-- Servers
           ================================================== -->
@@ -249,10 +350,11 @@ include 'edition.php';
           ================================================== -->
           <hr>
           <section id="references">
-            <div class="page-header">
-              <h1>References</h1>
-              <h2 lang="ase">M536x529S19a20508x509S19a28463x509S2fb00491x471S2e742464x481S2e732508x480</h2>
-            </div>
+            <h1>References</h1>
+            <h2 lang="ase">M536x529S19a20508x509S19a28463x509S2fb00491x471S2e742464x481S2e732508x480</h2>
+            <h3>SignWriting Text</h3>
+            <p>SignWriting Text uses strings of characters to form words that represent signs.
+            </p> 
 
             <h3 id="draft">Internet Draft to become RFC</h3>
             <p>Submitted to the IETF, <a href="http://signpuddle.net/wiki/index.php/I-D_draft-slevinski-signwriting-text">draft-slevinski-signwriting-text</a> is available for review. </p>
@@ -333,10 +435,103 @@ include 'edition.php';
     <script src="js/bootstrap-collapse.js"></script>
     <script src="js/bootstrap-carousel.js"></script>
     <script src="js/bootstrap-typeahead.js"></script>
+    <script src="js/keyISWA.js"></script>
+    <script src="js/palette.js"></script>
     <script type="text/javascript">
-      jQuery('a#process').click(function(){
-        jQuery('div#output').html('<h3>Processed Output</h3>' + jQuery('textarea#fsw_text').val());
+      jQuery('button#visualize').click(function(){
+        jQuery('div#output').html(jQuery('input#signed').val());
         signwriting_<?php echo $viewer;?>(document.getElementById("output"));
+      });
+
+      fnDisplay = function(data) {
+        var col1 = [],col2 = [],col3 = [];
+        var first = 1 + data['meta']['offset'];
+        var limit = data['meta']['limit'];
+        var last = data['meta']['offset'] + limit;
+        var total = data['meta']['totalResults'];
+        if (total<last) last=total;
+        var query = data['meta']['query'];
+        if (query) query += '&';
+        var content;
+        if (total>0){
+          content = first + " to " + last + " of " +  total;
+        } else {
+          content = "no results found";
+        }
+        if (total>limit) {
+          toolbar = '<div class="btn-toolbar">';
+          toolbar += '<div class="btn-group">';
+          toolbar += '<button id="first" class="btn"><i class="icon-backward"></i></button>';
+          toolbar += '<button id="prev" class="btn"><i class="icon-step-backward"></i></button>';
+          toolbar += '<button class="btn">' + content + '</button>';
+          toolbar += '<button id="next" class="btn"><i class="icon-step-forward"></i></a>';
+          toolbar += '<button id="last" class="btn"><i class="icon-forward"></i></a>';
+          toolbar += '</div>';
+          toolbar += '</div>';
+          content=toolbar;
+        }
+        $.each(data['results'], function(key, val) {
+          if (key<4) {
+            col1.push(val['text']);
+          } else if (key<8) {
+            col2.push(val['text']);
+          } else {
+            col3.push(val['text']);
+          }
+        });
+        col1 = col1.join('<br>');
+        col2 = col2.join('<br>');
+        col3 = col3.join('<br>');
+        content += "<table cellpadding=10><tr>"
+        content += '<td valign=top>' + col1 + '</td>';
+        content += '<td valign=top>' + col2 + '</td>';
+        content += '<td valign=top>' + col3 + '</td>';
+        content += "</tr></table>"
+        $('div#output').html('').height(500).append(content);
+        signwriting_<?php echo $viewer;?>(document.getElementById("output"));
+        if (total>limit) {
+          jQuery('button#first').click(function(){
+            query += 'offset=';
+            $.getJSON('v1?' + query, fnDisplay);
+          });
+          jQuery('button#prev').click(function(){
+            first -= limit+1;
+            if (first<0) first=0;
+            query += 'offset=' + first;
+            $.getJSON('v1?' + query, fnDisplay);
+          });
+          jQuery('button#next').click(function(){
+            if (last==total) last=data['meta']['offset'];
+            query += 'offset=' + last;
+            $.getJSON('v1?' + query, fnDisplay);
+          });
+          jQuery('button#last').click(function(){
+            query += 'offset=' + (total-limit);
+            $.getJSON('v1?' + query, fnDisplay);
+          });
+        }
+      };
+
+      jQuery('button#search').click(function(){
+        $.getJSON('v1?search=' + jQuery('input#spoken').val(), fnDisplay);
+      });
+      jQuery('button#query').click(function(){
+        $.getJSON('v1?query=' + jQuery('input#signed').val(), fnDisplay);
+      });
+      jQuery('button#reverse').click(function(){
+        $.getJSON('v1?reverse=' + jQuery('input#signed').val(), fnDisplay);
+      });
+
+      jQuery("#resp_form").submit(function(e){
+        e.preventDefault();
+        jQuery('div#response').html('').height(500);
+        jQuery.ajax({
+          url: '<?php echo $root;?>',
+          method: 'GET',
+          data: jQuery('#resp_form').serialize()
+        }).done(function (response) {
+          $('div#response').append(response);
+        });
       });
     </script>
 

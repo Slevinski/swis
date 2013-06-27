@@ -1,81 +1,66 @@
 <?php
+set_time_limit(0);
 $type = $_REQUEST['type'];
 $id = $_REQUEST['id'];
 
 $file = 'data/spml/' . $type . $id . '.spml';
-$file_sql = 'data/sql/' . $type . $id . '.sql';
 if(!file_exists($file)){
   die('invalid type ' . $type . ' and id ' . $id);
 }
 
-$tab_pre = $type . '_' . $id . '_';
-$tab_entry = $tab_pre . 'entry';
-$tab_item = $tab_pre . 'item';
-$tab_term = $tab_pre . 'term';
-
 $xml = simplexml_load_file($file);
 
-//sql header
-$output = <<<EOT
--- SPML to Puddle database creation
--- version 1.0
--- author Stephen E Slevinski Jr
--- http://www.signpuddle.net
+include "fsw.php";
 
---
--- Database: `Puddle`
---
+$signs = array();
+$terms = array();
+$links = array();
 
--- --------------------------------------------------------
-
-
-EOT;
-
-$output .= <<<EOT
---
--- Table structure for table `$tab_entry`
---
-DROP TABLE IF EXISTS `$tab_entry`;
-
-CREATE TABLE IF NOT EXISTS `$tab_entry` (
-  `e_id` int unsigned NOT NULL,
-  `cdt` int unsigned NOT NULL,
-  `mdt` int unsigned NOT NULL,
-  PRIMARY KEY  (`e_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `$tab_item`
---
-DROP TABLE IF EXISTS `$tab_item`;
-
-CREATE TABLE IF NOT EXISTS `$tab_item` (
-  `i_id` int unsigned NOT NULL,
-  `cdt` int unsigned NOT NULL,
-  `mdt` int unsigned NOT NULL,
-  `e_id` int unsigned NOT NULL,
-  `lang` varchar(18),
-  `txt` text,
-  `src` text,
-  PRIMARY KEY  (`i_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `$tab_term`
---
-DROP TABLE IF EXISTS `$tab_term`;
-
-CREATE TABLE IF NOT EXISTS `$tab_term` (
-  `t_id` int unsigned NOT NULL,
-  `i_id` int unsigned NOT NULL,
-  `trm` text,
-  PRIMARY KEY  (`t_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-EOT;
-
+/*
+$val = 5;
+$sql = "REPLACE table (column) VALUES (:val)";
+$stmt = $dbh->prepare($sql);
+$stmt->bindParam(':val', $val, PDO::PARAM_INT);
+$stmt->execute();
+$lastId = $dbh->lastInsertId();
+*/
 
 foreach($xml->children() as $entry) {
 
+  $keys=array();//spoken term keys
+
+  foreach($entry->term as $term){
+    if (fswText($term)){
+      if (in_array($term,$signs)){
+        $key = array_search($term,$signs);
+      } else {
+        $key = count($signs);
+        $signs[] = $term;
+      }
+    } else {
+      if (in_array($term,$terms)){
+        $keys[] = array_search($term,$terms);
+      } else {
+        $keys[] = count($terms);
+        $terms[] = $term;
+      }
+    }
+  }
+
+  foreach ($keys as $link){
+    $links[$key][]=$link;
+  }
+}
+
+foreach ($links as $key=>$keys){
+  echo $key . " links to ";
+  foreach ($keys as $link){
+    echo $link . ' ';
+  }
+  echo "<br>";
+}
+  
+/*
   $output .= <<<EOT
 
 
@@ -96,7 +81,8 @@ EOT;
     $mdt=$cdt;
   }
   $output .= "(";
-  $output .= $e_attr['e_id'] . ", ";
+//  $output .= $e_attr['e_id'] . ", ";
+  $output .= $e_attr['id'] . ", ";
   $output .= $cdt . ", ";
   $output .= $mdt . ")";
   $output.= ";";
@@ -125,7 +111,7 @@ EOT;
       $mdt=$cdt;
     }
   
-    $src = $detail['src'];
+//    $src = $detail['src'];
     $output .= "(";
     $output .= $i_attr['i_id'] . ', ';
     $output .= $cdt . ', ';
@@ -155,4 +141,5 @@ EOT;
 
 file_put_contents($file_sql,$output);
 echo '<a href="' . $file_sql . '">SQL file</a>';
+*/
 ?>

@@ -84,6 +84,29 @@ function fswQuery($text){
 }
 
 /** 
+ * @brief convert fsw to query
+ * @param fsw formal signwriting text
+ * @return query string for searching
+ * @ingroup conv
+ */
+function fsw2query($fsw){
+  if (!fswText($fsw)) return;
+  $fsw_sym = 'S[123][0-9a-f]{2}[0-5][0-9a-f]';
+  $fsw_coord = '[0-9]{3}x[0-9]{3}';
+  $fsw_query = $fsw_sym . $fsw_coord;
+  $fsw_pattern = '/' . $fsw_query . '/i';
+
+  $result = preg_match_all($fsw_pattern,$fsw,$matches);
+  $query = 'Q';
+  foreach ($matches[0] as $part){
+    $query .= $part;
+  }
+  
+  return $query;
+}
+
+
+/** 
  * @brief convert range to regular expression pattern
  * @param $min minimum value
  * @param $max max value

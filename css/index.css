@@ -1,5 +1,4 @@
 body {
-  padding-top: 130px;
   padding-bottom: 40px;
 }
 .sidebar-nav {
@@ -109,8 +108,15 @@ li.nav-header {
 }
 
 textarea {
-  width: 90%;
+  width: 40%;
   height: 130px;
+}
+
+section#index-links:after{
+ clear:both;
+ height:0;
+ visibility: hidden;
+ display:block;
 }
 
 footer {
@@ -131,12 +137,11 @@ pre {
   a.brand {
     width:22%;
   }
-  h3:before { 
-    display: block; 
-    content: " "; 
-    margin-top: -130px; 
-    height: 130px; 
-    visibility: hidden; 
+}
+
+@media (max-width: 769px) {
+  div.well {
+    display:none;
   }
 }
 

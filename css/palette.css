@@ -1,0 +1,60 @@
+#palette {
+  display: none;
+  color: #000000;
+  background-color: #ffffff;
+  position: absolute;
+  left:120;
+  top:5;
+  height: 98%;
+  width: 24.5%;
+  z-index:100;
+}
+
+#command {
+  position: relative;
+  float: left;
+  width:95;
+  top:0;
+  text-align: center;
+}
+
+.PaletteSymbol {
+  position: relative;
+  float: left;
+  overflow: hidden;
+  color: white;
+  height: 9.9%;
+  width: 16%;
+}
+
+.allvisible {
+  overflow: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+.cmd{
+  width:80px;
+  height:50px;
+  margin: 2px 2px 2px 2px;
+  border-top: 1px solid #cccccc;
+  border-bottom: 1px solid black;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid black;
+  background: #cccccc;
+  text-align: center;
+}
+
+.cmd:hover
+{
+  background: #eeeeee;
+}
+
+.cmd:active
+{
+  border-bottom: 1px solid #eeeeee;
+  border-top: 1px solid black;
+  border-right: 1px solid #eeeeee;
+  border-left: 1px solid black;
+}
