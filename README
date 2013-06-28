@@ -1,6 +1,6 @@
 SWIS
 The SignWriting Icon Server
-SemVer: 1.0.0-rc.2
+SemVer: 1.1.0-pre.1
 
 Formal strings stable since January 12th, 2012
 
@@ -24,9 +24,13 @@ Files
 -----
 README - this file
 Boxfile - Pagodabox.com preconfiguration
+api.php - API script for database access
 bsw.php - Binary SignWriting for symbol encoding, structural markers, and number characters
 csw.php - Character SignWriting for Unicode PUA
 database.php - ISWA database functions
+db.php - connection to MySQL database
+db_init.php - database initialization script
+db_load.php - load SPML into database
 edition.php - file that creates the signwriting_thin.js script dynamically
 filesystem.php - ISWA filesystem functions
 fsw.php - Formal SignWriting for regular searching
@@ -52,8 +56,10 @@ Directories
 css - cascading style sheets 
 img - images
 js - javascript files
+v1 - api version 1 access
 
 Version History
+1.1.0-pre.1 - June 27th, 2013: added database and api
 1.0.0-rc.2 - May 15th, 2013: added Styled Viewer and Font Viewer plugins
 1.0.0-rc - May 6th, 2013: custom signwriting_thin.js for each SWIS  
 1.0.0-prerelease.2 - April 2nd, 2013: Pagodabox file 
