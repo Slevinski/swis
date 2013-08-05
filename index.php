@@ -1,5 +1,8 @@
 <?php
 include 'edition.php';
+include 'db.php';
+$lang = $_REQUEST['lang'];
+$slang = $_REQUEST['slang'];
 ?>
 <!DOCTYPE html>
 <html lang="ase">
@@ -91,8 +94,8 @@ include 'edition.php';
 
             <ul class="nav nav-list">
               <li class="nav-header">API M580x513S14c02549x487S14c0a421x489S26502531x491S26516455x493S14c02498x487S14c0a474x490</li>
-              <li><a href="#front">Spoken Language</a></li>
               <li><a href="#back">Sign Language</a></li>
+              <li><a href="#front">Spoken Language</a></li>
               <li><a href="#components">Components</a></li>
               <li class="nav-header">Servers M548x530S15a37500x491S15a3f478x507S26c07521x474S26c11461x490S2fb00487x476S2f900537x470S2f900452x488</li>
               <li><a href="#infrastructure">Infrastructure</a></li>
@@ -120,15 +123,43 @@ include 'edition.php';
 
         <div class="span9">
           <div id="formal" class="">
-            <div class="input-append">
-              <input type="search" class="span7" placeholder="spoken language" id="spoken"/>
-              <button type="button" id="search" class="btn">Search</button>
+            <div class="">
+              <input type="search" class="span4" placeholder="sign language" id="signed"/>
+              <select id="signed_select">
+                <option value="">Select langauge</option>
+                <?php
+                  $sql = 'SELECT lang,name from languages where signed=1 order by name;';
+                  $stmt = $db->prepare($sql);
+                  $stmt->execute();
+                  $result = $stmt->fetchAll();
+                  foreach ($result as $item){
+                    echo '<option value="' . $item[0] . '" ';
+                    if ($lang==$item[0]) echo "selected";
+                    echo '>' . $item[1] . '</option>' . "\n";
+                  }
+                ?>
+              </select>
+            </div>
+            <div class="">
+              <input type="search" class="span4" placeholder="spoken language" id="spoken"/>
+              <select id="spoken_select">
+                <option value="">Select langauge</option>
+                <?php
+                  $sql = 'SELECT lang,name from languages where signed=0 order by name;';
+                  $stmt = $db->prepare($sql);
+                  $stmt->execute();
+                  $result = $stmt->fetchAll();
+                  foreach ($result as $item){
+                    echo '<option value="' . $item[0] . '" ';
+                    if ($slang==$item[0]) echo "selected";
+                    echo '>' . $item[1] . '</option>' . "\n";
+                  }
+                ?>
+              </select>
             </div>
             <div class="input-append">
-              <input type="search" class="span6" placeholder="sign language" id="signed"/>
-              <button id="visualize" class="btn">Visualize</button>
-              <button id="query" class="btn">Query</button>
-              <button id="reverse" class="btn">Reverse</button>
+              <button id="find_signs" class="btn">Find Signs</button>
+              <button id="find_spoken" class="btn">Find Spoken</button>
             </div>
 
             <div id="output"></div>
@@ -143,23 +174,21 @@ include 'edition.php';
               <h2 lang="ase">M580x513S14c02549x487S14c0a421x489S26502531x491S26516455x493S14c02498x487S14c0a474x490</h2>
             </div>
 
-            <h3 id="front">Spoken Language</h3>
-            <p>Search spoken language to find related signs. To find an exact term, enter the term and press search.  
-            Use the wildcard "%" to match any number of unknown characters.  For example, "hear%" will find "heart beat", "hearing" and more.  
-            Use the wildcard "_" to match any single unknown character.  For example, "h_m" will find "hum" and"ham".
-            </p>
 
             <h3 id="back">Sign Language</h3>
             <p>Process sign language using Formal SignWriting and query strings.
             </p>
-            <p>To visualize a Formal SignWriting string, enter an ASCII string such as 
-            M<noscript></noscript>518x529S14c20481x471S27106503x489 M<noscript></noscript>518x533S1870a489x515S18701482x490S20500508x496S2e734500x468 S<noscript></noscript>38800464x496 and press Visualize.
+            <p>Signs are stored as Formal SignWriting strings, such as M<noscript></noscript>518x529S14c20481x471S27106503x489.
+            The FSW string can be used to find signs or spoken language. 
             </p>
-            <p>A query will find approximate matches based on Formal SignWriting or query strings.  For example, the query string QS10000 will find all signs that use the symbol with key S10000, 
+            <p>For the sign language field, a query string can be used to find approximate matches based on Formal SignWriting searching.
+            For example, the query string QS10000 will find all signs that use the symbol with key S10000, 
             where as QS10000S21600 will find all signs that use both symbols S10000 and S21600.
             </p>
-            <p>A reverse lookup will find related spoken words based on Formal SignWriting or query strings.  
-            For example, the reverse lookup for M<noscript></noscript>518x533S1870a489x515S18701482x490S20500508x496S2e734500x468 will return "globe" and "world".
+            <h3 id="front">Spoken Language</h3>
+            <p>Search spoken language to find related signs. To find an exact term, enter the term and press search.  
+            Use the wildcard "%" to match any number of unknown characters.  For example, "hear%" will find "heart beat", "hearing" and more.  
+            Use the wildcard "_" to match any single unknown character.  For example, "h_m" will find "hum" and"ham".
             </p>
             <h3 id="components">Components</h3>
             <h4>Request Message</h4>
@@ -212,14 +241,9 @@ include 'edition.php';
             <?php
               $root = $swis_url . 'v1/?';
               $examples = array();
-              $examples[] = $root .'query=QS10013';
               $examples[] = $root .'query=QS10013&lang=ase';
-              $examples[] = $root .'search=globe';
-              $examples[] = $root .'search=globe&slang=en';
-              $examples[] = $root .'reverse=QS1870a489x515S18701482x490S20500508x496S2e734500x468';
-              $examples[] = $root .'';
-              $examples[] = $root .'offset=10';
-              $examples[] = $root .'offset=20';
+              $examples[] = $root .'search=globe&lang=ase&slang=en';
+              $examples[] = $root .'reverse=QS1870a489x515S18701482x490S20500508x496S2e734500x468&lang=ase&slang=en';
               foreach ($examples as $ex){
                 echo '<p><a href="' . $ex . '">' . $ex . '</a></p>';
               }
@@ -438,6 +462,7 @@ include 'edition.php';
     <script src="js/keyISWA.js"></script>
     <script src="js/palette.js"></script>
     <script type="text/javascript">
+      var xhr;
       jQuery('button#visualize').click(function(){
         jQuery('div#output').html(jQuery('input#signed').val());
         signwriting_<?php echo $viewer;?>(document.getElementById("output"));
@@ -492,45 +517,56 @@ include 'edition.php';
         if (total>limit) {
           jQuery('button#first').click(function(){
             query += 'offset=';
-            $.getJSON('v1?' + query, fnDisplay);
+            if(xhr) xhr.abort();
+            xhr = $.getJSON('v1?' + query, fnDisplay);
           });
           jQuery('button#prev').click(function(){
             first -= limit+1;
             if (first<0) first=0;
             query += 'offset=' + first;
-            $.getJSON('v1?' + query, fnDisplay);
+            if(xhr) xhr.abort();
+            xhr = $.getJSON('v1?' + query, fnDisplay);
           });
           jQuery('button#next').click(function(){
             if (last==total) last=data['meta']['offset'];
             query += 'offset=' + last;
-            $.getJSON('v1?' + query, fnDisplay);
+            if(xhr) xhr.abort();
+            xhr = $.getJSON('v1?' + query, fnDisplay);
           });
           jQuery('button#last').click(function(){
             query += 'offset=' + (total-limit);
-            $.getJSON('v1?' + query, fnDisplay);
+            if(xhr) xhr.abort();
+            xhr = $.getJSON('v1?' + query, fnDisplay);
           });
         }
       };
 
-      jQuery('button#search').click(function(){
-        $.getJSON('v1?search=' + jQuery('input#spoken').val(), fnDisplay);
+      jQuery('button#find_signs').click(function(){
+        $('div#output').html('<div class="spinner"></div>');
+        var loc = 'v1?search=' + jQuery('input#spoken').val() + '&query=' + jQuery('input#signed').val();
+        loc += '&slang=' + jQuery('select#spoken_select').val() + '&lang=' + jQuery('select#signed_select').val();
+        if(xhr) xhr.abort();
+        xhr = $.getJSON(loc, fnDisplay);
       });
-      jQuery('button#query').click(function(){
-        $.getJSON('v1?query=' + jQuery('input#signed').val(), fnDisplay);
-      });
-      jQuery('button#reverse').click(function(){
-        $.getJSON('v1?reverse=' + jQuery('input#signed').val(), fnDisplay);
+      jQuery('button#find_spoken').click(function(){
+        $('div#output').html('<div class="spinner"></div>');
+        var rev = jQuery('input#signed').val() || "Q"
+        var loc = 'v1?search=' + jQuery('input#spoken').val() + '&reverse=' + rev;
+        loc += '&slang=' + jQuery('select#spoken_select').val() + '&lang=' + jQuery('select#signed_select').val();
+        if(xhr) xhr.abort();
+        xhr = $.getJSON(loc, fnDisplay);
       });
 
       jQuery("#resp_form").submit(function(e){
         e.preventDefault();
-        jQuery('div#response').html('').height(500);
-        jQuery.ajax({
+        jQuery('div#response').html('<div class="spinner"></div>').height(500);
+        if(xhr) xhr.abort();
+        xhr = jQuery.ajax({
           url: '<?php echo $root;?>',
           method: 'GET',
           data: jQuery('#resp_form').serialize()
         }).done(function (response) {
-          $('div#response').append(response);
+          $('div#response').html(response);
         });
       });
     </script>

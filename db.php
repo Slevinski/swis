@@ -1,7 +1,8 @@
 <?php
 $db = new PDO(
-  'mysql:host=db148c.pair.com;dbname=slevin_api',
-  'slevin_12_r',
-  '4MPtRGzm'
+  'mysql:host=signwriting.com;dbname=sworg3x_api',
+  'sworg3x_api',
+  '7sign&you!'
 );
+$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 ?>

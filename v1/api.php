@@ -1,6 +1,6 @@
 <?php
 //development version of API
-//semver 1.1.0-preview.1
+//semver 1.1.0-preview.2
 include 'fsw.php';
 include 'db.php';
 $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,
@@ -24,44 +24,73 @@ $mquery = implode('&',$mq);
 
 $timein = microtime(true);
 if ($reverse){
-
+  if ($reverse=="Q") $reverse='';
   $regexp = query2regex($reverse);
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   try {
-    $sel = 'SELECT SQL_CALC_FOUND_ROWS terms.* FROM terms, signs, links ';
-    $sel .= 'where signs.id = links.sign_id and terms.id = links.term_id ';
+    $and = ' where ';
+    $sel = 'SELECT SQL_CALC_FOUND_ROWS t_out.* from terms t_out';
+
+    if ($regexp or $lang) {
+      $sel .= ', terms t_in where t_in.entry_id=t_out.entry_id';
+      $and = ' and ';
+      if ($lang) {
+        $sel .= ' and t_in.lang=:lang';
+      } else {
+        $sel .= ' and t_in.lang in(select lang from languages where signed=1)';
+      }
+
+      if ($regexp) {
+        $cnt = count($regexp);
+        $end = '';
+        $part = '';
+        $sel .=  " and t_in.text REGEXP " . str_replace('/',"'",$regexp[0]);
+        for ($i=1;$i<$cnt;$i++) {
+          $part = ' and t_in.id in (select id from terms where text REGEXP ' . str_replace('/',"'",$regexp[$i]);
+          if ($lang) {
+            $part .= ' and lang=:lang';
+          } else {
+            $part .= ' and lang in(select lang from languages where signed=1)';
+          }
+          $part .= 'END)';
+          if ($end) {
+            $end = str_replace('END)',$part . ')',$end);
+          } else {
+            $end = $part;
+          }
+        }
+        $end = str_replace('END)',')',$end);
+        $sel .= $end;
+      }
+
+    }
+
+    if ($slang) {
+      $sel .= $and . 't_out.lang=:slang';
+    } else {
+      $sel .= $and . 't_out.lang in(select lang from languages where signed=0)';
+    }
+
     if ($search) {
       if(strpos($search, '_') === false && strpos($search, '%') === false) {
-        $sel .= "and terms.text=:search";
+        $sel .= " and t_out.text=:search";
       } else {
-        $sel .= "and terms.text like :search";
+        $sel .= " and t_out.text like :search";
       }
     }
-    if ($slang) $sel .= ' and terms.lang=:slang';
-    if ($lang) $sel .= ' and signs.lang=:lang';
-  
-    if ($regexp) {
-      $cnt = count($regexp);
-      $end = '';
-      $part = '';
-      $sel .=  " and signs.text REGEXP " . str_replace('/',"'",$regexp[0]);
-      for ($i=1;$i<$cnt;$i++) {
-        $part = ' and signs.id in (select id from signs where text REGEXP ' . str_replace('/',"'",$regexp[$i]) . 'END)';
-        if ($end) {
-          $end = str_replace('END)',$part . ')',$end);
-        } else {
-          $end = $part;
-        }
-      }
-      $end = str_replace('END)',')',$end);
-      $sel .= $end;
-    }
-    $sel .= ' order by text limit 10';
+
+    $sel .= ' order by t_out.text limit 10';
     if ($offset > 0 ) $sel .= ' offset ' . $offset;
     $stmt = $db->prepare($sel);
-    if ($search) $stmt->bindParam(':search', $search, PDO::PARAM_STR);
-    if ($slang)  $stmt->bindParam(':slang', $slang);
-    if ($lang)  $stmt->bindParam(':lang', $lang);
+    if ($search) {
+      $stmt->bindParam(':search', $search, PDO::PARAM_STR);
+    }
+    if ($lang) {
+      $stmt->bindParam(':lang', $lang);
+    }
+    if ($slang) {
+      $stmt->bindParam(':slang', $slang);
+    }
     $stmt->execute();
     $resp = array();
     $resp['meta'] = array();
@@ -75,37 +104,51 @@ if ($reverse){
   } catch (PDOException $e) {
     echo $e->getCode() . ' ' . $e->getMessage();
   }
-
 } else {
-
   $regexp = query2regex($query);
-  $rwhere = " where ";
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   try {
-    $sel = 'SELECT SQL_CALC_FOUND_ROWS signs.* FROM signs';
-    if ($search) {
-      $sel .= ',terms,links where signs.id = links.sign_id and terms.id = links.term_id and ';
-      if(strpos($search, '_') === false && strpos($search, '%') === false) {
-        $sel .= "terms.text=:search";
+    $and = ' where ';
+    $sel = 'SELECT SQL_CALC_FOUND_ROWS t_out.* from terms t_out';
+
+    if ($search or $slang) {
+      $sel .= ', terms t_in where t_in.entry_id=t_out.entry_id';
+      $and = ' and ';
+      if ($slang) {
+        $sel .= ' and t_in.lang=:slang';
       } else {
-        $sel .= "terms.text like :search";
+        $sel .= ' and t_in.lang in(select lang from languages where signed=0)';
       }
-      if ($slang) $sel .= ' and terms.lang=:slang';
-      $rwhere = ' and ';
+
+      if ($search) {
+        if(strpos($search, '_') === false && strpos($search, '%') === false) {
+          $sel .= " and t_in.text=:search";
+        } else {
+          $sel .= " and t_in.text like :search";
+        }
+      }
     }
 
     if ($lang) {
-      $sel .= $rwhere . 'signs.lang=:lang';
-      $rwhere = ' and ';
+      $sel .= $and . 't_out.lang=:lang';
+    } else {
+      $sel .= $and . 't_out.lang in(select lang from languages where signed=1)';
     }
+
 
     if ($regexp) {
       $cnt = count($regexp);
       $end = '';
       $part = '';
-      $sel .=  $rwhere . "signs.text REGEXP " . str_replace('/',"'",$regexp[0]);
+      $sel .=  " and t_out.text REGEXP " . str_replace('/',"'",$regexp[0]);
       for ($i=1;$i<$cnt;$i++) {
-        $part = ' and signs.id in (select id from signs where text REGEXP ' . str_replace('/',"'",$regexp[$i]) . 'END)';
+        $part = ' and t_out.id in (select id from terms where text REGEXP ' . str_replace('/',"'",$regexp[$i]);
+        if ($lang) {
+          $part .= ' and lang=:lang';
+        } else {
+          $part .= ' and lang in(select lang from languages where signed=1)';
+        }
+        $part .= 'END)';
         if ($end) {
           $end = str_replace('END)',$part . ')',$end);
         } else {
@@ -115,17 +158,17 @@ if ($reverse){
       $end = str_replace('END)',')',$end);
       $sel .= $end;
     }
-    $sel .= ' order by text limit 10';
+    $sel .= ' order by t_out.text limit 10';
     if ($offset > 0 ) $sel .= ' offset ' . $offset;
     $stmt = $db->prepare($sel);
     if ($search) {
       $stmt->bindParam(':search', $search, PDO::PARAM_STR);
-      if ($slang) {
-        $stmt->bindParam(':slang', $slang);
-      }
     }
     if ($lang) {
       $stmt->bindParam(':lang', $lang);
+    }
+    if ($slang) {
+      $stmt->bindParam(':slang', $slang);
     }
     $stmt->execute();
     $resp = array();
@@ -141,4 +184,5 @@ if ($reverse){
     echo $e->getCode() . ' ' . $e->getMessage();
   }
 }
+
 ?>

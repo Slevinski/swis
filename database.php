@@ -156,8 +156,16 @@ function image_png($key,$ver){
   global $iswa_db;
   $code = key2code($key);
   $query = 'select glyph from font_png' . $ver . ' where code = ' . $code;
-  $row = $iswa_db->query($query)->fetch();
-  return $row[0];
+  try{
+    $row = $iswa_db->query($query)->fetch();
+  } catch (Exception $e) {
+    return image_png('29f0c',$ver);
+  }
+  if ($row[0]) {
+    return $row[0];
+  } else {
+    return image_png('29f0c',$ver);
+  }
 }
 
 function image_svg($key,$ver){
