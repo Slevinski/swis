@@ -126,7 +126,7 @@ $slang = $_REQUEST['slang'];
             <div class="">
               <input type="search" class="span4" placeholder="sign language" id="signed"/>
               <select id="signed_select">
-                <option value="">Select langauge</option>
+                <option value="">Select language</option>
                 <?php
                   $sql = 'SELECT lang,name from languages where signed=1 order by name;';
                   $stmt = $db->prepare($sql);
@@ -143,7 +143,7 @@ $slang = $_REQUEST['slang'];
             <div class="">
               <input type="search" class="span4" placeholder="spoken language" id="spoken"/>
               <select id="spoken_select">
-                <option value="">Select langauge</option>
+                <option value="">Select language</option>
                 <?php
                   $sql = 'SELECT lang,name from languages where signed=0 order by name;';
                   $stmt = $db->prepare($sql);
