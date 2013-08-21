@@ -10,8 +10,8 @@
  $swis_url = @$_ENV['swis_url'];
  if (!$swis_url) $swis_url = curPage();
  
- $semver = "1.1.0-pre.2";
- $ed_date = "August 5th, 2013";
+ $semver = "1.1.0-pre.3";
+ $ed_date = "August 21st, 2013";
  
 
 
@@ -24,6 +24,7 @@ function curPage() {
   } else {
     $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["SCRIPT_NAME"];
   }
+  $pageURL = str_replace ('/js/','/',$pageURL);
   return str_replace (basename($_SERVER["PHP_SELF"]),'',$pageURL);
 }
 

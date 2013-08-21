@@ -1,8 +1,8 @@
 <?php
 include 'edition.php';
 include 'db.php';
-$lang = $_REQUEST['lang'];
-$slang = $_REQUEST['slang'];
+$lang = @$_REQUEST['lang'];
+$slang =@ $_REQUEST['slang'];
 ?>
 <!DOCTYPE html>
 <html lang="ase">
