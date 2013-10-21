@@ -1,6 +1,6 @@
 SWIS
 The SignWriting Icon Server
-SemVer: 1.1.0-pre.3
+SemVer: 1.2.0-pre.1
 
 Formal strings stable since January 12th, 2012
 
@@ -59,6 +59,7 @@ js - javascript files
 v1 - api version 1 access
 
 Version History
+1.2.0-pre.1 - October 21st, 2013: file caching solutions 
 1.1.0-pre.3 - August 21st, 2013: fixed server location in scripts and templates
 1.1.0-pre.2 - August 5th, 2013: new database design and updated api 
 1.1.0-pre.1 - June 27th, 2013: added database and api

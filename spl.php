@@ -130,10 +130,10 @@ function bld2ksw($bld){
 /**
  * from IMWA symbol id to ISWA 2008 symbol id
  */
-$imwa = array();
+$imwaConv = array();
 function imwa2iswa($imwa_id){
-  global $imwa;
-  if (count($imwa)==0){
+  global $imwaConv;
+  if (count($imwaConv)==0){
     $filename = 'iswa/data/imwa_iswa.txt';
     $contents = trim(file_get_contents($filename));
     $rows = explode("\n",$contents);

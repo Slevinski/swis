@@ -28,6 +28,22 @@
  * @file
  *   
  */
+function image_name($font,$size,$pad,$bound,$colorize,$line,$fill,$back,$fsw,$break){
+  $name = $font . '/';
+  if (!$size) $size = 1;
+  $name .= number_format($size,2) . '/';
+  if ($pad) $name .= intval($pad) . '/';
+  if ($bound) $name .= $bound . '/';
+  if ($colorize) $name .= 'colorize/';
+  $name .= $line . 'x' . $fill . 'x' . $back . '/';
+  if ($break) $name.= $break . '/';
+  $name .= $fsw . '.' . substr($font,0,3);
+  return $name; 
+}
+
+function file_really_put_contents($filename,$contents){
+
+}
 
 function glyph_png($key,$ver,$size,$line,$fill,$back, $colorize){
   global $SymbolGroups;

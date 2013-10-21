@@ -10,8 +10,8 @@
  $swis_url = @$_ENV['swis_url'];
  if (!$swis_url) $swis_url = curPage();
  
- $semver = "1.1.0-pre.3";
- $ed_date = "August 21st, 2013";
+ $semver = "1.2.0-pre.1";
+ $ed_date = "October 21st, 2013";
  
 
 

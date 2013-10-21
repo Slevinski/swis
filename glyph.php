@@ -87,6 +87,21 @@ if ($code){
 
 $fmt = substr($font,0,3);
 $ver = substr($font,3,1);
+
+$filename = 'img/' . image_name($font,$size,$pad,$bound,$colorize,$line,$fill,$back,$key,$break);
+$etag = md5($filename);
+$lastmod = 'Thu, 12 Jan 2012 16:20:01 GMT';
+if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $lastmod ||
+    trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+    header("HTTP/1.1 304 Not Modified");
+    exit;
+}
+$expires = 60*60*24*14;
+header("Pragma: public");
+header("Cache-Control: maxage=".$expires);
+header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$expires) . ' GMT');
+header('Last-Modified: ' . $lastmod);
+header("Etag: $etag");
 switch ($fmt){
   case "txt":
     header("Content-type: text/plain");
@@ -103,6 +118,5 @@ switch ($fmt){
     header('Content-Disposition: filename=' . $name . '.png');
     ImagePNG(glyph_png($key,$ver,$size,$line, $fill, $back, $colorize));
 }
-
 ?>
 
