@@ -118,12 +118,12 @@ switch ($fmt){
         $ext = 'ksw';
       }
       $contents = glyphogram_txt($ksw, $ver, $pad, $bound, $line, $fill, $back, $break);
-      mkdir(dirname($filename),0777,true);
+      @mkdir(dirname($filename),0777,true);
       if ($filehash){
         $filehash = str_replace('.' . $fmt,'.' . $ext,$filehash);
-        file_put_contents($filehash,$text);
+        @file_put_contents($filehash,$text);
       }
-      file_put_contents($filename,$contents);
+      @file_put_contents($filename,$contents);
       echo $contents;
     }
     break;
@@ -139,9 +139,9 @@ switch ($fmt){
         $ksw = $text;
       }
       $contents = glyphogram_svg($ksw, $ver, $size, $pad, $bound, $line, $fill, $back, $colorize);
-      mkdir(dirname($filename),0777,true);
+      @mkdir(dirname($filename),0777,true);
       //no need for $filehash check because text written as metadata inside of SVG
-      file_put_contents($filename,$contents);
+      @file_put_contents($filename,$contents);
       echo $contents;
     }
     break;
@@ -159,12 +159,12 @@ switch ($fmt){
         $ext = 'ksw';
       }
       $contents = glyphogram_png($ksw, $ver, $size, $pad, $bound, $line, $fill, $back, $colorize);
-      mkdir(dirname($filename),0777,true);
+      @mkdir(dirname($filename),0777,true);
       if ($filehash){
         $filehash = str_replace('.' . $fmt,'.' . $ext,$filehash);
-        file_put_contents($filehash,$text);
+        @file_put_contents($filehash,$text);
       }
-      ImagePNG($contents,$filename);
+      @ImagePNG($contents,$filename);
       ImagePNG($contents);
     }
 }
