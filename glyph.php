@@ -19,7 +19,7 @@
  * 
  * END Copyright
  *  
- * @copyright 2007-2012 Stephen E Slevinski Jr 
+ * @copyright 2007-2013 Stephen E Slevinski Jr 
  * @author Steve Slevinski (slevin@signpuddle.net)  
  * @version 1
  * @section License 
@@ -28,6 +28,12 @@
  * @file
  *   
  */
+
+//stable font since Sept 19th, 2011 speed bump
+if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] ||  $_SERVER['HTTP_IF_NONE_MATCH']) {
+    header("HTTP/1.1 304 Not Modified");
+    exit;
+}
 
 /**
  * include general iswa library
@@ -57,8 +63,6 @@ $fill = @$_REQUEST['fill'];
 $back = @$_REQUEST['back'];//doesn't work
 $break = @$_REQUEST['break'];//specialty for txt font
 $colorize = @$_REQUEST['colorize'];
-$name= @$_REQUEST['name'];
-if(!$name){$name='glyph';}
 
 //testing and setting
 if ($code){
@@ -85,18 +89,25 @@ if ($code){
   die();
 }
 
+$name= @$_REQUEST['name'];
+if(!$name){$name=$key;}
+
 $fmt = substr($font,0,3);
 $ver = substr($font,3,1);
 
 $filename = 'img/' . image_name($font,$size,$pad,$bound,$colorize,$line,$fill,$back,$key,$break);
 $etag = md5($filename);
-$lastmod = 'Thu, 12 Jan 2012 16:20:01 GMT';
-if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $lastmod ||
-    trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
-    header("HTTP/1.1 304 Not Modified");
-    exit;
-}
-$expires = 60*60*24*14;
+
+//stable font since Sept 19th, 2011 speed bump
+$lastmod = 'Mon, 19 Sep 2011 16:20:03 GMT';
+//check moved to start of script.  Uncomment if lastmod changes.
+//if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $lastmod ||
+//    trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+//    header("HTTP/1.1 304 Not Modified");
+//    exit;
+//}
+
+$expires = 60*60*24*365;
 header("Pragma: public");
 header("Cache-Control: maxage=".$expires);
 header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$expires) . ' GMT');
@@ -119,4 +130,3 @@ switch ($fmt){
     ImagePNG(glyph_png($key,$ver,$size,$line, $fill, $back, $colorize));
 }
 ?>
-

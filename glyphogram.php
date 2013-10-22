@@ -29,11 +29,17 @@
  *   
  */
 
+//stable names and font since Jan 12th, 2012 speed bump
+if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] ||  $_SERVER['HTTP_IF_NONE_MATCH']) {
+    header("HTTP/1.1 304 Not Modified");
+    exit;
+}
+
 /**
  * include general libraries
  */
-include 'msw.php';
 include 'image.php';
+include 'msw.php';
 
 /**
  * attributes
@@ -54,7 +60,7 @@ $break = @$_REQUEST['break'];
 $colorize = @$_REQUEST['colorize'];
 
 if (fswText($text)) {
-//  $ksw = fsw2ksw($text);
+//  nothing
 } else if (kswLayout($ksw)) {
   $text = $ksw;
 } else if (kswPanel($text)){
@@ -74,19 +80,28 @@ $ver = substr($font,3,1);
 
 $filename = 'img/' . image_name($font,$size,$pad,$bound,$colorize,$line,$fill,$back,$text,$break);
 $etag = md5($filename);
-$lastmod = 'Thu, 12 Jan 2012 16:20:01 GMT';
-if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $lastmod ||
-    trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
-    header("HTTP/1.1 304 Not Modified");
-    exit;
+$filehash = '';
+if (strlen($text)>250){
+  $filename = str_replace($text,$etag,$filename);
+  $filehash = $filename;
 }
-$expires = 60*60*24*14;
+
+//stable names and font since Jan 12th, 2012
+$lastmod = 'Thu, 12 Jan 2012 16:20:01 GMT';
+//check moved to start of script.  Uncomment if lastmod changes.
+//if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $lastmod ||
+//    trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+//    header("HTTP/1.1 304 Not Modified");
+//    $logFile = str_replace('.' . $fmt, '.log',$filename);
+//    exit;
+//}
+
+$expires = 60*60*24*365;
 header("Pragma: public");
 header("Cache-Control: maxage=".$expires);
 header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$expires) . ' GMT');
 header('Last-Modified: ' . $lastmod);
 header("Etag: $etag");
-
 switch ($fmt){
   case "txt":
     header("Content-type: text/plain");
@@ -96,11 +111,18 @@ switch ($fmt){
     } else {
       if (fswText($text)) {
         $ksw = fsw2ksw($text);
+        $ext = 'fsw';
+
       } else {
         $ksw = $text;
+        $ext = 'ksw';
       }
       $contents = glyphogram_txt($ksw, $ver, $pad, $bound, $line, $fill, $back, $break);
       mkdir(dirname($filename),0777,true);
+      if ($filehash){
+        $filehash = str_replace('.' . $fmt,'.' . $ext,$filehash);
+        file_put_contents($filehash,$text);
+      }
       file_put_contents($filename,$contents);
       echo $contents;
     }
@@ -118,6 +140,7 @@ switch ($fmt){
       }
       $contents = glyphogram_svg($ksw, $ver, $size, $pad, $bound, $line, $fill, $back, $colorize);
       mkdir(dirname($filename),0777,true);
+      //no need for $filehash check because text written as metadata inside of SVG
       file_put_contents($filename,$contents);
       echo $contents;
     }
@@ -130,11 +153,17 @@ switch ($fmt){
     } else {
       if (fswText($text)) {
         $ksw = fsw2ksw($text);
+        $ext = 'fsw';
       } else {
         $ksw = $text;
+        $ext = 'ksw';
       }
       $contents = glyphogram_png($ksw, $ver, $size, $pad, $bound, $line, $fill, $back, $colorize);
       mkdir(dirname($filename),0777,true);
+      if ($filehash){
+        $filehash = str_replace('.' . $fmt,'.' . $ext,$filehash);
+        file_put_contents($filehash,$text);
+      }
       ImagePNG($contents,$filename);
       ImagePNG($contents);
     }

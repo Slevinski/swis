@@ -19,7 +19,7 @@
  * 
  * END Copyright
  *  
- * @copyright 2007-2012 Stephen E Slevinski Jr 
+ * @copyright 2007-2013 Stephen E Slevinski Jr 
  * @author Steve Slevinski (slevin@signpuddle.net)  
  * @version 1
  * @section License 
@@ -39,10 +39,6 @@ function image_name($font,$size,$pad,$bound,$colorize,$line,$fill,$back,$fsw,$br
   if ($break) $name.= $break . '/';
   $name .= $fsw . '.' . substr($font,0,3);
   return $name; 
-}
-
-function file_really_put_contents($filename,$contents){
-
 }
 
 function glyph_png($key,$ver,$size,$line,$fill,$back, $colorize){
