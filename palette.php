@@ -34,7 +34,7 @@
 
 echo '<html><head>';
 echo '<script src="js/jquery.js"></script>';
-echo '<link href="palette.css" rel="stylesheet" type="text/css" media="all">';
+echo '<link href="css/palette.css" rel="stylesheet" type="text/css" media="all">';
 $css = @$_REQUEST['css'];
 if ($css){
   echo '<link href="' . $css . '.css" rel="stylesheet" type="text/css" media="all">';
@@ -51,6 +51,6 @@ echo '</div>';
 echo '<div id="palette" class="palette">';
 echo '</div>';
 echo '<script type="text/javascript" src="js/keyISWA.js"></script>';
-echo '<script type="text/javascript" src="palette.js"></script>';
+echo '<script type="text/javascript" src="js/palette.js"></script>';
 echo '</body></html>';
 ?>

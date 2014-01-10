@@ -71,7 +71,7 @@ function fswQuery($text){
   $fsw_sym = 'S[123][0-9a-f]{2}[0-5u][0-9a-fu]';
   $fsw_coord = '([0-9]{3}x[0-9]{3})?';
   $fsw_var = '(V[0-9]+)?';
-  $fsw_query = 'QT?(' . $fsw_range . $fsw_coord . ')*(' . $fsw_sym . $fsw_coord . ')*' . $fsw_var;
+  $fsw_query = 'QT?(' . $fsw_sym . $fsw_coord . '|' . $fsw_range . $fsw_coord . ')*' . $fsw_var;
   $fsw_pattern = '/^' . $fsw_query . '$/i';
 
   $result = preg_match($fsw_pattern,$text,$matches);
@@ -589,7 +589,7 @@ function query2regex ($query,$fuzz=''){
   if (!fswQuery($query)) return;
 
   if (!$query || $query=='Q'){
-    return array('/' . $re_word . '/');
+    return array('/' . $re_term . '?'. $re_word . '/');
   }
 
   if (!$query || $query=='QT'){
@@ -640,7 +640,11 @@ function query2regex ($query,$fuzz=''){
       //now I have the specific search symbol
       // add to general ksw word
       $segment = $re_word . $segment . '(' . $re_sym . $re_coord . ')*';
-      if ($term) $segment = $re_term . $segment;
+      if ($term) {
+        $segment = $re_term . $segment;
+      } else {
+        $segment = $re_term . '?' . $segment;
+      }
       $segment= '/' . $segment . '/';
       $segments[]= $segment;
     }
@@ -668,7 +672,11 @@ function query2regex ($query,$fuzz=''){
       }
       // add to general ksw word
       $segment = $re_word . $segment . '(' . $re_sym . $re_coord . ')*';
-      if ($term) $segment = $re_term . $segment;
+      if ($term) {
+        $segment = $re_term . $segment;
+      } else {
+        $segment = $re_term . '?' . $segment;
+      }
       $segment= '/' . $segment . '/';
       $segments[]= $segment;
     }

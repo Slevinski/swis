@@ -51,6 +51,7 @@ $text = @$_REQUEST['text'];
 $panel = @$_REQUEST['panel'];
 $font= @$_REQUEST['font'];
 $size = @$_REQUEST['size'];
+if ($size) $size = abs(number_format($size,2));
 $pad=@$_REQUEST['pad'];
 $bound=@$_REQUEST['bound'];
 $line = @$_REQUEST['line'];
@@ -78,7 +79,7 @@ if(!$name){$name=$text;}
 $fmt = substr($font,0,3);
 $ver = substr($font,3,1);
 
-$filename = 'img/' . image_name($font,$size,$pad,$bound,$colorize,$line,$fill,$back,$text,$break);
+$filename = 'cache/' . image_name($font,$size,$pad,$bound,$colorize,$line,$fill,$back,$text,$break);
 $etag = md5($filename);
 $filehash = '';
 if (strlen($text)>250){
@@ -92,7 +93,6 @@ $lastmod = 'Thu, 12 Jan 2012 16:20:01 GMT';
 //if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $lastmod ||
 //    trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
 //    header("HTTP/1.1 304 Not Modified");
-//    $logFile = str_replace('.' . $fmt, '.log',$filename);
 //    exit;
 //}
 
@@ -145,7 +145,8 @@ switch ($fmt){
       echo $contents;
     }
     break;
-  default://png
+  case "png":
+  case "":
     header("Content-type: image/png");
     header('Content-Disposition: filename=' . $name . '.png');
     if (file_exists($filename) ){
@@ -167,5 +168,7 @@ switch ($fmt){
       @ImagePNG($contents,$filename);
       ImagePNG($contents);
     }
+    break;
+  default://ignore other
 }
 ?>

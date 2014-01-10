@@ -105,7 +105,7 @@ $slang =@ $_REQUEST['slang'];
               <li><a href="#styled">SignWriting Styled Viewer</a></li>
               <li><a href="#thin">SignWriting Thin Viewer</a></li>
               <li><a href="#font">SignWriting Font Viewer</a></li>
-              <li><a href="#mediawiki">SignWriting MediaWiki Plugin</a></li>
+              <li><a href="#mediawiki">SignWriting Gadget</a></li>
               <li class="nav-header">End Users M545x518S30007482x483S16d10516x472S20600523x496</li>
               <li><a href="#portable">Portable Bookmark</a></li>
               <li><a href="#pastable">Pastable Bookmark</a></li>
@@ -297,7 +297,7 @@ $slang =@ $_REQUEST['slang'];
             <p>The <a href="#font">SignWriting Font Viewer</a> is written in JavaScript and uses temporary Unicode characters on plane 15.
             The font can be locally installed or streamed from a server.
             </p> 
-            <p>The <a href="#mediawiki">SignWriting MediaWiki Plugin</a> is a custom extension for MediaWiki software.
+            <p>The <a href="#mediawiki">SignWriting Gadget</a> is a custom script for MediaWiki software.
             </p> 
           </section>
 
@@ -337,10 +337,14 @@ $slang =@ $_REQUEST['slang'];
             <li class="L1"><span class="dec">&lt;script type="text/javascript" src="<a href="js/signwriting_font.js">js/signwriting_font.js</a>"&gt;</span></li>
             </ol></pre>
           
-            <h3 id="mediawiki">SignWriting MediaWiki Plugin</h3>
-            <p>The SignWriring MediaWiki Plugin is a custom extension for MediaWiki software.  Utilizing the SignWriting Icon Server available on Wikimedia Labs, this extension adds a single client side script to the Resource Module before the page view.  Except to pass a 3 KB file to the client, the server running the MediaWiki software is not involved.</p>
-            <ul><li><a href="http://www.mediawiki.org/wiki/Extension:SignWriting_MediaWiki_Plugin">Extension page on MediaWiki.org</a></li>
-            <li><a href="https://gerrit.wikimedia.org/r/gitweb?p=mediawiki/extensions/SignWritingMediaWikiPlugin.git">Code base in Wikimedia's gerrit</a></li>
+            <h3 id="mediawiki">SignWriting Gadget</h3>
+            <p>The SignWriring Gadget is a custom script for MediaWiki software.  
+            Utilizing the SignWriting Icon Server available on Wikimedia Labs, this script updates the page view on the client side.  
+            The gadget has been enabled by default on Wikimedia Incubator.  Other sites can add a user script.
+            </p>
+            <ul><li><a href="http://incubator.wikimedia.org/wiki/User:Slevinski/SignWriting">SignWriting on Wikimedia Incubator</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/User:Slevinski">Enable SignWriting on the English Wikipedia</a></li>
+            <li><a href="https://meta.wikimedia.org/wiki/User:Slevinski">Enable SignWriting on Wikimedia Meta</a></li>
             </ul>
           </section>
 
@@ -436,7 +440,7 @@ $slang =@ $_REQUEST['slang'];
 
       <footer>
         <p>SignPuddle Standard: SignWriting Icon Server</p>
-        <p>Copyright 2007-2013 Stephen E Slevinski Jr. Some Rights Reserved.</p>
+        <p>Copyright 2007-2014 Stephen E Slevinski Jr. Some Rights Reserved.</p>
         <p>Except where otherwise noted, this work is licensed under</p>
         <p><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution ShareAlike 3.0</p>
       </footer>
