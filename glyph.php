@@ -58,9 +58,16 @@ $font= @$_REQUEST['font'];
 if (!$font) $font='png1';
 
 $size = @$_REQUEST['size'];//doesn't work for SVG
+$size = floatval($size);
+if ($size<=0) $size='';
+
+$color_hex = '/^[0-9a-f]{3}([0-9a-f]{3})?$/i';
 $line = @$_REQUEST['line'];
+if (!preg_match($color_hex,$line,$matches)) $line='';
 $fill = @$_REQUEST['fill'];
+if (!preg_match($color_hex,$fill,$matches)) $fill='';
 $back = @$_REQUEST['back'];//doesn't work
+if (!preg_match($color_hex,$back,$matches)) $back='';
 $break = @$_REQUEST['break'];//specialty for txt font
 $colorize = @$_REQUEST['colorize'];
 

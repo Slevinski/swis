@@ -51,12 +51,22 @@ $text = @$_REQUEST['text'];
 $panel = @$_REQUEST['panel'];
 $font= @$_REQUEST['font'];
 $size = @$_REQUEST['size'];
+$size = floatval($size);
+if ($size<=0) $size='';
 if ($size) $size = abs(number_format($size,2));
+
 $pad=@$_REQUEST['pad'];
+$pad= floatval($pad);
+if ($pad<=0) $pad='';
 $bound=@$_REQUEST['bound'];
+
+$color_hex = '/^[0-9a-f]{3}([0-9a-f]{3})?$/i';
 $line = @$_REQUEST['line'];
+if (!preg_match($color_hex,$line,$matches)) $line='';
 $fill = @$_REQUEST['fill'];
-$back = @$_REQUEST['back'];
+if (!preg_match($color_hex,$fill,$matches)) $fill='';
+$back = @$_REQUEST['back'];//doesn't work
+if (!preg_match($color_hex,$back,$matches)) $back='';
 $break = @$_REQUEST['break'];
 $colorize = @$_REQUEST['colorize'];
 

@@ -442,7 +442,7 @@ $slang =@ $_REQUEST['slang'];
         <p>SignPuddle Standard: SignWriting Icon Server</p>
         <p>Copyright 2007-2014 Stephen E Slevinski Jr. Some Rights Reserved.</p>
         <p>Except where otherwise noted, this work is licensed under</p>
-        <p><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution ShareAlike 3.0</p>
+        <p><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution ShareAlike 3.0</a></p>
       </footer>
 
     </div><!--/.fluid-container-->
