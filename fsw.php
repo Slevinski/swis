@@ -70,10 +70,9 @@ function fswQuery($text){
   $fsw_range = 'R[123][0-9a-f]{2}t[123][0-9a-f]{2}';
   $fsw_sym = 'S[123][0-9a-f]{2}[0-5u][0-9a-fu]';
   $fsw_coord = '([0-9]{3}x[0-9]{3})?';
-  $fsw_var = '(V[0-9]+)?';
-  $fsw_query = 'QT?(' . $fsw_sym . $fsw_coord . '|' . $fsw_range . $fsw_coord . ')*' . $fsw_var;
-  $fsw_pattern = '/^' . $fsw_query . '$/i';
-
+  $fsw_var = '(V[0-9]+)';
+  $fsw_query = 'Q((A(' . $fsw_sym . '|' . $fsw_range . ')+)?T)?(' . $fsw_sym . $fsw_coord . '|' . $fsw_range . $fsw_coord . ')*' . $fsw_var  . '?';
+  $fsw_pattern = '/^' . $fsw_query . '$/';
   $result = preg_match($fsw_pattern,$text,$matches);
   if ($result) {
     if ($text == $matches[0]) {
@@ -572,7 +571,7 @@ $pattern = '';
  * @return array of regular expressions for searching
  * @ingroup fre
  */
-function query2regex ($query,$fuzz=''){
+function query2regex ($query,$fuzz='',$boundry='/'){
   if ($fuzz=='') $fuzz = 20;
 
   $re_sym = 'S[123][0-9a-f]{2}[0-5][0-9a-f]';
@@ -584,29 +583,74 @@ function query2regex ($query,$fuzz=''){
   $fsw_sym = 'S[123][0-9a-f]{2}[0-5u][0-9a-fu]';
   $fsw_coord = '([0-9]{3}x[0-9]{3})?';
   $fsw_var = '(V[0-9]+)';
-  $fsw_query = 'QT(' . $fsw_range . $fsw_coord . ')*(' . $fsw_sym . $fsw_coord . ')*' . $fsw_var . '?';
+  $fsw_query = 'Q((A(' . $fsw_sym . '|' . $fsw_range . ')+)?T)?(' . $fsw_sym . $fsw_coord . '|' . $fsw_range . $fsw_coord . ')*' . $fsw_var  . '?';
 
   if (!fswQuery($query)) return;
 
   if (!$query || $query=='Q'){
-    return array('/' . $re_term . '?'. $re_word . '/');
+    return array($boundry . $re_term . '?'. $re_word . $boundry);
   }
 
   if (!$query || $query=='QT'){
-    return array('/' . $re_term . $re_word . '/');
+    return array($boundry . $re_term . $re_word . $boundry);
   }
 
   $segments = array();
 
   $term = strpos($query,'T');
 
+  if ($term){
+    $q_term = '(A';
+    $query_t = substr($query,0,$term);
+    $query = substr($query,$term+1);
+
+    //this gets all symbols and ranges
+    $fsw_pattern = '/(' . $fsw_sym . '|' . $fsw_range . ')/';
+    $result = preg_match_all($fsw_pattern,$query_t,$matches);
+    if ($result) {
+      foreach ($matches[0] as $part){
+        //if symbol...
+        $fsw_pattern = '/^' . $fsw_sym . '$/';
+        $result = preg_match($fsw_pattern,$part,$matched);
+        if ($result) {
+          $base = substr($part,1,3);
+          $segment = 'S' . $base;
+
+          $fill = substr($part,4,1);
+          if ($fill=='u') {
+            $segment .= '[0-5]';
+          } else {
+            $segment .= $fill;
+          }
+    
+          $rotate = substr($part,5,1);
+          if ($rotate=='u') {
+            $segment .= '[0-9a-f]';
+          } else {
+            $segment .= $rotate;
+          }
+          $q_term .= $segment;
+        } else {
+          $from = substr($part,1,3);
+          $to = substr($part,5,3);
+          $re_range = range2regex($from,$to,"hex");
+          $segment = 'S' . $re_range . '[0-5][0-9a-f]';
+          $q_term .= $segment;
+        }
+      }
+      $q_term .= '(' . $re_sym. ')*)';
+    } else {
+      $q_term .= '(' . $re_sym. ')+)';
+    }
+  }
+  
   //get the variance
-  $fsw_pattern = '/' . $fsw_var . '/i';
+  $fsw_pattern = '/' . $fsw_var . '/';
   $result = preg_match($fsw_pattern,$query,$matches);
   if ($result) $fuzz = substr($matches[0],1);
 
   //this gets all symbols with or without location
-  $fsw_pattern = '/' . $fsw_sym . $fsw_coord . '/i';
+  $fsw_pattern = '/' . $fsw_sym . $fsw_coord . '/';
   $result = preg_match_all($fsw_pattern,$query,$matches);
   if ($result) {
     foreach ($matches[0] as $part){
@@ -641,7 +685,7 @@ function query2regex ($query,$fuzz=''){
       // add to general ksw word
       $segment = $re_word . $segment . '(' . $re_sym . $re_coord . ')*';
       if ($term) {
-        $segment = $re_term . $segment;
+        $segment = $q_term . $segment;
       } else {
         $segment = $re_term . '?' . $segment;
       }
@@ -673,15 +717,21 @@ function query2regex ($query,$fuzz=''){
       // add to general ksw word
       $segment = $re_word . $segment . '(' . $re_sym . $re_coord . ')*';
       if ($term) {
-        $segment = $re_term . $segment;
+        $segment = $q_term . $segment;
       } else {
         $segment = $re_term . '?' . $segment;
       }
-      $segment= '/' . $segment . '/';
+      $segment= $boundry . $segment . $boundry;
       $segments[]= $segment;
     }
   }
-  
+  if (count($segments)==0){
+    if ($term){
+      $segments[] = $boundry . $q_term . $re_word . $boundry;
+    } else {
+      $segments[] = $boundry . $re_term . '?' . $re_word . $boundry;
+    }
+  }
   return $segments;
 }
 
