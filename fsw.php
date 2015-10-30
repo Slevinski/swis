@@ -61,6 +61,24 @@ function fswText($text){
 }
 
 /** 
+ * @brief extract Formal SignWriting string from text
+ * @param $text character string
+ * @return properly formatted Formal SignWriting
+ * @ingroup fre
+ */
+function fswString($text){
+  $fsw_sym = 'S[123][0-9a-f]{2}[0-5][0-9a-f]';
+  $fsw_coord = '[0-9]{3}x[0-9]{3}';
+  $fsw_word = '(A(' . $fsw_sym. ')+)?[BLMR](' . $fsw_coord . ')(' . $fsw_sym . $fsw_coord . ')*';
+  $fsw_punc = 'S38[7-9ab][0-5][0-9a-f]' . $fsw_coord;
+  $fsw_pattern = '/(' . $fsw_word . '|' . $fsw_punc . ')/i';
+
+  $result = preg_match_all($fsw_pattern,$text,$matches);
+
+  return implode($matches[0], ' ');
+}
+
+/** 
  * @brief test if text is Formal SignWriting Query
  * @param $text character string
  * @return boolean value if text is Formal SignWriting Query
