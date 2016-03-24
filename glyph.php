@@ -50,6 +50,7 @@ $key = @$_REQUEST['key'];
 $code = @$_REQUEST['code'];
 $bsw = @$_REQUEST['bsw'];
 $sym = @$_REQUEST['sym'];
+$sss = @$_REQUEST['sss'];
 if($sym){
   $key = bsw2key(csw2bsw($sym));
 //  echo urlencode($sym) . ' and ' . $key;
@@ -63,6 +64,7 @@ if ($size<=0) $size='';
 
 $color_hex = '/^[0-9a-f]{3}([0-9a-f]{3})?$/i';
 $line = @$_REQUEST['line'];
+$color = @$_REQUEST['color'];
 if (!preg_match($color_hex,$line,$matches)) $line='';
 $fill = @$_REQUEST['fill'];
 if (!preg_match($color_hex,$fill,$matches)) $fill='';
@@ -92,6 +94,9 @@ if ($code){
   } else {
     $key = base2view($base);
   }
+} else if ($sss) {
+  $key = id2key($sss);
+  $line = $color;
 } else {
   die();
 }
