@@ -385,7 +385,7 @@ $slang =@ $_REQUEST['slang'];
             </p> 
 
             <h3 id="draft">Internet Draft to become RFC</h3>
-            <p>Submitted to the IETF, <a href="http://signpuddle.net/wiki/index.php/I-D_draft-slevinski-signwriting-text">draft-slevinski-signwriting-text</a> is available for review. </p>
+            <p>Submitted to the IETF, <a href="https://tools.ietf.org/html/draft-slevinski-formal-signwriting">draft-slevinski-formal-signwriting</a> is available for review. </p>
 
             <h3 id="theory">Theory and Example</h3>
             <p><a href="http://signpuddle.net/wiki/index.php/MSW">Modern SignWriting</a> explains the character encoding model of SignWriting Text, stable since January 12th, 2012.
