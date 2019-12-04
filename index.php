@@ -37,12 +37,6 @@ $slang =@ $_REQUEST['slang'];
       $viewer = @$_REQUEST['viewer'];
       if (!$viewer) $viewer = "styled";
       switch ($viewer){
-        case "styled":
-          echo '    <script type="text/javascript">' . "\n";
-          echo $styled_script . "\n";
-          echo $styled_start . "\n";
-          echo '    </script>' . "\n";
-          break;
         case "thin":
           echo '    <script type="text/javascript">' . "\n";
           echo $thin_script . "\n";
@@ -52,6 +46,14 @@ $slang =@ $_REQUEST['slang'];
         case "font":
           echo '    <script type="text/javascript" src="js/signwriting_text.js"></script>' . "\n";
           echo '    <script type="text/javascript" src="js/signwriting_font.js"></script>' . "\n";
+          break;
+        default:
+          $viewer = "styled":
+          echo '    <script type="text/javascript">' . "\n";
+          echo $styled_script . "\n";
+          echo $styled_start . "\n";
+          echo '    </script>' . "\n";
+          break;
       }
     ?>
 
